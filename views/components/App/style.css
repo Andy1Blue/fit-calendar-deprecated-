@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: gray;
+  font-size: 16px;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #44020f;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.navbar {
+  background-color: #44020f;
+  color: white;
+  min-height: 5vh;
+  font-size: 14px;
+}
+
+.nav-item img {
+  margin: 5px;
+  width: 20px;
+  height: 20px;
+}
+
+#red-toast {
+  background-color: #44020f;
+  z-index: 999;
+  position: absolute;
+  color: white;
+  border: 1px solid black;
+  top: 30%;
+  left: 40%;
+  padding: 10px;
+  animation: show 0.5s;
+  font-size: 22px;
+}
+
+#red-toast #red-toast-close {
+  position: absolute;
+  top: -6px;
+  right: 1px;
+  border: 0;
+  background: none;
+  color: white;
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.logo-welcome-page {
+  width: 90px;
+  height: 90px;
+}
+
+.alert {
+  color: rgb(255, 154, 154);
+}
+
+.input-number{
+  width:80px;
+}

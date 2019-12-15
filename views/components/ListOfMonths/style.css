@@ -1,0 +1,109 @@
+.traning-table-content {
+    padding: 2rem 0;
+    margin: 0 auto;
+}
+
+.calendar-year {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.calendar-year button:nth-child(1) {
+    border: none;
+    background-color: transparent;
+    font-size: 2vh;
+    transform: rotate(180deg);
+    color: rgb(226, 226, 226);
+}
+
+.calendar-year h2 {
+    margin-top: 5px;
+    color: rgb(226, 226, 226);
+}
+
+.calendar-year button:nth-child(3) {
+    border: none;
+    background-color: transparent;
+    font-size: 2vh;
+    margin-bottom: 2px;
+    color: rgb(226, 226, 226);
+}
+
+rect:hover:after {
+    font-family: 'Roboto', sans-serif;
+    z-index: 999;
+    content: attr(comment);
+    position: absolute;
+    width: 150px;
+    margin: 20px;
+    padding: 5px;
+    font-size: 12px;
+    border: 1px solid black;
+    background: white;
+    color: black;
+}
+
+.m1 rect,
+.m2 rect,
+.m3 rect,
+.m4 rect,
+.m5 rect,
+.m6 rect,
+.m7 rect,
+.m8 rect,
+.m9 rect,
+.m10 rect,
+.m11 rect,
+.m12 rect {
+    background-color: rgb(202, 206, 247);
+    height: 21px;
+    width: 21px;
+    margin: 4px;
+    float: left;
+}
+
+@media only screen and (max-width: 1000px) {
+
+    .m1 rect,
+    .m2 rect,
+    .m3 rect,
+    .m4 rect,
+    .m5 rect,
+    .m6 rect,
+    .m7 rect,
+    .m8 rect,
+    .m9 rect,
+    .m10 rect,
+    .m11 rect,
+    .m12 rect {
+        background-color: rgb(202, 206, 247);
+        height: 6px;
+        width: 6px;
+        margin: 2px;
+        float: left;
+    }
+
+    .traning-table-content {
+        padding: 4rem 0;
+        margin: 0 auto;
+    }
+}
+
+.m1,
+.m2,
+.m3,
+.m4,
+.m5,
+.m6,
+.m7,
+.m8,
+.m9,
+.m10,
+.m11,
+.m12 {
+    margin: 3px;
+    display: table;
+    position: relative;
+}
