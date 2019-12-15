@@ -1,36 +1,40 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Training } from './training.model';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class TrainingsService {
-    private trainings: Training[] = [];
+    constructor(@InjectModel('Training') private readonly trainingModel: Model<Training>) { }
 
-    private findTraining(userId: number, trainingId: string): [Training, number] {
-        const trainingIndex = this.trainings.findIndex((el) => el.id == trainingId && el.userId == userId);
-        const training = this.trainings[trainingIndex];
+    private async findTraining(userId: number, trainingId: string): Promise<Training> {
+        let training;
+        try {
+            training = await this.trainingModel.findOne({ userId, _id: trainingId });
+        } catch (error) {
+            throw new NotFoundException('Could not find training or user.');
+        }
 
         if (!training) {
             throw new NotFoundException('Could not find training or user.');
         }
 
-        return [training, trainingIndex];
+        return training;
     }
 
-    insertTraining(
+    async insertTraining(
         description: string,
         distance: number | null,
         calories: number | null,
         time: number | null,
         userId: number,
     ) {
-        const id = new Date().toString();
         const trainingDate = '1231';
         const createdDate = new Date();
         const lastUpdatedDateTime = createdDate;
         const isActive = true;
 
-        const newTraining = new Training(
-            id,
+        const newTraining = new this.trainingModel({
             trainingDate,
             description,
             distance,
@@ -40,55 +44,54 @@ export class TrainingsService {
             createdDate,
             lastUpdatedDateTime,
             isActive,
-        );
-        this.trainings.push(newTraining);
-        return id;
+        });
+        const result = await newTraining.save();
+        return result.id as string;
     }
 
-    getTranings() {
-        return [...this.trainings];
+    async getTranings() {
+        const result = await this.trainingModel.find().exec();
+        return result as Training[];
     }
 
-    getTrainingsForUser(userId: number) {
-        const trainingsForUser = this.trainings.find(el => el.userId == userId);
+    async getTrainingsForUser(userId: number) {
+        const trainingsForUser = await this.trainingModel.find({ userId });
 
         if (!trainingsForUser) {
             throw new NotFoundException('Could not find trainings for specify user.');
         }
 
-        return [trainingsForUser];
+        return trainingsForUser as Training[];
     }
 
-    getSingleTraining(userId: number, trainingId: string) {
-        const training = this.findTraining(userId, trainingId)[0];
+    async getSingleTraining(userId: number, trainingId: string) {
+        const training = await this.findTraining(userId, trainingId);
+
         if (!training) {
             throw new NotFoundException('Could not find training.');
         }
 
-        return { ...training };
+        return training as Training;
     }
 
-    updateTraining(
+    async updateTraining(
         userId: number,
         trainingId: string,
         trainingDescription: string,
     ) {
-        const [training, index] = this.findTraining(userId, trainingId);
-        const updatedTraining = { ...training };
+        const updatedTraining = await this.findTraining(userId, trainingId);
 
-        if (!training) {
-            throw new NotFoundException('Could not find training or user.');
-        } else {
-            if (trainingDescription) {
-                updatedTraining.description = trainingDescription;
-            }
-
-            this.trainings[index] = updatedTraining;
+        if (trainingDescription) {
+            updatedTraining.description = trainingDescription;
         }
+
+        updatedTraining.save();
     }
 
-    deleteTraining(userId: number, trainingId: string) {
-        const index = this.findTraining(userId, trainingId)[1];
-        this.trainings.splice(index, 1);
+    async deleteTraining(userId: number, trainingId: string) {
+        const result = await this.trainingModel.deleteOne({ userId, _id: trainingId }).exec();
+        if (result.n === 0) {
+            throw new NotFoundException('Could not find training.');
+        }
     }
 }

@@ -6,14 +6,14 @@ export class TrainingsController {
     constructor(private readonly trainingsService: TrainingsService) { }
 
     @Post()
-    addTraining(
+    async addTraining(
         @Body('description') trainingDescription: string,
         @Body('distance') trainingDistance: number | null,
         @Body('calories') trainingCalories: number | null,
         @Body('time') trainingTime: number | null,
         @Body('userId') trainingUserId: number,
     ) {
-        const generatedId = this.trainingsService.insertTraining(
+        const generatedId = await this.trainingsService.insertTraining(
             trainingDescription,
             trainingDistance,
             trainingCalories,
@@ -24,32 +24,35 @@ export class TrainingsController {
     }
 
     @Get()
-    getAllTranings() {
-        return this.trainingsService.getTranings();
+    async getAllTranings() {
+        const allTrainings = await this.trainingsService.getTranings();
+        return allTrainings;
     }
 
     @Get('/user/:userId')
-    getTranings(@Param('userId') userId: number) {
-        return this.trainingsService.getTrainingsForUser(userId);
+    async getTranings(@Param('userId') userId: number) {
+        const userTranings = await this.trainingsService.getTrainingsForUser(userId);
+        return userTranings;
     }
 
     @Get('/user/:userId/id/:id') // TODO: ultimately :trainingDate
-    getTraning(@Param('id') traningId: string, @Param('userId') userId: number) {
-        return this.trainingsService.getSingleTraining(userId, traningId);
+    async getTraning(@Param('id') traningId: string, @Param('userId') userId: number) {
+        const training = await this.trainingsService.getSingleTraining(userId, traningId);
+        return training;
     }
 
     @Patch('/user/:userId/id/:id')
-    updateTraining(
+    async updateTraining(
         @Param('userId') userId: number,
         @Param('id') traningId: string,
         @Body('description') trainingDescription: string) {
-        this.trainingsService.updateTraining(userId, traningId, trainingDescription);
+        await this.trainingsService.updateTraining(userId, traningId, trainingDescription);
         return null;
     }
 
     @Delete('/user/:userId/id/:id')
-    removeTraining(@Param('userId') userId: number, @Param('id') traningId: string) {
-        this.trainingsService.deleteTraining(userId, traningId);
+    async removeTraining(@Param('userId') userId: number, @Param('id') traningId: string) {
+        await this.trainingsService.deleteTraining(userId, traningId);
         return null;
     }
 }
