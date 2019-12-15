@@ -1,0 +1,22 @@
+ul {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+li {
+  list-style: none;
+  margin: 10px;
+}
+
+.logo {
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
+
+.logout-button {
+  background-color: unset;
+  border: 0.1px solid #fff;
+  color: #fff;
+}

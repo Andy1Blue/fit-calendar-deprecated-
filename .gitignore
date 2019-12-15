@@ -1,5 +1,7 @@
 # compiled output
 /dist
+/views/dist
+/views/components/Config
 /node_modules
 
 # Logs
