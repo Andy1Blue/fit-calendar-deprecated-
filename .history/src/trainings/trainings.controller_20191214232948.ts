@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch } from '@nestjs/common';
 import { TrainingsService } from './trainings.service';
 
 @Controller('trainings')
@@ -44,12 +44,6 @@ export class TrainingsController {
         @Param('id') traningId: string,
         @Body('description') trainingDescription: string) {
         this.trainingsService.updateTraining(userId, traningId, trainingDescription);
-        return null;
-    }
-
-    @Delete('/user/:userId/id/:id')
-    removeTraining(@Param('userId') userId: number, @Param('id') traningId: string) {
-        this.trainingsService.deleteTraining(userId, traningId);
         return null;
     }
 }

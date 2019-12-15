@@ -46,10 +46,4 @@ export class TrainingsController {
         this.trainingsService.updateTraining(userId, traningId, trainingDescription);
         return null;
     }
-
-    @Delete('/user/:userId/id/:id')
-    removeTraining(@Param('userId') userId: number, @Param('id') traningId: string) {
-        this.trainingsService.deleteTraining(userId, traningId);
-        return null;
-    }
 }

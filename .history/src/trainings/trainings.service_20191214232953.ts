@@ -86,9 +86,4 @@ export class TrainingsService {
             this.trainings[index] = updatedTraining;
         }
     }
-
-    deleteTraining(userId: number, trainingId: string) {
-        const index = this.findTraining(userId, trainingId)[1];
-        this.trainings.splice(index, 1);
-    }
 }
