@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch } from '@nestjs/common';
 import { TrainingsService } from './trainings.service';
 
 @Controller('trainings')
@@ -21,5 +21,29 @@ export class TrainingsController {
             trainingUserId,
         );
         return { id: generatedId };
+    }
+
+    @Get()
+    getAllTranings() {
+        return this.trainingsService.getTranings();
+    }
+
+    @Get('/user/:userId')
+    getTranings(@Param('userId') userId: number) {
+        return this.trainingsService.getTrainingsForUser(userId);
+    }
+
+    @Get('/user/:userId/id/:id') // TODO: ultimately :trainingDate
+    getTraning(@Param('id') traningId: string, @Param('userId') userId: number) {
+        return this.trainingsService.getSingleTraining(userId, traningId);
+    }
+
+    @Patch('/user/:userId/id/:id')
+    updateTraining(
+        @Param('userId') userId: number,
+        @Param('id') traningId: string,
+        @Body('description') trainingDescription: string) {
+        this.trainingsService.updateTraining(userId, traningId, trainingDescription);
+        return null;
     }
 }
