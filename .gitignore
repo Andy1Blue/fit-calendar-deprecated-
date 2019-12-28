@@ -3,6 +3,7 @@
 /views/dist
 /views/components/Config
 /node_modules
+/.logs
 
 # Logs
 logs
