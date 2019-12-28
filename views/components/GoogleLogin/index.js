@@ -8,9 +8,8 @@
 import React, { Component } from 'react';
 import './style.css';
 import GoogleAuth from 'react-google-login';
-import  config  from '../Config';
+import config  from '../Config';
 import logo from '../../assets/logo-calendar.png';
-import config from '../Config';
 
 class GoogleLogin extends Component {
     state = {
@@ -67,7 +66,7 @@ class GoogleLogin extends Component {
             }
 
             // Redirecting, TODO: change it to a different way
-            window.location.href = "/";
+            window.location.href = config.url;
         }
 
         return (
