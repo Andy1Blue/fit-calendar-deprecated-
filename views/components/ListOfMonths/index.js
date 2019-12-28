@@ -157,6 +157,7 @@ class ListOfMonths extends Component {
                     if (day + "" + month + "" + year === today) {
                         elem.style.backgroundColor = 'green';
                         elem.style.border = '1px solid #414363';
+                        elem.style.borderBottom = '5px solid #414363';
                     } else {
                         elem.style.backgroundColor = 'green';
                     }
@@ -176,6 +177,7 @@ class ListOfMonths extends Component {
 
                     if (day + "" + month + "" + year === today) {
                         elem.style.border = '1px solid #414363';
+                        elem.style.borderBottom = '5px solid #414363';
                     }
                 }
             }

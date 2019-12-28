@@ -65,6 +65,21 @@ rect:hover:after {
     float: left;
 }
 
+.m1 rect:hover,
+.m2 rect:hover,
+.m4 rect:hover,
+.m3 rect:hover,
+.m5 rect:hover,
+.m6 rect:hover,
+.m7 rect:hover,
+.m8 rect:hover,
+.m9 rect:hover,
+.m10 rect:hover,
+.m11 rect:hover,
+.m12 rect:hover {
+    background-color: rgb(220, 222, 248);
+}
+
 /* @media only screen and (max-width: 1000px) {
 
     .m1 rect,
