@@ -20,7 +20,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "start:react": "webpack-dev-server --mode development --hot",
+    "start:react": "webpack-dev-server --mode development --hot --open",
     "build:react": "webpack --mode production"
   },
   "dependencies": {
@@ -83,8 +83,8 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
-    "testRegex": ".spec.ts$",
+    "rootDir": "test",
+    "testRegex": ".test.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },

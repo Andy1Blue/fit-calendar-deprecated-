@@ -6,7 +6,7 @@ export const TrainingSchema = new mongoose.Schema({
     distance: Number,
     calories: Number,
     time: Number,
-    userId: Number,
+    userId: String,
     createdDate: Date,
     lastUpdatedDateTime: Date,
     isActive: Boolean,
@@ -19,7 +19,7 @@ export interface Training extends mongoose.Document{
     distance: number | null;
     calories: number | null;
     time: number | null;
-    userId: number;
+    userId: string;
     createdDate: Date;
     lastUpdatedDateTime: Date;
     isActive: boolean;

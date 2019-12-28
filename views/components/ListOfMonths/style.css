@@ -45,6 +45,7 @@ rect:hover:after {
     color: black;
 }
 
+.m0 rect,
 .m1 rect,
 .m2 rect,
 .m3 rect,
@@ -64,7 +65,7 @@ rect:hover:after {
     float: left;
 }
 
-@media only screen and (max-width: 1000px) {
+/* @media only screen and (max-width: 1000px) {
 
     .m1 rect,
     .m2 rect,
@@ -89,8 +90,9 @@ rect:hover:after {
         padding: 4rem 0;
         margin: 0 auto;
     }
-}
+} */
 
+.m0,
 .m1,
 .m2,
 .m3,
@@ -106,4 +108,11 @@ rect:hover:after {
     margin: 3px;
     display: table;
     position: relative;
+}
+
+#table-statistics {
+    width:300px;
+    text-align: center;
+    margin-left:auto; 
+    margin-right:auto;
 }

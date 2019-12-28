@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 export class TrainingsService {
     constructor(@InjectModel('Training') private readonly trainingModel: Model<Training>) { }
 
-    private async findTraining(userId: number, trainingId: string): Promise<Training> {
+    private async findTraining(userId: string, trainingId: string): Promise<Training> {
         let training;
         try {
             training = await this.trainingModel.findOne({ userId, _id: trainingId });
@@ -23,13 +23,13 @@ export class TrainingsService {
     }
 
     async insertTraining(
+        trainingDate: string,
         description: string,
         distance: number | null,
         calories: number | null,
         time: number | null,
-        userId: number,
+        userId: string,
     ) {
-        const trainingDate = '1231';
         const createdDate = new Date();
         const lastUpdatedDateTime = createdDate;
         const isActive = true;
@@ -54,7 +54,7 @@ export class TrainingsService {
         return result as Training[];
     }
 
-    async getTrainingsForUser(userId: number) {
+    async getTrainingsForUser(userId: string) {
         const trainingsForUser = await this.trainingModel.find({ userId });
 
         if (!trainingsForUser) {
@@ -64,7 +64,7 @@ export class TrainingsService {
         return trainingsForUser as Training[];
     }
 
-    async getSingleTraining(userId: number, trainingId: string) {
+    async getSingleTraining(userId: string, trainingId: string) {
         const training = await this.findTraining(userId, trainingId);
 
         if (!training) {
@@ -75,9 +75,12 @@ export class TrainingsService {
     }
 
     async updateTraining(
-        userId: number,
+        userId: string,
         trainingId: string,
         trainingDescription: string,
+        trainingDistance: number,
+        trainingCalories: number,
+        trainingTime: number,
     ) {
         const updatedTraining = await this.findTraining(userId, trainingId);
 
@@ -85,13 +88,69 @@ export class TrainingsService {
             updatedTraining.description = trainingDescription;
         }
 
+        if (trainingDistance >= 0) {
+            updatedTraining.distance = trainingDistance;
+        }
+
+        if (trainingCalories >= 0) {
+            updatedTraining.calories = trainingCalories;
+        }
+
+        if (trainingTime >= 0) {
+            updatedTraining.time = trainingTime;
+        }
+
         updatedTraining.save();
     }
 
-    async deleteTraining(userId: number, trainingId: string) {
+    async deleteTraining(userId: string, trainingId: string) {
         const result = await this.trainingModel.deleteOne({ userId, _id: trainingId }).exec();
         if (result.n === 0) {
             throw new NotFoundException('Could not find training.');
         }
+    }
+
+    async sumTraingsDataByYear(userId: string, year: string) {
+        const time = await this.trainingModel.aggregate([{
+            $match: { $and: [{ userId }, { time: { $gte: 1 } }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
+        },
+        { $group: { _id: null, time: { $sum: '$time' } } },
+        ]);
+
+        const distance = await this.trainingModel.aggregate([{
+            $match: { $and: [{ userId }, { distance: { $gte: 1 } }] },
+        },
+        { $group: { _id: null, distance: { $sum: '$distance' } } },
+        ]);
+
+        const calories = await this.trainingModel.aggregate([{
+            $match: { $and: [{ userId }, { calories: { $gte: 1 } }] },
+        },
+        { $group: { _id: null, calories: { $sum: '$calories' } } },
+        ]);
+
+        return { time, distance, calories };
+    }
+
+    async sumTraingsDataByMonth(userId: string, year: string,month: string) {
+        const time = await this.trainingModel.aggregate([{
+            $match: { $and: [{ userId }, { time: { $gte: 1 } }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }] },
+        },
+        { $group: { _id: null, time: { $sum: '$time' } } },
+        ]);
+
+        const distance = await this.trainingModel.aggregate([{
+            $match: { $and: [{ userId }, { distance: { $gte: 1 } }] },
+        },
+        { $group: { _id: null, distance: { $sum: '$distance' } } },
+        ]);
+
+        const calories = await this.trainingModel.aggregate([{
+            $match: { $and: [{ userId }, { calories: { $gte: 1 } }] },
+        },
+        { $group: { _id: null, calories: { $sum: '$calories' } } },
+        ]);
+
+        return { time, distance, calories };
     }
 }
