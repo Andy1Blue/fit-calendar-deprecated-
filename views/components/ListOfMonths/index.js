@@ -155,18 +155,18 @@ class ListOfMonths extends Component {
 
                     elem.setAttribute("id", day + "." + month + "." + year);
                     if (day + "" + month + "" + year === today) {
-                        elem.style.backgroundColor = 'green';
-                        elem.style.border = '1px solid #414363';
-                        elem.style.borderBottom = '5px solid #414363';
+                        elem.style.backgroundColor = '#de49ba';
+                        // elem.style.border = '1px solid #c0993e';
+                        elem.style.borderBottom = '5px solid #c0993e';
                     } else {
-                        elem.style.backgroundColor = 'green';
+                        elem.style.backgroundColor = '#de49ba';
                     }
                     elem.setAttribute("trainingId", idList[i])
                     elem.setAttribute("comment", day + "." + month + "." + year + " [" + description[i] + "]");
                     break;
                 } else {
                     elem.style.cursor = 'pointer';
-                    elem.style.color = '#8c90bd';
+                    elem.style.color = '#7c838c';
                     elem.style.fontFamily = 'Roboto, sans-serif';
                     elem.style.fontSize = '8px';
                     elem.innerHTML = day;
@@ -176,8 +176,8 @@ class ListOfMonths extends Component {
                     elem.setAttribute("comment", day + "." + month + "." + year + " [No training!]");
 
                     if (day + "" + month + "" + year === today) {
-                        elem.style.border = '1px solid #414363';
-                        elem.style.borderBottom = '5px solid #414363';
+                        // elem.style.border = '1px solid #c0993e';
+                        elem.style.borderBottom = '5px solid #c0993e';
                     }
                 }
             }
@@ -361,91 +361,118 @@ class ListOfMonths extends Component {
                             </div>
                         }
 
-                        {sumValuesMonth && (sumValuesMonth.time[0] || sumValuesMonth.distance[0] || sumValuesMonth.calories[0]) &&
-                            <div>
-                                <div className="row">
-                                    <div className="col">
-                                        <h4>In this month:</h4>
+                        <div className="center">
+                            {sumValuesMonth && (sumValuesMonth.time[0] || sumValuesMonth.distance[0] || sumValuesMonth.calories[0]) &&
+                                <div class="statistic-bar-conteiner">
+                                    <div class="statistic-bar-title">
+                                        <div class="statistic-bar-elem">In this month</div>
+                                        <div class="statistic-bar-elem">0? workouts</div>
+                                    </div>
+                                    <div class="statistic-bar-content">
+                                        <div class="statistic-bar-elem bold">
+                                            {sumValuesMonth.time[0] &&
+                                                <span>&#128336; {sumValuesMonth.time[0].time} min (~ {Math.round(sumValuesMonth.time[0].time / 60, 1)}h)</span>
+                                            }
+                                        </div>
+                                        <div class="statistic-bar-elem">
+                                            {sumValuesMonth.distance[0] &&
+                                                <span>&#128099; {sumValuesMonth.distance[0].distance} km</span>
+                                            }
+                                        </div>
+                                        <div class="statistic-bar-elem">
+                                            {sumValuesMonth.calories[0] &&
+                                                <span>&#128293; {sumValuesMonth.calories[0].calories} kcal</span>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <div className="col">
-                                        <table id="table-statistics" className="table table-dark">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"></th>
-                                                    <th scope="col">Sum</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {sumValuesMonth.time[0] &&
-                                                    <tr>
-                                                        <th scope="row">Time</th>
-                                                        <td> {sumValuesMonth.time[0].time} min (~ {Math.round(sumValuesMonth.time[0].time / 60, 1)}h)</td>
-                                                    </tr>
-                                                }
-                                                {sumValuesMonth.distance[0] &&
-                                                    <tr>
-                                                        <th scope="row">Distance</th>
-                                                        <td>{sumValuesMonth.distance[0].distance} km
-                                        </td>
-                                                    </tr>
-                                                }
-                                                {sumValuesMonth.calories[0] &&
-                                                    <tr>
-                                                        <th scope="row">Calories</th>
-                                                        <td>{sumValuesMonth.calories[0].calories} kcal</td>
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        }
+                            }
 
-                        {sumValuesYear && (sumValuesYear.time[0] || sumValuesYear.distance[0] || sumValuesYear.calories[0]) &&
-                            <div>
-                                <div className="row">
-                                    <div className="col">
-                                        <h4>In this year:</h4>
+                            {sumValuesYear && (sumValuesYear.time[0] || sumValuesYear.distance[0] || sumValuesYear.calories[0]) &&
+                                <div class="statistic-bar-conteiner">
+                                    <div class="statistic-bar-title">
+                                        <div class="statistic-bar-elem">In this year</div>
+                                        <div class="statistic-bar-elem">0? workouts</div>
+                                    </div>
+                                    <div class="statistic-bar-content">
+                                        <div class="statistic-bar-elem bold">
+                                            {sumValuesYear.time[0] &&
+                                                <span>&#128336; {sumValuesYear.time[0].time} min (~ {Math.round(sumValuesYear.time[0].time / 60, 1)}h)</span>
+                                            }
+                                        </div>
+                                        <div class="statistic-bar-elem">
+                                            {sumValuesYear.distance[0] &&
+                                                <span>&#128099; {sumValuesYear.distance[0].distance} km</span>
+                                            }
+                                        </div>
+                                        <div class="statistic-bar-elem">
+                                            {sumValuesYear.calories[0] &&
+                                                <span>&#128293; {sumValuesYear.calories[0].calories} kcal</span>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <div className="col">
-                                        <table id="table-statistics" className="table table-dark">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"></th>
-                                                    <th scope="col">Sum</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {sumValuesYear.time[0] &&
-                                                    <tr>
-                                                        <th scope="row">Time</th>
-                                                        <td> {sumValuesYear.time[0].time} min (~ {Math.round(sumValuesYear.time[0].time / 60, 1)}h)</td>
-                                                    </tr>
-                                                }
-                                                {sumValuesYear.distance[0] &&
-                                                    <tr>
-                                                        <th scope="row">Distance</th>
-                                                        <td>{sumValuesYear.distance[0].distance} km
-                                        </td>
-                                                    </tr>
-                                                }
-                                                {sumValuesYear.calories[0] &&
-                                                    <tr>
-                                                        <th scope="row">Calories</th>
-                                                        <td>{sumValuesYear.calories[0].calories} kcal</td>
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
+                            }
+
+                        </div>
+
+                        <div className="center">
+                            {sumValuesMonth && (sumValuesMonth.time[0] || sumValuesMonth.distance[0] || sumValuesMonth.calories[0]) &&
+                                <div class="statistic-bar-conteiner">
+                                    <div class="statistic-bar-title">
+                                        <div class="statistic-bar-elem">In this month</div>
+                                        <div class="statistic-bar-elem">0? workouts</div>
+                                    </div>
+                                    <div class="statistic-bar-content">
+                                        <div class="statistic-bar-elem bold">
+                                            {sumValuesMonth.time[0] &&
+                                                <span>&#128336; {sumValuesMonth.time[0].time} min (~ {Math.round(sumValuesMonth.time[0].time / 60, 1)}h)</span>
+                                            }
+                                        </div>
+                                        <div class="statistic-bar-elem">
+                                            {sumValuesMonth.distance[0] &&
+                                                <span>&#128099; {sumValuesMonth.distance[0].distance} km</span>
+                                            }
+                                        </div>
+                                        <div class="statistic-bar-elem">
+                                            {sumValuesMonth.calories[0] &&
+                                                <span>&#128293; {sumValuesMonth.calories[0].calories} kcal</span>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                            }
+
+                            {sumValuesYear && (sumValuesYear.time[0] || sumValuesYear.distance[0] || sumValuesYear.calories[0]) &&
+                                <div class="statistic-bar-conteiner">
+                                    <div class="statistic-bar-title">
+                                        <div class="statistic-bar-elem">In this year</div>
+                                        <div class="statistic-bar-elem">0? workouts</div>
+                                    </div>
+                                    <div class="statistic-bar-content">
+                                        <div class="statistic-bar-elem bold">
+                                            {sumValuesYear.time[0] &&
+                                                <span>&#128336; {sumValuesYear.time[0].time} min (~ {Math.round(sumValuesYear.time[0].time / 60, 1)}h)</span>
+                                            }
+                                        </div>
+                                        <div class="statistic-bar-elem">
+                                            {sumValuesYear.distance[0] &&
+                                                <span>&#128099; {sumValuesYear.distance[0].distance} km</span>
+                                            }
+                                        </div>
+                                        <div class="statistic-bar-elem">
+                                            {sumValuesYear.calories[0] &&
+                                                <span>&#128293; {sumValuesYear.calories[0].calories} kcal</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+
+
+
                     </div>
                 }
             </div>

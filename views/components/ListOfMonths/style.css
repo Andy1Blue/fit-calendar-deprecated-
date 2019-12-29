@@ -1,4 +1,6 @@
 .traning-table-content {
+    width:950px;
+    height:450px;
     padding: 2rem 0;
     margin: 0 auto;
 }
@@ -58,7 +60,7 @@ rect:hover:after {
 .m10 rect,
 .m11 rect,
 .m12 rect {
-    background-color: rgb(202, 206, 247);
+    background-color: #6e2364;
     height: 21px;
     width: 21px;
     margin: 4px;
@@ -77,7 +79,7 @@ rect:hover:after {
 .m10 rect:hover,
 .m11 rect:hover,
 .m12 rect:hover {
-    background-color: rgb(220, 222, 248);
+    background-color: #4e4c5d;
 }
 
 /* @media only screen and (max-width: 1000px) {
@@ -130,4 +132,45 @@ rect:hover:after {
     text-align: center;
     margin-left:auto; 
     margin-right:auto;
+    background-color: #1d1b29;
+    color: #a4a2af;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.bold {
+    font-weight: bold;
+    font-size:18px;
+}
+
+.statistic-bar-conteiner {
+    margin:10px;
+    border-radius: 10px;
+    padding:20px;
+    width:500px;
+    background-color: #1d1b29;
+display: flex;
+justify-content: center;
+flex-direction: column;
+}
+
+.statistic-bar-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.statistic-bar-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.statistic-bar-elem {
+    display: flex;
+    flex-direction: column;
+    padding:5px;
 }

@@ -2,8 +2,9 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: gray;
+  background-color: #2e2b3d;
   font-size: 16px;
+  color:#dedce6;
 }
 
 .App {
@@ -17,7 +18,7 @@ body {
 }
 
 .App-header {
-  background-color: #44020f;
+  background-color: #2f2c3f;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -25,14 +26,33 @@ body {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  background: url('../../assets/background.png') bottom center no-repeat;
+}
+
+.welcome-container {
+  background-color:#0000005e;
+  padding:50px;
+  border-radius: 20px;
+}
+
+.footer {
+  position:absolute;
+  bottom:10px;
+  font-size: 10px;
+  left:40%;
+  right:40%;
 }
 
 .App-link {
   color: #61dafb;
 }
 
+.small {
+  font-size:10px;
+}
+
 .navbar {
-  background-color: #44020f;
+  background-color:#1f1c2f;
   color: white;
   min-height: 5vh;
   font-size: 14px;
@@ -45,16 +65,18 @@ body {
 }
 
 #red-toast {
-  background-color: #44020f;
+  background-color: #1b1927;
   z-index: 999;
   position: absolute;
   color: white;
   border: 1px solid black;
   top: 30%;
-  left: 40%;
-  padding: 10px;
+  left: 30%;
+  padding: 20px;
   animation: show 0.5s;
   font-size: 22px;
+  border-radius: 10px;
+  width:500px;
 }
 
 #red-toast #red-toast-close {

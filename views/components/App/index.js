@@ -218,11 +218,12 @@ class App extends Component {
                 {isFetching && <div><Loader /></div>}
                 {TCgId === null && !isFetching &&
                     <header className="App-header">
-                        <div>
+                        <div className="welcome-container">
                             <img className="logo-welcome-page" src={logo} alt="logo" />
                             <p>Training calendar</p>
                             <div>
                                 <GoogleLogin />
+                                <div className="footer">Photo by Alora Griffiths on Unsplash</div>
                             </div>
                         </div>
                     </header>
@@ -285,16 +286,16 @@ class App extends Component {
                                         }} value={dayObject.distance === 0 ? '' : dayObject.distance}></input>
 
                                         <br /><small>Quick add:<br />
-                                            <span class="btn btn-secondary margin1" onClick={this.addToDescription}> [INDOOR BIKE] </span>
-                                            <span class="btn btn-secondary margin1" onClick={this.addToDescription}> [TABATA] </span>
-                                            <span class="btn btn-secondary margin1" onClick={this.addToDescription}> [TAPE] </span>
+                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [INDOOR RUN] </span>
+                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [TABATA] </span>
+                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [MINI BAND] </span>
                                             <br />
-                                            <span class="btn btn-secondary margin1" onClick={this.addToDescription}> [RUN] </span>
-                                            <span class="btn btn-secondary margin1" onClick={this.addToDescription}> [WALK] </span>
-                                            <span class="btn btn-secondary margin1" onClick={this.addToDescription}> [BIKE] </span>
+                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [RUN] </span>
+                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [WALK] </span>
+                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [BIKE] </span>
                                             <br />
-                                            <span class="btn btn-secondary margin1" onClick={this.addToDescription}> [GYM] </span>
-                                            <span class="btn btn-secondary margin1" onClick={this.addToDescription}> [SPINNING] </span>
+                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [GYM] </span>
+                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [SPINNING] </span>
                                         </small>
 
                                         <br />Comment:<br />
