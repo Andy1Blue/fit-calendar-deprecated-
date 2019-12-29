@@ -26,7 +26,7 @@ body {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  background: url('../../assets/background.png') bottom center no-repeat;
+  background: url('http://blueapp.ovh/fit-calendar/views/assets/background.png') bottom center no-repeat;
 }
 
 .welcome-container {
