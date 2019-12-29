@@ -202,8 +202,6 @@ class App extends Component {
     }
 
     componentDidMount() {
-        console.log(config.domain)
-
         // If local storage is not null
         if (localStorage.getItem('TCgId') !== null) {
             const TCgId = localStorage.getItem('TCgId');

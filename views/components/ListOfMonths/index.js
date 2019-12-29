@@ -40,7 +40,7 @@ class ListOfMonths extends Component {
     }
 
     actualDay = () => {
-        const actualDay = (new Date().getDate() + 1).toString();
+        const actualDay = (new Date().getDate()).toString();
         this.setState({ actualDay: actualDay.length === 2 ? actualDay : `0${actualDay}` });
         return actualDay.length === 2 ? actualDay : `0${actualDay}`;
     }
