@@ -51,7 +51,7 @@ export class TrainingsController {
 
     @Get('/sum/user/:userId/year/:year/month/:month')
     async getSumTraningDataByMonth(@Param('userId') userId: string, @Param('year') year: string, @Param('month') month: string) {
-        const result = await this.trainingsService.sumTraingsDataByMonth(userId, year,month);
+        const result = await this.trainingsService.sumTraingsDataByMonth(userId, year, month);
         return result;
     }
 

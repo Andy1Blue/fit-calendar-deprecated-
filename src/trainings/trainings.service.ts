@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 export class TrainingsService {
     constructor(@InjectModel('Training') private readonly trainingModel: Model<Training>) { }
 
-    private async findTraining(userId: string, trainingId: string): Promise<Training> {
+     private async findTraining(userId: string, trainingId: string): Promise<Training> {
         let training;
         try {
             training = await this.trainingModel.findOne({ userId, _id: trainingId });
