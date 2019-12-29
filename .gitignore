@@ -1,7 +1,6 @@
 # compiled output
 /dist
 /views/dist
-/views/components/Config
 /node_modules
 /.logs
 
@@ -38,4 +37,5 @@ lerna-debug.log*
 
 # other
 .env
+/views/components/Config/index.js
 /.history
