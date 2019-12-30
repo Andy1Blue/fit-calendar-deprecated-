@@ -63,6 +63,10 @@ body {
   height: 20px;
 }
 
+.padding10 {
+  padding:10px;
+}
+
 #red-toast {
   background-color: #1b1927;
   z-index: 999;

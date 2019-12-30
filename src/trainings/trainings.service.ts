@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 export class TrainingsService {
     constructor(@InjectModel('Training') private readonly trainingModel: Model<Training>) { }
 
-     private async findTraining(userId: string, trainingId: string): Promise<Training> {
+    private async findTraining(userId: string, trainingId: string): Promise<Training> {
         let training;
         try {
             training = await this.trainingModel.findOne({ userId, _id: trainingId });
@@ -64,6 +64,26 @@ export class TrainingsService {
         return trainingsForUser as Training[];
     }
 
+    async getLastTrainingForUser(userId: string) {
+        const lastTrainingForUser = await this.trainingModel.find({ userId }).sort({ createdDate: -1 }).limit(1);
+
+        if (!lastTrainingForUser) {
+            throw new NotFoundException('Could not find training for specify user.');
+        }
+
+        return lastTrainingForUser as Training[];
+    }
+
+    async getFirstTrainingForUser(userId: string) {
+        const firstTrainingForUser = await this.trainingModel.find({ userId }).sort({ createdDate: 1 }).limit(1);
+
+        if (!firstTrainingForUser) {
+            throw new NotFoundException('Could not find training for specify user.');
+        }
+
+        return firstTrainingForUser as Training[];
+    }
+
     async getSingleTraining(userId: string, trainingId: string) {
         const training = await this.findTraining(userId, trainingId);
 
@@ -111,6 +131,14 @@ export class TrainingsService {
     }
 
     async sumTraingsDataByYear(userId: string, year: string) {
+        let count = 0;
+
+        this.trainingModel.countDocuments({ $and: [{ userId }, { trainingDate: { '$regex': year, '$options': 'i' } }] }, function (err, c) {
+            if (!err) {
+                count = c;
+            }
+        });
+
         const time = await this.trainingModel.aggregate([{
             $match: { $and: [{ userId }, { time: { $gte: 1 } }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
         },
@@ -129,10 +157,18 @@ export class TrainingsService {
         { $group: { _id: null, calories: { $sum: '$calories' } } },
         ]);
 
-        return { time, distance, calories };
+        return { count, time, distance, calories };
     }
 
-    async sumTraingsDataByMonth(userId: string, year: string,month: string) {
+    async sumTraingsDataByMonth(userId: string, year: string, month: string) {
+        let count = 0;
+
+        this.trainingModel.countDocuments({ $and: [{ userId }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }] }, function (err, c) {
+            if (!err) {
+                count = c;
+            }
+        });
+
         const time = await this.trainingModel.aggregate([{
             $match: { $and: [{ userId }, { time: { $gte: 1 } }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }] },
         },
@@ -140,17 +176,17 @@ export class TrainingsService {
         ]);
 
         const distance = await this.trainingModel.aggregate([{
-            $match: { $and: [{ userId }, { distance: { $gte: 1 } }] },
+            $match: { $and: [{ userId }, { distance: { $gte: 1 } }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }] },
         },
         { $group: { _id: null, distance: { $sum: '$distance' } } },
         ]);
 
         const calories = await this.trainingModel.aggregate([{
-            $match: { $and: [{ userId }, { calories: { $gte: 1 } }] },
+            $match: { $and: [{ userId }, { calories: { $gte: 1 } }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }] },
         },
         { $group: { _id: null, calories: { $sum: '$calories' } } },
         ]);
 
-        return { time, distance, calories };
+        return { count, time, distance, calories };
     }
 }

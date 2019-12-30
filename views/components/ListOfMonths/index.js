@@ -17,6 +17,8 @@ class ListOfMonths extends Component {
         actualDay: null,
         sumValuesYear: null,
         sumValuesMonth: null,
+        firstTraining: null,
+        lastTraining: null,
     }
 
     refresh = () => {
@@ -103,7 +105,7 @@ class ListOfMonths extends Component {
                     elem.setAttribute("comment", day + "." + month + "." + year + " [No training!]");
                     elem.setAttribute("data-toggle", 'modal');
                     elem.setAttribute("data-target", '#workoutDay');
-                    
+
                     if (day + "" + month + "" + year === today) {
                         elem.className = 'rect-standard rect-today';
                     }
@@ -156,6 +158,30 @@ class ListOfMonths extends Component {
                     this.setState({ sumValuesMonth });
                 });
 
+            fetch(config.domain + '/trainings/first/user/' + TCgId,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                .then(response => response.json())
+                .then(firstTraining => {
+                    this.setState({ firstTraining });
+                });
+
+            fetch(config.domain + '/trainings/last/user/' + TCgId,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                .then(response => response.json())
+                .then(lastTraining => {
+                    this.setState({ lastTraining });
+                });
+
             fetch(config.domain + '/trainings/user/' + TCgId,
                 {
                     method: "GET",
@@ -182,6 +208,11 @@ class ListOfMonths extends Component {
         } else {
             this.setState({ isWorkoutDate: [], isFetching: false })
         }
+    }
+
+    formatDate = (data) => {
+        let result = data.slice(0, 2) + "." + data.slice(2,4) + "."+ data.slice(4);
+        return result;
     }
 
     generateReacts = () => {
@@ -216,7 +247,7 @@ class ListOfMonths extends Component {
     }
 
     render() {
-        const { isFetching, isWorkoutDate, actualYear, sumValuesYear, sumValuesMonth } = this.state;
+        const { isFetching, isWorkoutDate, actualYear, sumValuesYear, sumValuesMonth, lastTraining, firstTraining } = this.state;
         return (
             <div className="App-matches">
                 {isFetching && <div><Loader /></div>}
@@ -256,7 +287,7 @@ class ListOfMonths extends Component {
                                 <div className="statistic-bar-conteiner">
                                     <div className="statistic-bar-title">
                                         <div className="statistic-bar-elem">In this month</div>
-                                        <div className="statistic-bar-elem">0? workouts</div>
+                                        <div className="statistic-bar-elem">{sumValuesMonth.count}  workouts</div>
                                     </div>
                                     <div className="statistic-bar-content">
                                         <div className="statistic-bar-elem bold">
@@ -282,7 +313,7 @@ class ListOfMonths extends Component {
                                 <div className="statistic-bar-conteiner">
                                     <div className="statistic-bar-title">
                                         <div className="statistic-bar-elem">In this year</div>
-                                        <div className="statistic-bar-elem">0? workouts</div>
+                                        <div className="statistic-bar-elem">{sumValuesYear.count}  workouts</div>
                                     </div>
                                     <div className="statistic-bar-content">
                                         <div className="statistic-bar-elem bold">
@@ -307,52 +338,60 @@ class ListOfMonths extends Component {
                         </div>
 
                         <div className="center">
-                            {sumValuesMonth && (sumValuesMonth.time[0] || sumValuesMonth.distance[0] || sumValuesMonth.calories[0]) &&
+                            {lastTraining && lastTraining !== null &&
                                 <div className="statistic-bar-conteiner">
                                     <div className="statistic-bar-title">
-                                        <div className="statistic-bar-elem">In this month</div>
-                                        <div className="statistic-bar-elem">0? workouts</div>
+                                        <div className="statistic-bar-elem">Last workout</div>
+                                        <div className="statistic-bar-elem">
+                                            {lastTraining[0].trainingDate &&
+                                                <span>{this.formatDate(lastTraining[0].trainingDate)}</span>
+                                            }
+                                        </div>
                                     </div>
                                     <div className="statistic-bar-content">
                                         <div className="statistic-bar-elem bold">
-                                            {sumValuesMonth.time[0] &&
-                                                <span>&#128336; {sumValuesMonth.time[0].time} min (~ {Math.round(sumValuesMonth.time[0].time / 60, 1)}h)</span>
+                                            {lastTraining[0].time &&
+                                                <span>&#128336; {lastTraining[0].time} min (~ {Math.round(lastTraining[0].time / 60, 1)}h)</span>
                                             }
                                         </div>
                                         <div className="statistic-bar-elem">
-                                            {sumValuesMonth.distance[0] &&
-                                                <span>&#128099; {sumValuesMonth.distance[0].distance} km</span>
+                                            {lastTraining[0].distance &&
+                                                <span>&#128099; {lastTraining[0].distance} km</span>
                                             }
                                         </div>
                                         <div className="statistic-bar-elem">
-                                            {sumValuesMonth.calories[0] &&
-                                                <span>&#128293; {sumValuesMonth.calories[0].calories} kcal</span>
+                                            {lastTraining[0].calories &&
+                                                <span>&#128293; {lastTraining[0].calories} kcal</span>
                                             }
                                         </div>
                                     </div>
                                 </div>
                             }
 
-                            {sumValuesYear && (sumValuesYear.time[0] || sumValuesYear.distance[0] || sumValuesYear.calories[0]) &&
+                            {firstTraining && firstTraining !== null &&
                                 <div className="statistic-bar-conteiner">
                                     <div className="statistic-bar-title">
-                                        <div className="statistic-bar-elem">In this year</div>
-                                        <div className="statistic-bar-elem">0? workouts</div>
+                                        <div className="statistic-bar-elem">First workout</div>
+                                        <div className="statistic-bar-elem">
+                                            {firstTraining[0].trainingDate &&
+                                                <span>{this.formatDate(firstTraining[0].trainingDate)}</span>
+                                            }
+                                        </div>
                                     </div>
                                     <div className="statistic-bar-content">
                                         <div className="statistic-bar-elem bold">
-                                            {sumValuesYear.time[0] &&
-                                                <span>&#128336; {sumValuesYear.time[0].time} min (~ {Math.round(sumValuesYear.time[0].time / 60, 1)}h)</span>
+                                            {firstTraining[0].time &&
+                                                <span>&#128336; {firstTraining[0].time} min (~ {Math.round(firstTraining[0].time / 60, 1)}h)</span>
                                             }
                                         </div>
                                         <div className="statistic-bar-elem">
-                                            {sumValuesYear.distance[0] &&
-                                                <span>&#128099; {sumValuesYear.distance[0].distance} km</span>
+                                            {firstTraining[0].distance &&
+                                                <span>&#128099; {firstTraining[0].distance} km</span>
                                             }
                                         </div>
                                         <div className="statistic-bar-elem">
-                                            {sumValuesYear.calories[0] &&
-                                                <span>&#128293; {sumValuesYear.calories[0].calories} kcal</span>
+                                            {firstTraining[0].calories &&
+                                                <span>&#128293; {firstTraining[0].calories} kcal</span>
                                             }
                                         </div>
                                     </div>

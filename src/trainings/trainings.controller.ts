@@ -43,6 +43,18 @@ export class TrainingsController {
         return training;
     }
 
+    @Get('/first/user/:userId')
+    async getFirstTraning(@Param('id') traningId: string, @Param('userId') userId: string) {
+        const training = await this.trainingsService.getFirstTrainingForUser(userId);
+        return training;
+    }
+
+    @Get('/last/user/:userId')
+    async getLastTraning(@Param('id') traningId: string, @Param('userId') userId: string) {
+        const training = await this.trainingsService.getLastTrainingForUser(userId);
+        return training;
+    }
+
     @Get('/sum/user/:userId/year/:year')
     async getSumTraningDataByYear(@Param('userId') userId: string, @Param('year') year: string) {
         const result = await this.trainingsService.sumTraingsDataByYear(userId, year);

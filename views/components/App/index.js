@@ -190,6 +190,10 @@ class App extends Component {
          this.setState({ alertText });
         $('#workoutDay').modal('hide');
         $('#alert').modal('show');
+
+        setTimeout(()=>{
+            $('#alert').modal('hide');
+        },2000)
     }
 
     checkTextareaIsEmpty = () => {
@@ -254,7 +258,7 @@ class App extends Component {
 
                                 <div class="modal-body">
                                     {showDay &&
-                                        <div id="red-toast">
+                                        <div id="red-toast" class="padding10">
                                             <div>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
@@ -349,7 +353,7 @@ class App extends Component {
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-body">
-                                    <div id="red-toast">
+                                    <div id="red-toast" class="padding10">
                                         {alertText}
                                     </div>
                                 </div>
