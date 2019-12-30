@@ -110,7 +110,7 @@ rect:hover:after {
     background-color: #4e4c5d;
 }
 
-/* @media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1000px) {
 
     .m1 rect,
     .m2 rect,
@@ -124,18 +124,18 @@ rect:hover:after {
     .m10 rect,
     .m11 rect,
     .m12 rect {
-        background-color: rgb(202, 206, 247);
-        height: 6px;
-        width: 6px;
-        margin: 2px;
-        float: left;
+        display: none;
+
     }
 
     .traning-table-content {
-        padding: 4rem 0;
-        margin: 0 auto;
+        height: 10px;    
     }
-} */
+
+    .m1:after {
+        content: "Use the non-mobile browser to show the calendar!";  
+    }
+}
 
 .m0,
 .m1,

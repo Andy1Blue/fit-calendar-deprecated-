@@ -23,6 +23,7 @@ class App extends Component {
         targetDay: null,
         refresh: false,
         targetDayTId: null,
+        alertText: null,
         dayObject: {
             description: null,
             distance: null,
@@ -124,6 +125,7 @@ class App extends Component {
                     this.setState({ showDay: false });
                     this.refresh();
                     this.forceUpdate();
+                    this.showAlert('Workout added!');
                 });
         }
     }
@@ -157,6 +159,7 @@ class App extends Component {
                     this.setState({ showDay: false });
                     this.refresh();
                     this.forceUpdate();
+                    this.showAlert('Workout updated!');
                 });
         }
     }
@@ -179,7 +182,14 @@ class App extends Component {
                 this.setState({ showDay: false });
                 this.refresh();
                 this.forceUpdate();
+                this.showAlert('Workout deleted!');
             });
+    }
+
+    showAlert = (alertText) => {
+         this.setState({ alertText });
+        $('#workoutDay').modal('hide');
+        $('#alert').modal('show');
     }
 
     checkTextareaIsEmpty = () => {
@@ -211,7 +221,7 @@ class App extends Component {
     }
 
     render() {
-        const { isFetching, TCgId, showDay, targetDay, refresh, dayObject, showDayLoader, isDescriptionInactive } = this.state;
+        const { isFetching, TCgId, showDay, targetDay, refresh, dayObject, showDayLoader, isDescriptionInactive,alertText } = this.state;
         return (
             <div className="App">
                 {isFetching && <div><Loader /></div>}
@@ -232,108 +242,120 @@ class App extends Component {
                         <GoogleLogin />
                     </div>
 
-                                    <div onClick={this.showDay}>
+                    <div onClick={this.showDay}>
                         {!refresh &&
                             <ListOfMonths TCgId={TCgId} />
                         }
                     </div>
 
-<div class="modal fade" id="workoutDay" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-    
-      <div class="modal-body">
-      {showDay &&
-                        <div id="red-toast">
-                            <div>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-                                {!showDayLoader &&
-                                    <div>
-                                        Day: {targetDay}
+                    <div class="modal fade" id="workoutDay" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
 
-                                        <br />
+                                <div class="modal-body">
+                                    {showDay &&
+                                        <div id="red-toast">
+                                            <div>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                {!showDayLoader &&
+                                                    <div>
+                                                        Day: {targetDay}
 
-                                        &#128336;
+                                                        <br />
+
+                                                        &#128336;
 
                                             <input type="number" id="time" class="input-number" placeholder="min" onChange={e => {
-                                            this.setState({
-                                                dayObject: {
-                                                    description: dayObject.description,
-                                                    time: e.target.value,
-                                                    calories: dayObject.calories,
-                                                    distance: dayObject.distance,
-                                                }
-                                            })
-                                            this.checkTextareaIsEmpty()
-                                        }} value={dayObject.time === 0 ? '' : dayObject.time}></input>
+                                                            this.setState({
+                                                                dayObject: {
+                                                                    description: dayObject.description,
+                                                                    time: e.target.value,
+                                                                    calories: dayObject.calories,
+                                                                    distance: dayObject.distance,
+                                                                }
+                                                            })
+                                                            this.checkTextareaIsEmpty()
+                                                        }} value={dayObject.time === 0 ? '' : dayObject.time}></input>
 
-                                        &#128293;
+                                                        &#128293;
 
                                         <input type="number" id="calories" class="input-number" placeholder="kcal" onChange={e => {
-                                            this.setState({
-                                                dayObject: {
-                                                    description: dayObject.description,
-                                                    time: dayObject.time,
-                                                    calories: e.target.value,
-                                                    distance: dayObject.distance,
-                                                }
-                                            })
-                                            this.checkTextareaIsEmpty()
-                                        }} value={dayObject.calories === 0 ? '' : dayObject.calories}></input>
+                                                            this.setState({
+                                                                dayObject: {
+                                                                    description: dayObject.description,
+                                                                    time: dayObject.time,
+                                                                    calories: e.target.value,
+                                                                    distance: dayObject.distance,
+                                                                }
+                                                            })
+                                                            this.checkTextareaIsEmpty()
+                                                        }} value={dayObject.calories === 0 ? '' : dayObject.calories}></input>
 
-                                        &#128099;
+                                                        &#128099;
 
                                         <input type="number" id="distance" class="input-number" placeholder="km" onChange={e => {
-                                            this.setState({
-                                                dayObject: {
-                                                    description: dayObject.description,
-                                                    time: dayObject.time,
-                                                    calories: dayObject.calories,
-                                                    distance: e.target.value,
+                                                            this.setState({
+                                                                dayObject: {
+                                                                    description: dayObject.description,
+                                                                    time: dayObject.time,
+                                                                    calories: dayObject.calories,
+                                                                    distance: e.target.value,
+                                                                }
+                                                            })
+                                                            this.checkTextareaIsEmpty()
+                                                        }} value={dayObject.distance === 0 ? '' : dayObject.distance}></input>
+
+                                                        <br /><small>Quick add:<br />
+                                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [INDOOR RUN] </span>
+                                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [TABATA] </span>
+                                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [MINI BAND] </span>
+                                                            <br />
+                                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [RUN] </span>
+                                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [WALK] </span>
+                                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [BIKE] </span>
+                                                            <br />
+                                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [GYM] </span>
+                                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [SPINNING] </span>
+                                                        </small>
+
+                                                        <br />Comment:<br />
+
+                                                        {dayObject.description && <textarea id="description" onChange={e => { this.setState({ description: e.target.value }); this.checkTextareaIsEmpty() }}>{dayObject.description}</textarea>}
+                                                        {!dayObject.description && <textarea onChange={this.checkTextareaIsEmpty} id="description"></textarea>}
+
+                                                        <br />
+                                                        {!dayObject.description && <button disabled={isDescriptionInactive} onClick={this.saveDay}>Save</button>}
+                                                        {dayObject.description && <button disabled={isDescriptionInactive} onClick={this.updateDay}>Update</button>}
+                                                        {dayObject.description && <button disabled={isDescriptionInactive} onClick={this.deleteDay}>Delete</button>}
+
+                                                        <br />
+                                                        {isDescriptionInactive && <span className="alert">Field cannot be empty!</span>}
+                                                    </div>
                                                 }
-                                            })
-                                            this.checkTextareaIsEmpty()
-                                        }} value={dayObject.distance === 0 ? '' : dayObject.distance}></input>
-
-                                        <br /><small>Quick add:<br />
-                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [INDOOR RUN] </span>
-                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [TABATA] </span>
-                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [MINI BAND] </span>
-                                            <br />
-                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [RUN] </span>
-                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [WALK] </span>
-                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [BIKE] </span>
-                                            <br />
-                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [GYM] </span>
-                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [SPINNING] </span>
-                                        </small>
-
-                                        <br />Comment:<br />
-
-                                        {dayObject.description && <textarea id="description" onChange={e => { this.setState({ description: e.target.value }); this.checkTextareaIsEmpty() }}>{dayObject.description}</textarea>}
-                                        {!dayObject.description && <textarea onChange={this.checkTextareaIsEmpty} id="description"></textarea>}
-
-                                        <br />
-                                        {!dayObject.description && <button disabled={isDescriptionInactive} onClick={this.saveDay}>Save</button>}
-                                        {dayObject.description && <button disabled={isDescriptionInactive} onClick={this.updateDay}>Update</button>}
-                                        {dayObject.description && <button disabled={isDescriptionInactive} onClick={this.deleteDay}>Delete</button>}
-
-                                        <br />
-                                        {isDescriptionInactive && <span className="alert">Field cannot be empty!</span>}
-                                    </div>
-                                }
-                                {showDayLoader &&
-                                    <div><Loader /></div>
-                                }
+                                                {showDayLoader &&
+                                                    <div><Loader /></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
                             </div>
                         </div>
-                    }
-      </div>
-    </div>
-  </div>
-</div>
+                    </div>
+
+                    <div class="modal fade" id="alert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div id="red-toast">
+                                        {alertText}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
                 }
