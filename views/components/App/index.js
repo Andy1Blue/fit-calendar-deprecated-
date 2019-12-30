@@ -202,7 +202,6 @@ class App extends Component {
     }
 
     componentDidMount() {
-        // If local storage is not null
         if (localStorage.getItem('TCgId') !== null) {
             const TCgId = localStorage.getItem('TCgId');
             this.setState({ TCgId, isLogin: true, isFetching: false })
@@ -220,10 +219,10 @@ class App extends Component {
                     <header className="App-header">
                         <div className="welcome-container">
                             <img className="logo-welcome-page" src={logo} alt="logo" />
-                            <p>Training calendar</p>
+                            <p>FitCalendar</p>
                             <div>
                                 <GoogleLogin />
-                                <div className="footer">Photo by Alora Griffiths on Unsplash</div>
+                                <div className="footer">FitCalendar</div>
                             </div>
                         </div>
                     </header>
@@ -233,10 +232,23 @@ class App extends Component {
                         <GoogleLogin />
                     </div>
 
-                    {showDay &&
+                                    <div onClick={this.showDay}>
+                        {!refresh &&
+                            <ListOfMonths TCgId={TCgId} />
+                        }
+                    </div>
+
+<div class="modal fade" id="workoutDay" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    
+      <div class="modal-body">
+      {showDay &&
                         <div id="red-toast">
                             <div>
-                                <button id="red-toast-close" onClick={this.closeDay}>x</button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
                                 {!showDayLoader &&
                                     <div>
                                         Day: {targetDay}
@@ -318,12 +330,11 @@ class App extends Component {
                             </div>
                         </div>
                     }
+      </div>
+    </div>
+  </div>
+</div>
 
-                    <div onClick={this.showDay}>
-                        {!refresh &&
-                            <ListOfMonths TCgId={TCgId} />
-                        }
-                    </div>
                 </div>
                 }
             </div>

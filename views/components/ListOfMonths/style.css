@@ -1,6 +1,6 @@
 .traning-table-content {
-    width:950px;
-    height:450px;
+    width: 950px;
+    height: 450px;
     padding: 2rem 0;
     margin: 0 auto;
 }
@@ -33,8 +33,36 @@
     color: rgb(226, 226, 226);
 }
 
+.rect-workout {
+    cursor: pointer;
+    color: #fff;
+    font-family: 'Roboto, sans-serif';
+    font-size: 8px;
+}
+
+.rect-active-today {
+    background-color: #de49ba;
+    border-bottom: 5px solid #c0993e;
+}
+
+.rect-active {
+    background-color: #de49ba;
+}
+
+.rect-standard {
+    background-color: #6e2364;
+    cursor: pointer;
+    color: #7c838c;
+    font-family: 'Roboto, sans-serif';
+    font-size: 8px;
+    padding: 0px 0px 7px 7px;
+}
+
+.rect-today {
+   border-bottom: 5px solid #c0993e;
+}
+
 rect:hover:after {
-    font-family: 'Roboto', sans-serif;
     z-index: 999;
     content: attr(comment);
     position: absolute;
@@ -60,7 +88,7 @@ rect:hover:after {
 .m10 rect,
 .m11 rect,
 .m12 rect {
-    background-color: #6e2364;
+    font-family: 'Roboto', sans-serif;
     height: 21px;
     width: 21px;
     margin: 4px;
@@ -128,10 +156,10 @@ rect:hover:after {
 }
 
 #table-statistics {
-    width:300px;
+    width: 300px;
     text-align: center;
-    margin-left:auto; 
-    margin-right:auto;
+    margin-left: auto;
+    margin-right: auto;
     background-color: #1d1b29;
     color: #a4a2af;
 }
@@ -143,18 +171,18 @@ rect:hover:after {
 
 .bold {
     font-weight: bold;
-    font-size:18px;
+    font-size: 18px;
 }
 
 .statistic-bar-conteiner {
-    margin:10px;
+    margin: 10px;
     border-radius: 10px;
-    padding:20px;
-    width:500px;
+    padding: 20px;
+    width: 500px;
     background-color: #1d1b29;
-display: flex;
-justify-content: center;
-flex-direction: column;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .statistic-bar-title {
@@ -172,5 +200,5 @@ flex-direction: column;
 .statistic-bar-elem {
     display: flex;
     flex-direction: column;
-    padding:5px;
+    padding: 5px;
 }

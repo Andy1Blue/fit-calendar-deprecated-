@@ -4,7 +4,7 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: #2e2b3d;
   font-size: 16px;
-  color:#dedce6;
+  color: #dedce6;
 }
 
 .App {
@@ -29,17 +29,17 @@ body {
 }
 
 .welcome-container {
-  background-color:#0000005e;
-  padding:50px;
+  background-color: #0000005e;
+  padding: 50px;
   border-radius: 20px;
 }
 
 .footer {
-  position:absolute;
-  bottom:10px;
+  position: absolute;
+  bottom: 10px;
   font-size: 10px;
-  left:40%;
-  right:40%;
+  left: 40%;
+  right: 40%;
 }
 
 .App-link {
@@ -47,11 +47,11 @@ body {
 }
 
 .small {
-  font-size:10px;
+  font-size: 10px;
 }
 
 .navbar {
-  background-color:#1f1c2f;
+  background-color: #1f1c2f;
   color: white;
   min-height: 5vh;
   font-size: 14px;
@@ -66,25 +66,35 @@ body {
 #red-toast {
   background-color: #1b1927;
   z-index: 999;
-  position: absolute;
   color: white;
   border: 1px solid black;
-  top: 30%;
-  left: 30%;
-  padding: 20px;
   animation: show 0.5s;
   font-size: 22px;
   border-radius: 10px;
-  width:500px;
 }
 
-#red-toast #red-toast-close {
-  position: absolute;
-  top: -6px;
-  right: 1px;
-  border: 0;
-  background: none;
-  color: white;
+.modal {
+  top: 20%;
+}
+
+.close {
+  color: #fff;
+  text-shadow: none;
+  margin-right: 8px;
+}
+
+.close:hover {
+  color: rgb(194, 194, 194);
+}
+
+.modal-dialog {
+  background-color: transparent;
+  border: none;
+}
+
+.modal-content {
+  background-color: transparent;
+  border: none;
 }
 
 @keyframes show {
@@ -106,10 +116,10 @@ body {
   color: rgb(255, 154, 154);
 }
 
-.input-number{
-  width:80px;
+.input-number {
+  width: 80px;
 }
 
 .margin1 {
-  margin:1px;
+  margin: 1px;
 }

@@ -1,14 +1,9 @@
-/*
- *
- * Component for creating list of months
- *
- */
-
-// Imports
 import React, { Component } from 'react';
 import './style.css';
 import Loader from '../Loader';
 import config from '../Config';
+import GoogleLogin from 'react-google-login';
+
 class ListOfMonths extends Component {
     state = {
         refresh: false,
@@ -26,7 +21,6 @@ class ListOfMonths extends Component {
 
     refresh = () => {
         this.setState({ isFetching: true });
-        this.setState({ isFetching: false });
     }
 
     actualYear = () => {
@@ -49,30 +43,9 @@ class ListOfMonths extends Component {
         let a = this.state.actualYear;
         this.setState({ actualYear: a + 1 });
 
-        const m1 = document.getElementById("root").querySelector(".App .App-matches .container .m1");
-        m1.innerHTML = '';
-        const m2 = document.getElementById("root").querySelector(".App .App-matches .container .m2");
-        m2.innerHTML = '';
-        const m3 = document.getElementById("root").querySelector(".App .App-matches .container .m3");
-        m3.innerHTML = '';
-        const m4 = document.getElementById("root").querySelector(".App .App-matches .container .m4");
-        m4.innerHTML = '';
-        const m5 = document.getElementById("root").querySelector(".App .App-matches .container .m5");
-        m5.innerHTML = '';
-        const m6 = document.getElementById("root").querySelector(".App .App-matches .container .m6");
-        m6.innerHTML = '';
-        const m7 = document.getElementById("root").querySelector(".App .App-matches .container .m7");
-        m7.innerHTML = '';
-        const m8 = document.getElementById("root").querySelector(".App .App-matches .container .m8");
-        m8.innerHTML = '';
-        const m9 = document.getElementById("root").querySelector(".App .App-matches .container .m9");
-        m9.innerHTML = '';
-        const m10 = document.getElementById("root").querySelector(".App .App-matches .container .m10");
-        m10.innerHTML = '';
-        const m11 = document.getElementById("root").querySelector(".App .App-matches .container .m11");
-        m11.innerHTML = '';
-        const m12 = document.getElementById("root").querySelector(".App .App-matches .container .m12");
-        m12.innerHTML = '';
+        for (let i = 1; i <= 12; i++) {
+            document.getElementById("root").querySelector(".App .App-matches .container .m" + i).innerHTML = '';
+        }
 
         this.fetchData();
         this.refresh();
@@ -83,30 +56,9 @@ class ListOfMonths extends Component {
         let a = this.state.actualYear;
         this.setState({ actualYear: a - 1 });
 
-        const m1 = document.getElementById("root").querySelector(".App .App-matches .container .m1");
-        m1.innerHTML = '';
-        const m2 = document.getElementById("root").querySelector(".App .App-matches .container .m2");
-        m2.innerHTML = '';
-        const m3 = document.getElementById("root").querySelector(".App .App-matches .container .m3");
-        m3.innerHTML = '';
-        const m4 = document.getElementById("root").querySelector(".App .App-matches .container .m4");
-        m4.innerHTML = '';
-        const m5 = document.getElementById("root").querySelector(".App .App-matches .container .m5");
-        m5.innerHTML = '';
-        const m6 = document.getElementById("root").querySelector(".App .App-matches .container .m6");
-        m6.innerHTML = '';
-        const m7 = document.getElementById("root").querySelector(".App .App-matches .container .m7");
-        m7.innerHTML = '';
-        const m8 = document.getElementById("root").querySelector(".App .App-matches .container .m8");
-        m8.innerHTML = '';
-        const m9 = document.getElementById("root").querySelector(".App .App-matches .container .m9");
-        m9.innerHTML = '';
-        const m10 = document.getElementById("root").querySelector(".App .App-matches .container .m10");
-        m10.innerHTML = '';
-        const m11 = document.getElementById("root").querySelector(".App .App-matches .container .m11");
-        m11.innerHTML = '';
-        const m12 = document.getElementById("root").querySelector(".App .App-matches .container .m12");
-        m12.innerHTML = '';
+        for (let i = 1; i <= 12; i++) {
+            document.getElementById("root").querySelector(".App .App-matches .container .m" + i).innerHTML = '';
+        }
 
         this.fetchData();
         this.refresh();
@@ -117,23 +69,6 @@ class ListOfMonths extends Component {
         return new Date(year, month, 0).getDate();
     };
 
-    addTitle = (day) => {
-        const elem = document.createElement("rect");
-        elem.style.backgroundColor = '#44020f'
-
-        elem.style.cursor = 'pointer';
-        elem.style.color = 'white';
-        elem.style.fontFamily = 'Roboto, sans-serif';
-        elem.style.fontSize = '9px';
-        elem.style.paddingTop = '2px';
-        elem.innerHTML = day;
-
-        elem.setAttribute("id", '8');
-
-        const m = document.getElementById("root").querySelector(".App .App-matches .container .m0");
-        m.appendChild(elem);
-    }
-
     addRect = (selector, day, month, year) => {
         const isWorkoutDate = this.state.isWorkoutDate;
         const description = this.state.description;
@@ -143,52 +78,45 @@ class ListOfMonths extends Component {
             const elem = document.createElement("rect");
             const today = this.actualDay() + "" + this.actualMonth() + "" + this.actualYear();
 
-            // Iterating fetched data from the database
             const workoutDateLength = isWorkoutDate.length > 0 ? isWorkoutDate.length : 10;
             for (let i = 0; i < workoutDateLength; i++) {
                 if (day + "" + month + "" + year === isWorkoutDate[i]) {
-                    elem.style.cursor = 'pointer';
-                    elem.style.color = 'white';
-                    elem.style.fontFamily = 'Roboto, sans-serif';
-                    elem.style.fontSize = '8px';
+                    elem.className = 'rect-workout';
                     elem.innerHTML = day;
 
                     elem.setAttribute("id", day + "." + month + "." + year);
                     if (day + "" + month + "" + year === today) {
-                        elem.style.backgroundColor = '#de49ba';
-                        // elem.style.border = '1px solid #c0993e';
-                        elem.style.borderBottom = '5px solid #c0993e';
+                        elem.className = 'rect-workout rect-active-today';
                     } else {
-                        elem.style.backgroundColor = '#de49ba';
+                        elem.className = 'rect-workout rect-active';
                     }
                     elem.setAttribute("trainingId", idList[i])
                     elem.setAttribute("comment", day + "." + month + "." + year + " [" + description[i] + "]");
+                    elem.setAttribute("data-toggle", 'modal');
+                    elem.setAttribute("data-target", '#workoutDay');
                     break;
                 } else {
-                    elem.style.cursor = 'pointer';
-                    elem.style.color = '#7c838c';
-                    elem.style.fontFamily = 'Roboto, sans-serif';
-                    elem.style.fontSize = '8px';
+                    elem.className = 'rect-standard';
                     elem.innerHTML = day;
-                    elem.style.padding = '0px 0px 7px 7px';
 
                     elem.setAttribute("id", day + "." + month + "." + year);
                     elem.setAttribute("comment", day + "." + month + "." + year + " [No training!]");
-
+                    elem.setAttribute("data-toggle", 'modal');
+                    elem.setAttribute("data-target", '#workoutDay');
+                    
                     if (day + "" + month + "" + year === today) {
-                        // elem.style.border = '1px solid #c0993e';
-                        elem.style.borderBottom = '5px solid #c0993e';
+                        elem.className = 'rect-standard rect-today';
                     }
                 }
             }
 
-            // Adding an element for the selected selector
             const m = document.getElementById("root").querySelector(".App .App-matches .container ." + selector);
             m.appendChild(elem);
         }
     };
 
     fetchData = () => {
+        this.setState({ isFetching: true });
         if (localStorage.getItem('TCgId') !== null) {
             const TCgId = localStorage.getItem('TCgId');
 
@@ -237,7 +165,6 @@ class ListOfMonths extends Component {
                 })
                 .then(response => response.json())
                 .then(response => {
-                    console.log({ response })
                     let isWorkoutDate = [];
                     let description = [];
                     let idList = [];
@@ -248,13 +175,11 @@ class ListOfMonths extends Component {
                     }
                     this.setState({ isWorkoutDate, isFetching: false, description, idList });
 
-                    // Generate rects
                     this.generateReacts();
                 });
             this.refresh();
             this.forceUpdate();
         } else {
-            // If is null return empty data
             this.setState({ isWorkoutDate: [], isFetching: false })
         }
     }
@@ -263,57 +188,19 @@ class ListOfMonths extends Component {
         const isWorkoutDate = this.state.isWorkoutDate;
         let actualYear = this.state.actualYear;
 
-        // If isWorkoutDate have more than 0 elements, create days rectangles
         if (isWorkoutDate) {
             // for (let i = 1; i <= 31; i++) {
             //     this.addTitle(i);
             // }
 
-            for (let i = 1; i <= this.daysInMonth(1, actualYear); i++) {
-                this.addRect("m1", String("00" + i).slice(-2), "01", actualYear);
-            }
-
-            for (let i = 1; i <= this.daysInMonth(2, actualYear); i++) {
-                this.addRect("m2", String("00" + i).slice(-2), "02", actualYear);
-            }
-
-            for (let i = 1; i <= this.daysInMonth(3, actualYear); i++) {
-                this.addRect("m3", String("00" + i).slice(-2), "03", actualYear);
-            }
-
-            for (let i = 1; i <= this.daysInMonth(4, actualYear); i++) {
-                this.addRect("m4", String("00" + i).slice(-2), "04", actualYear);
-            }
-
-            for (let i = 1; i <= this.daysInMonth(5, actualYear); i++) {
-                this.addRect("m5", String("00" + i).slice(-2), "05", actualYear);
-            }
-
-            for (let i = 1; i <= this.daysInMonth(6, actualYear); i++) {
-                this.addRect("m6", String("00" + i).slice(-2), "06", actualYear);
-            }
-            for (let i = 1; i <= this.daysInMonth(7, actualYear); i++) {
-                this.addRect("m7", String("00" + i).slice(-2), "07", actualYear);
-            }
-
-            for (let i = 1; i <= this.daysInMonth(8, actualYear); i++) {
-                this.addRect("m8", String("00" + i).slice(-2), "08", actualYear);
-            }
-
-            for (let i = 1; i <= this.daysInMonth(9, actualYear); i++) {
-                this.addRect("m9", String("00" + i).slice(-2), "09", actualYear);
-            }
-
-            for (let i = 1; i <= this.daysInMonth(10, actualYear); i++) {
-                this.addRect("m10", String("00" + i).slice(-2), "10", actualYear);
-            }
-
-            for (let i = 1; i <= this.daysInMonth(11, actualYear); i++) {
-                this.addRect("m11", String("00" + i).slice(-2), "11", actualYear);
-            }
-
-            for (let i = 1; i <= this.daysInMonth(12, actualYear); i++) {
-                this.addRect("m12", String("00" + i).slice(-2), "12", actualYear);
+            for (let i = 1; i <= 12; i++) {
+                let y = `0${i}`;
+                if (y.length > 2) {
+                    y = `${i}`;
+                }
+                for (let j = 1; j <= this.daysInMonth(i, actualYear); j++) {
+                    this.addRect(`m${i}`, String("00" + j).slice(-2), y, actualYear);
+                }
             }
         }
     }
@@ -321,8 +208,11 @@ class ListOfMonths extends Component {
     componentDidMount() {
         this.setState({ actualYear: this.actualYear() });
 
-        // If local storage is not null, fetch data from DB by userid
-        this.fetchData();
+        if (localStorage.getItem('TCgId') !== null) {
+            this.fetchData();
+        } else {
+            GoogleLogin.logout();
+        }
     }
 
     render() {
@@ -356,30 +246,30 @@ class ListOfMonths extends Component {
                         {(sumValuesMonth || sumValuesYear) &&
                             <div className="row">
                                 <div className="col">
-                                    <h1>Statistics</h1>
+                                    <h2>Statistics</h2>
                                 </div>
                             </div>
                         }
 
                         <div className="center">
                             {sumValuesMonth && (sumValuesMonth.time[0] || sumValuesMonth.distance[0] || sumValuesMonth.calories[0]) &&
-                                <div class="statistic-bar-conteiner">
-                                    <div class="statistic-bar-title">
-                                        <div class="statistic-bar-elem">In this month</div>
-                                        <div class="statistic-bar-elem">0? workouts</div>
+                                <div className="statistic-bar-conteiner">
+                                    <div className="statistic-bar-title">
+                                        <div className="statistic-bar-elem">In this month</div>
+                                        <div className="statistic-bar-elem">0? workouts</div>
                                     </div>
-                                    <div class="statistic-bar-content">
-                                        <div class="statistic-bar-elem bold">
+                                    <div className="statistic-bar-content">
+                                        <div className="statistic-bar-elem bold">
                                             {sumValuesMonth.time[0] &&
                                                 <span>&#128336; {sumValuesMonth.time[0].time} min (~ {Math.round(sumValuesMonth.time[0].time / 60, 1)}h)</span>
                                             }
                                         </div>
-                                        <div class="statistic-bar-elem">
+                                        <div className="statistic-bar-elem">
                                             {sumValuesMonth.distance[0] &&
                                                 <span>&#128099; {sumValuesMonth.distance[0].distance} km</span>
                                             }
                                         </div>
-                                        <div class="statistic-bar-elem">
+                                        <div className="statistic-bar-elem">
                                             {sumValuesMonth.calories[0] &&
                                                 <span>&#128293; {sumValuesMonth.calories[0].calories} kcal</span>
                                             }
@@ -389,23 +279,23 @@ class ListOfMonths extends Component {
                             }
 
                             {sumValuesYear && (sumValuesYear.time[0] || sumValuesYear.distance[0] || sumValuesYear.calories[0]) &&
-                                <div class="statistic-bar-conteiner">
-                                    <div class="statistic-bar-title">
-                                        <div class="statistic-bar-elem">In this year</div>
-                                        <div class="statistic-bar-elem">0? workouts</div>
+                                <div className="statistic-bar-conteiner">
+                                    <div className="statistic-bar-title">
+                                        <div className="statistic-bar-elem">In this year</div>
+                                        <div className="statistic-bar-elem">0? workouts</div>
                                     </div>
-                                    <div class="statistic-bar-content">
-                                        <div class="statistic-bar-elem bold">
+                                    <div className="statistic-bar-content">
+                                        <div className="statistic-bar-elem bold">
                                             {sumValuesYear.time[0] &&
                                                 <span>&#128336; {sumValuesYear.time[0].time} min (~ {Math.round(sumValuesYear.time[0].time / 60, 1)}h)</span>
                                             }
                                         </div>
-                                        <div class="statistic-bar-elem">
+                                        <div className="statistic-bar-elem">
                                             {sumValuesYear.distance[0] &&
                                                 <span>&#128099; {sumValuesYear.distance[0].distance} km</span>
                                             }
                                         </div>
-                                        <div class="statistic-bar-elem">
+                                        <div className="statistic-bar-elem">
                                             {sumValuesYear.calories[0] &&
                                                 <span>&#128293; {sumValuesYear.calories[0].calories} kcal</span>
                                             }
@@ -418,23 +308,23 @@ class ListOfMonths extends Component {
 
                         <div className="center">
                             {sumValuesMonth && (sumValuesMonth.time[0] || sumValuesMonth.distance[0] || sumValuesMonth.calories[0]) &&
-                                <div class="statistic-bar-conteiner">
-                                    <div class="statistic-bar-title">
-                                        <div class="statistic-bar-elem">In this month</div>
-                                        <div class="statistic-bar-elem">0? workouts</div>
+                                <div className="statistic-bar-conteiner">
+                                    <div className="statistic-bar-title">
+                                        <div className="statistic-bar-elem">In this month</div>
+                                        <div className="statistic-bar-elem">0? workouts</div>
                                     </div>
-                                    <div class="statistic-bar-content">
-                                        <div class="statistic-bar-elem bold">
+                                    <div className="statistic-bar-content">
+                                        <div className="statistic-bar-elem bold">
                                             {sumValuesMonth.time[0] &&
                                                 <span>&#128336; {sumValuesMonth.time[0].time} min (~ {Math.round(sumValuesMonth.time[0].time / 60, 1)}h)</span>
                                             }
                                         </div>
-                                        <div class="statistic-bar-elem">
+                                        <div className="statistic-bar-elem">
                                             {sumValuesMonth.distance[0] &&
                                                 <span>&#128099; {sumValuesMonth.distance[0].distance} km</span>
                                             }
                                         </div>
-                                        <div class="statistic-bar-elem">
+                                        <div className="statistic-bar-elem">
                                             {sumValuesMonth.calories[0] &&
                                                 <span>&#128293; {sumValuesMonth.calories[0].calories} kcal</span>
                                             }
@@ -444,23 +334,23 @@ class ListOfMonths extends Component {
                             }
 
                             {sumValuesYear && (sumValuesYear.time[0] || sumValuesYear.distance[0] || sumValuesYear.calories[0]) &&
-                                <div class="statistic-bar-conteiner">
-                                    <div class="statistic-bar-title">
-                                        <div class="statistic-bar-elem">In this year</div>
-                                        <div class="statistic-bar-elem">0? workouts</div>
+                                <div className="statistic-bar-conteiner">
+                                    <div className="statistic-bar-title">
+                                        <div className="statistic-bar-elem">In this year</div>
+                                        <div className="statistic-bar-elem">0? workouts</div>
                                     </div>
-                                    <div class="statistic-bar-content">
-                                        <div class="statistic-bar-elem bold">
+                                    <div className="statistic-bar-content">
+                                        <div className="statistic-bar-elem bold">
                                             {sumValuesYear.time[0] &&
                                                 <span>&#128336; {sumValuesYear.time[0].time} min (~ {Math.round(sumValuesYear.time[0].time / 60, 1)}h)</span>
                                             }
                                         </div>
-                                        <div class="statistic-bar-elem">
+                                        <div className="statistic-bar-elem">
                                             {sumValuesYear.distance[0] &&
                                                 <span>&#128099; {sumValuesYear.distance[0].distance} km</span>
                                             }
                                         </div>
-                                        <div class="statistic-bar-elem">
+                                        <div className="statistic-bar-elem">
                                             {sumValuesYear.calories[0] &&
                                                 <span>&#128293; {sumValuesYear.calories[0].calories} kcal</span>
                                             }

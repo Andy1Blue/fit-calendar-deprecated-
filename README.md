@@ -40,7 +40,7 @@ $ npm run start:prod
 # views development mode
 $ npm run start:react
 
-# build views rom production
+# build views for production
 $ npm run build:react
 
 # using PM2
