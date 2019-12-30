@@ -26,7 +26,6 @@ body {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  background: url('http://blueapp.ovh/img/background.png') bottom center no-repeat;
 }
 
 .welcome-container {
