@@ -146,13 +146,13 @@ export class TrainingsService {
         ]);
 
         const distance = await this.trainingModel.aggregate([{
-            $match: { $and: [{ userId }, { distance: { $gte: 1 } }] },
+            $match: { $and: [{ userId }, { distance: { $gte: 1 } }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
         },
         { $group: { _id: null, distance: { $sum: '$distance' } } },
         ]);
 
         const calories = await this.trainingModel.aggregate([{
-            $match: { $and: [{ userId }, { calories: { $gte: 1 } }] },
+            $match: { $and: [{ userId }, { calories: { $gte: 1 } }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
         },
         { $group: { _id: null, calories: { $sum: '$calories' } } },
         ]);

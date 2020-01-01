@@ -6,6 +6,8 @@ import GoogleLogin from 'react-google-login';
 
 class ListOfMonths extends Component {
     state = {
+        today: null,
+        todayWorkout: null,
         refresh: false,
         isFetching: true,
         isWorkoutDate: [],
@@ -78,7 +80,7 @@ class ListOfMonths extends Component {
 
         if (isWorkoutDate) {
             const elem = document.createElement("rect");
-            const today = this.actualDay() + "" + this.actualMonth() + "" + this.actualYear();
+            const today = this.state.today;
 
             const workoutDateLength = isWorkoutDate.length > 0 ? isWorkoutDate.length : 10;
             for (let i = 0; i < workoutDateLength; i++) {
@@ -198,9 +200,12 @@ class ListOfMonths extends Component {
                         isWorkoutDate.push(response[i]['trainingDate']);
                         description.push(response[i]['description']);
                         idList.push(response[i]['_id']);
+
+                        if (response[i]['trainingDate'] === this.state.today) {
+                            this.setState({ todayWorkout: response[i] });
+                        }
                     }
                     this.setState({ isWorkoutDate, isFetching: false, description, idList });
-
                     this.generateReacts();
                 });
             this.refresh();
@@ -211,7 +216,7 @@ class ListOfMonths extends Component {
     }
 
     formatDate = (data) => {
-        let result = data.slice(0, 2) + "." + data.slice(2,4) + "."+ data.slice(4);
+        let result = data.slice(0, 2) + "." + data.slice(2, 4) + "." + data.slice(4);
         return result;
     }
 
@@ -238,6 +243,7 @@ class ListOfMonths extends Component {
 
     componentDidMount() {
         this.setState({ actualYear: this.actualYear() });
+        this.setState({ today: this.actualDay() + "" + this.actualMonth() + "" + this.actualYear() });
 
         if (localStorage.getItem('TCgId') !== null) {
             this.fetchData();
@@ -247,163 +253,284 @@ class ListOfMonths extends Component {
     }
 
     render() {
-        const { isFetching, isWorkoutDate, actualYear, sumValuesYear, sumValuesMonth, lastTraining, firstTraining } = this.state;
+        const { isFetching, isWorkoutDate, actualYear, sumValuesYear, sumValuesMonth, lastTraining, firstTraining, today, todayWorkout } = this.state;
         return (
             <div className="App-matches">
                 {isFetching && <div><Loader /></div>}
 
                 {!isFetching && isWorkoutDate &&
-                    <div className="container" id="calendar">
-                        <div className="calendar-year"><button onClick={this.subtractYear}>&#10148;</button> <h2>{actualYear}</h2> <button onClick={this.addYear}>&#10148;</button></div>
-                        <div className="row">
-                            <div className="traning-table-content">
-                                <div className="col">
-                                    {/* <div className="m0"></div> */}
-                                    <div className="m1"></div>
-                                    <div className="m2"></div>
-                                    <div className="m3"></div>
-                                    <div className="m4"></div>
-                                    <div className="m5"></div>
-                                    <div className="m6"></div>
-                                    <div className="m7"></div>
-                                    <div className="m8"></div>
-                                    <div className="m9"></div>
-                                    <div className="m10"></div>
-                                    <div className="m11"></div>
-                                    <div className="m12"></div>
+                    <div className="content-container">
+                        <div className="left">
+                            <section id="today">
+                                <div className="today-bar">
+                                    <div className="center">
+                                        {actualYear &&
+                                            <div className="statistic-bar-conteiner">
+                                                <div className="statistic-bar-title">
+                                                    <div className="statistic-bar-elem">
+                                                        <span>Today is &#128467; <b>{this.formatDate(today)}</b></span>
+                                                    </div>
+                                                    <div className="statistic-bar-elem">
+                                                        <div className="add-workout">
+                                                            {todayWorkout === null &&
+                                                                <span
+                                                                    data-toggle='modal'
+                                                                    data-target='#workoutDay'
+                                                                    id={this.formatDate(today)}
+                                                                >Add workout</span>}
+
+                                                            {todayWorkout !== null &&
+                                                                <span
+                                                                    data-toggle='modal'
+                                                                    data-target='#workoutDay'
+                                                                    id={this.formatDate(today)}
+                                                                    trainingId={todayWorkout._id}
+                                                                >Edit workout</span>}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {todayWorkout !== null &&
+                                                    <div>
+                                                        <div className="statistic-bar-content">
+                                                            <span className="badge margin-top5">&#128170; Your today training:</span>
+                                                        </div>
+                                                        <div className="statistic-bar-content">
+                                                            {todayWorkout.description &&
+                                                                <span className="badge badge-inverse background-description">{todayWorkout.description}</span>
+                                                            }
+                                                        </div>
+                                                        <div className="statistic-bar-content">
+                                                            <div className="statistic-bar-elem bold">
+                                                                {todayWorkout.time !== 0 &&
+                                                                    <span>&#128336; {todayWorkout.time} min (~ {Math.round(todayWorkout.time / 60, 1)}h)</span>
+                                                                }
+                                                                {todayWorkout.time === 0 &&
+                                                                    <span>&#128336; 0 min (~ 0h)</span>
+                                                                }
+                                                            </div>
+                                                            <div className="statistic-bar-elem">
+                                                                {todayWorkout.distance !== 0 &&
+                                                                    <span>&#128099; {todayWorkout.distance} km</span>
+                                                                }
+                                                                {todayWorkout.distance === 0 &&
+                                                                    <span>&#128099; 0 km</span>
+                                                                }
+                                                            </div>
+                                                            <div className="statistic-bar-elem">
+                                                                {todayWorkout.calories !== 0 &&
+                                                                    <span>&#128293; {todayWorkout.calories} kcal</span>
+                                                                }
+                                                                {todayWorkout.calories === 0 &&
+                                                                    <span>&#128293; 0 kcal</span>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+
+
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section id="statistics">
+                                {(sumValuesMonth || sumValuesYear) &&
+                                    <div className="col">
+                                        <h2>Statistics</h2>
+                                    </div>
+                                }
+
+                                <div className="center">
+                                    {sumValuesMonth &&
+                                        <div className="statistic-bar-conteiner">
+                                            <div className="statistic-bar-title">
+                                                <div className="statistic-bar-elem">In this month</div>
+                                                <div className="statistic-bar-elem">
+                                                    <span><b>{sumValuesMonth.count}</b> workouts</span>
+                                                </div>
+                                            </div>
+                                            <div className="statistic-bar-content">
+                                                <div className="statistic-bar-elem bold">
+                                                    {sumValuesMonth.time[0] !== undefined &&
+                                                        <span>&#128336; {sumValuesMonth.time[0].time} min (~ {Math.round(sumValuesMonth.time[0].time / 60, 1)}h)</span>
+                                                    }
+                                                    {sumValuesMonth.time[0] === undefined &&
+                                                        <span>&#128336; 0 min (~ 0h)</span>
+                                                    }
+                                                </div>
+                                                <div className="statistic-bar-elem">
+                                                    {sumValuesMonth.distance[0] !== undefined &&
+                                                        <span>&#128099; {sumValuesMonth.distance[0].distance} km</span>
+                                                    }
+                                                    {sumValuesMonth.distance[0] === undefined &&
+                                                        <span>&#128099; 0 km</span>
+                                                    }
+                                                </div>
+                                                <div className="statistic-bar-elem">
+                                                    {sumValuesMonth.calories[0] !== undefined &&
+                                                        <span>&#128293; {sumValuesMonth.calories[0].calories} kcal</span>
+                                                    }
+                                                    {sumValuesMonth.calories[0] === undefined &&
+                                                        <span>&#128293; 0 kcal</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div className="center">
+                                    {sumValuesYear &&
+                                        <div className="statistic-bar-conteiner">
+                                            <div className="statistic-bar-title">
+                                                <div className="statistic-bar-elem">In this year</div>
+                                                <div className="statistic-bar-elem">{sumValuesYear.count}  workouts</div>
+                                            </div>
+                                            <div className="statistic-bar-content">
+                                                <div className="statistic-bar-elem bold">
+                                                    {sumValuesYear.time[0] !== undefined &&
+                                                        <span>&#128336; {sumValuesYear.time[0].time} min (~ {Math.round(sumValuesYear.time[0].time / 60, 1)}h)</span>
+                                                    }
+                                                    {sumValuesYear.time[0] === undefined &&
+                                                        <span>&#128336; 0 min (~ 0h)</span>
+                                                    }
+                                                </div>
+                                                <div className="statistic-bar-elem">
+                                                    {sumValuesYear.distance[0] !== undefined &&
+                                                        <span>&#128099; {sumValuesYear.distance[0].distance} km</span>
+                                                    }
+                                                    {sumValuesYear.distance[0] === undefined &&
+                                                        <span>&#128099; 0 km</span>
+                                                    }
+                                                </div>
+                                                <div className="statistic-bar-elem">
+                                                    {sumValuesYear.calories[0] !== undefined &&
+                                                        <span>&#128293; {sumValuesYear.calories[0].calories} kcal</span>
+                                                    }
+                                                    {sumValuesYear.calories[0] === undefined &&
+                                                        <span>&#128293; 0 kcal</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+
+                                <div className="center">
+                                    {lastTraining &&
+                                        <div className="statistic-bar-conteiner">
+                                            <div className="statistic-bar-title">
+                                                <div className="statistic-bar-elem">Last workout</div>
+                                                <div className="statistic-bar-elem">
+                                                    {lastTraining[0].trainingDate &&
+                                                        <span>{this.formatDate(lastTraining[0].trainingDate)}</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div className="statistic-bar-content">
+                                                <div className="statistic-bar-elem bold">
+                                                    {lastTraining[0].time !== null &&
+                                                        <span>&#128336; {lastTraining[0].time} min (~ {Math.round(lastTraining[0].time / 60, 1)}h)</span>
+                                                    }
+                                                    {lastTraining[0].time === null &&
+                                                        <span>&#128336; 0 min (~ 0h)</span>
+                                                    }
+                                                </div>
+                                                <div className="statistic-bar-elem">
+                                                    {lastTraining[0].distance !== null &&
+                                                        <span>&#128099; {lastTraining[0].distance} km</span>
+                                                    }
+                                                    {lastTraining[0].distance === null &&
+                                                        <span>&#128099; 0 km</span>
+                                                    }
+                                                </div>
+                                                <div className="statistic-bar-elem">
+                                                    {lastTraining[0].calories !== null &&
+                                                        <span>&#128293; {lastTraining[0].calories} kcal</span>
+                                                    }
+                                                    {lastTraining[0].calories === null &&
+                                                        <span>&#128293; 0 kcal</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div className="center">
+                                    {firstTraining &&
+                                        <div className="statistic-bar-conteiner">
+                                            <div className="statistic-bar-title">
+                                                <div className="statistic-bar-elem">First workout</div>
+                                                <div className="statistic-bar-elem">
+                                                    {firstTraining[0].trainingDate !== 0 &&
+                                                        <span>{this.formatDate(firstTraining[0].trainingDate)}</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div className="statistic-bar-content">
+                                                <div className="statistic-bar-elem bold">
+                                                    {firstTraining[0].time !== null &&
+                                                        <span>&#128336; {firstTraining[0].time} min (~ {Math.round(firstTraining[0].time / 60, 1)}h)</span>
+                                                    }
+                                                    {firstTraining[0].time === null &&
+                                                        <span>&#128336; 0 min (~ 0h)</span>
+                                                    }
+                                                </div>
+                                                <div className="statistic-bar-elem">
+                                                    {firstTraining[0].distance !== null &&
+                                                        <span>&#128099; {firstTraining[0].distance} km</span>
+                                                    }
+                                                    {firstTraining[0].distance === null &&
+                                                        <span>&#128099; 0 km</span>
+                                                    }
+                                                </div>
+                                                <div className="statistic-bar-elem">
+                                                    {firstTraining[0].calories !== null &&
+                                                        <span>&#128293; {firstTraining[0].calories} kcal</span>
+                                                    }
+                                                    {firstTraining[0].calories === null &&
+                                                        <span>&#128293; 0 kcal</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="right">
+                            <div className="container" id="calendar">
+                                <div className="calendar-year"><button onClick={this.subtractYear}>&#10148;</button> <h2>{actualYear}</h2> <button onClick={this.addYear}>&#10148;</button></div>
+                                <div className="row">
+                                    <div className="traning-table-content">
+                                        <div className="col">
+                                            {/* <div className="m0"></div> */}
+                                            <div className="m1"></div>
+                                            <div className="m2"></div>
+                                            <div className="m3"></div>
+                                            <div className="m4"></div>
+                                            <div className="m5"></div>
+                                            <div className="m6"></div>
+                                            <div className="m7"></div>
+                                            <div className="m8"></div>
+                                            <div className="m9"></div>
+                                            <div className="m10"></div>
+                                            <div className="m11"></div>
+                                            <div className="m12"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        {(sumValuesMonth || sumValuesYear) &&
-                            <div className="row">
-                                <div className="col">
-                                    <h2>Statistics</h2>
-                                </div>
-                            </div>
-                        }
-
-                        <div className="center">
-                            {sumValuesMonth && (sumValuesMonth.time[0] || sumValuesMonth.distance[0] || sumValuesMonth.calories[0]) &&
-                                <div className="statistic-bar-conteiner">
-                                    <div className="statistic-bar-title">
-                                        <div className="statistic-bar-elem">In this month</div>
-                                        <div className="statistic-bar-elem">{sumValuesMonth.count}  workouts</div>
-                                    </div>
-                                    <div className="statistic-bar-content">
-                                        <div className="statistic-bar-elem bold">
-                                            {sumValuesMonth.time[0] &&
-                                                <span>&#128336; {sumValuesMonth.time[0].time} min (~ {Math.round(sumValuesMonth.time[0].time / 60, 1)}h)</span>
-                                            }
-                                        </div>
-                                        <div className="statistic-bar-elem">
-                                            {sumValuesMonth.distance[0] &&
-                                                <span>&#128099; {sumValuesMonth.distance[0].distance} km</span>
-                                            }
-                                        </div>
-                                        <div className="statistic-bar-elem">
-                                            {sumValuesMonth.calories[0] &&
-                                                <span>&#128293; {sumValuesMonth.calories[0].calories} kcal</span>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
-                            {sumValuesYear && (sumValuesYear.time[0] || sumValuesYear.distance[0] || sumValuesYear.calories[0]) &&
-                                <div className="statistic-bar-conteiner">
-                                    <div className="statistic-bar-title">
-                                        <div className="statistic-bar-elem">In this year</div>
-                                        <div className="statistic-bar-elem">{sumValuesYear.count}  workouts</div>
-                                    </div>
-                                    <div className="statistic-bar-content">
-                                        <div className="statistic-bar-elem bold">
-                                            {sumValuesYear.time[0] &&
-                                                <span>&#128336; {sumValuesYear.time[0].time} min (~ {Math.round(sumValuesYear.time[0].time / 60, 1)}h)</span>
-                                            }
-                                        </div>
-                                        <div className="statistic-bar-elem">
-                                            {sumValuesYear.distance[0] &&
-                                                <span>&#128099; {sumValuesYear.distance[0].distance} km</span>
-                                            }
-                                        </div>
-                                        <div className="statistic-bar-elem">
-                                            {sumValuesYear.calories[0] &&
-                                                <span>&#128293; {sumValuesYear.calories[0].calories} kcal</span>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
-                        </div>
-
-                        <div className="center">
-                            {lastTraining && lastTraining !== null &&
-                                <div className="statistic-bar-conteiner">
-                                    <div className="statistic-bar-title">
-                                        <div className="statistic-bar-elem">Last workout</div>
-                                        <div className="statistic-bar-elem">
-                                            {lastTraining[0].trainingDate &&
-                                                <span>{this.formatDate(lastTraining[0].trainingDate)}</span>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div className="statistic-bar-content">
-                                        <div className="statistic-bar-elem bold">
-                                            {lastTraining[0].time &&
-                                                <span>&#128336; {lastTraining[0].time} min (~ {Math.round(lastTraining[0].time / 60, 1)}h)</span>
-                                            }
-                                        </div>
-                                        <div className="statistic-bar-elem">
-                                            {lastTraining[0].distance &&
-                                                <span>&#128099; {lastTraining[0].distance} km</span>
-                                            }
-                                        </div>
-                                        <div className="statistic-bar-elem">
-                                            {lastTraining[0].calories &&
-                                                <span>&#128293; {lastTraining[0].calories} kcal</span>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
-                            {firstTraining && firstTraining !== null &&
-                                <div className="statistic-bar-conteiner">
-                                    <div className="statistic-bar-title">
-                                        <div className="statistic-bar-elem">First workout</div>
-                                        <div className="statistic-bar-elem">
-                                            {firstTraining[0].trainingDate &&
-                                                <span>{this.formatDate(firstTraining[0].trainingDate)}</span>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div className="statistic-bar-content">
-                                        <div className="statistic-bar-elem bold">
-                                            {firstTraining[0].time &&
-                                                <span>&#128336; {firstTraining[0].time} min (~ {Math.round(firstTraining[0].time / 60, 1)}h)</span>
-                                            }
-                                        </div>
-                                        <div className="statistic-bar-elem">
-                                            {firstTraining[0].distance &&
-                                                <span>&#128099; {firstTraining[0].distance} km</span>
-                                            }
-                                        </div>
-                                        <div className="statistic-bar-elem">
-                                            {firstTraining[0].calories &&
-                                                <span>&#128293; {firstTraining[0].calories} kcal</span>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
-                        </div>
-
-
-
                     </div>
                 }
+
             </div>
         )
     }

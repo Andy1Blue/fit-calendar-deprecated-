@@ -1,12 +1,54 @@
+.content-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    width: 950px;
+}
+
 .traning-table-content {
     width: 950px;
-    height: 450px;
-    padding: 2rem 0;
+    padding: 0.5rem 0;
     margin: 0 auto;
 }
 
+.add-workout {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.margin-top5 {
+    margin-top: 5px;
+}
+
+#statistics {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#today {
+    margin-top: 20px;
+}
+
+.background-description {
+    background-color: #2c293f;
+    margin: 5px;
+    padding: 15px;
+    border-radius: 10px;
+}
+
 .calendar-year {
-    margin-top: 50px;
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -59,7 +101,7 @@
 }
 
 .rect-today {
-   border-bottom: 5px solid #c0993e;
+    border-bottom: 5px solid #c0993e;
 }
 
 rect:hover:after {
@@ -110,30 +152,18 @@ rect:hover:after {
     background-color: #4e4c5d;
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1300px) {
+    #statistics {
+        flex-direction: row;
+        justify-content: center;
+    }
 
-    .m1 rect,
-    .m2 rect,
-    .m3 rect,
-    .m4 rect,
-    .m5 rect,
-    .m6 rect,
-    .m7 rect,
-    .m8 rect,
-    .m9 rect,
-    .m10 rect,
-    .m11 rect,
-    .m12 rect {
+    #calendar {
         display: none;
-
     }
 
-    .traning-table-content {
-        height: 10px;    
-    }
-
-    .m1:after {
-        content: "Use the non-mobile browser to show the calendar!";  
+    .right {
+        display: none;
     }
 }
 
