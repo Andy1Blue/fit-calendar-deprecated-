@@ -153,6 +153,30 @@ rect:hover:after {
 }
 
 @media only screen and (max-width: 1305px) {
+    .content-container {
+        width: 100%;
+    }
+
+    .left {
+        width: 100%;
+    }
+
+    .statistic-bar-conteiner {
+    width: 100%;
+}
+
+#today {
+    width: 100%;
+}
+
+    .today-bar {
+        width: 100%;
+    }
+
+    .training-table-content {
+        width: 90%;
+    }
+
     #statistics {
         flex-direction: row;
         justify-content: center;
@@ -208,7 +232,6 @@ rect:hover:after {
     margin: 10px;
     border-radius: 10px;
     padding: 20px;
-    width: 500px;
     background-color: #1d1b29;
     display: flex;
     justify-content: center;
