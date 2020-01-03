@@ -159,7 +159,7 @@ export class TrainingsService {
         return theLargestAmountOfCalories as Training[];
     }
 
-    async sumTraingsDataByYear(year, training: ITraining) {
+    async sumTraingsDataByYear(year: string, training: ITraining) {
         let count = 0;
 
         this.trainingModel.countDocuments(
@@ -189,7 +189,7 @@ export class TrainingsService {
         { $group: { _id: null, calories: { $sum: '$calories' } } },
         ]);
 
-        return { count, time, distance, calories };
+        return { 0: {time: time[0].time, distance: distance[0].distance, calories: calories[0].calories}, count };
     }
 
     async sumTraingsDataByMonth(year: string, month: string, training: ITraining) {
@@ -228,6 +228,6 @@ export class TrainingsService {
         { $group: { _id: null, calories: { $sum: '$calories' } } },
         ]);
 
-        return { count, time, distance, calories };
+        return { 0: {time: time[0].time, distance: distance[0].distance, calories: calories[0].calories}, count };
     }
 }
