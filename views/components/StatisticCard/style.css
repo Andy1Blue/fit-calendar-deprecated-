@@ -1,6 +1,11 @@
-.statistic-bar-conteiner {
+#card .center {
+    display: flex;
+    justify-content: center;
+}
+
+#card .center .statistic-bar-conteiner {
     font-size: 14px;
-    width:300px;
+    width: 300px;
     margin: 10px;
     border-radius: 10px;
     padding: 20px;
@@ -10,25 +15,31 @@
     flex-direction: column;
 }
 
-.statistic-bar-title {
+#card .center .statistic-bar-conteiner .statistic-bar-title {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.statistic-bar-content {
+#card .center .statistic-bar-conteiner .statistic-bar-content {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 }
 
-.statistic-bar-elem {
+#card .center .statistic-bar-conteiner .statistic-bar-title .statistic-bar-elem,
+#card .center .statistic-bar-conteiner .statistic-bar-content .statistic-bar-elem {
     display: flex;
     flex-direction: column;
     padding: 5px;
 }
 
-.statistic-bar-elem:nth-child(1)   {
+#card .center .statistic-bar-conteiner .statistic-bar-title .statistic-bar-elem:nth-child(1) {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#card .center .statistic-bar-conteiner .statistic-bar-content .statistic-bar-elem:nth-child(1) {
     font-weight: bold;
     font-size: 14px;
 }

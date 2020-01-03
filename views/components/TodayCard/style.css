@@ -1,0 +1,54 @@
+#today-card .today-bar {
+    width: 100%;
+}
+
+#today-card .today-bar .center {
+    display: flex;
+    justify-content: center;
+}
+
+#today-card .today-bar .center .statistic-bar-conteiner {
+    font-size: 14px;
+    width: 300px;
+    margin: 10px;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #1d1b29;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#today-card .today-bar .center .statistic-bar-conteiner .statistic-bar-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#today-card .today-bar .center .statistic-bar-conteiner .statistic-bar-title .statistic-bar-elem {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+#today-card .today-bar .center .statistic-bar-conteiner .statistic-bar-title .statistic-bar-elem .add-workout {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#today-card .today-bar .center .statistic-bar-conteiner div .statistic-bar-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#today-card .today-bar .center .statistic-bar-conteiner div .statistic-bar-content .statistic-bar-elem {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+#today-card .today-bar .center .statistic-bar-conteiner div .statistic-bar-content .statistic-bar-elem:nth-child(1) {
+    font-weight: bold;
+    font-size: 14px;
+}

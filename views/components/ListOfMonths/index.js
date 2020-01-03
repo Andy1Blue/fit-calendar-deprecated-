@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './style.css';
 import Loader from '../Loader';
 import StatisticCard from '../StatisticCard';
+import TodayCard from '../TodayCard';
 import config from '../Config';
 import GoogleLogin from 'react-google-login';
 
@@ -149,8 +150,11 @@ class ListOfMonths extends Component {
                 })
                 .then(response => response.json())
                 .then(sumValuesYear => {
-                    this.setState({ sumValuesYear });
-                    console.log({ sumValuesYear })
+                    if (sumValuesYear.statusCode === 500) {
+                        this.setState({ sumValuesYear: null });
+                    } else {
+                        this.setState({ sumValuesYear });
+                    }
                 });
 
             fetch(config.domain + '/trainings/sum/user/' + TCgId + '/year/' + year + '/month/' + month,
@@ -162,7 +166,11 @@ class ListOfMonths extends Component {
                 })
                 .then(response => response.json())
                 .then(sumValuesMonth => {
-                    this.setState({ sumValuesMonth });
+                    if (sumValuesMonth.statusCode === 500) {
+                        this.setState({ sumValuesMonth: null });
+                    } else {
+                        this.setState({ sumValuesMonth });
+                    }
                 });
 
             fetch(config.domain + '/trainings/calories/user/' + TCgId + '/year/' + year,
@@ -174,7 +182,11 @@ class ListOfMonths extends Component {
                 })
                 .then(response => response.json())
                 .then(theLargestCalories => {
-                    this.setState({ theLargestCalories });
+                    if (theLargestCalories.statusCode === 500) {
+                        this.setState({ theLargestCalories: null });
+                    } else {
+                        this.setState({ theLargestCalories });
+                    }
                 });
 
             fetch(config.domain + '/trainings/time/user/' + TCgId + '/year/' + year,
@@ -186,7 +198,11 @@ class ListOfMonths extends Component {
                 })
                 .then(response => response.json())
                 .then(theLargestTime => {
-                    this.setState({ theLargestTime });
+                    if (theLargestTime.statusCode === 500) {
+                        this.setState({ theLargestTime: null });
+                    } else {
+                        this.setState({ theLargestTime });
+                    }
                 });
 
             fetch(config.domain + '/trainings/distance/user/' + TCgId + '/year/' + year,
@@ -198,31 +214,11 @@ class ListOfMonths extends Component {
                 })
                 .then(response => response.json())
                 .then(theLargestDistance => {
-                    this.setState({ theLargestDistance });
-                });
-
-            fetch(config.domain + '/trainings/first/user/' + TCgId,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
+                    if (theLargestDistance.statusCode === 500) {
+                        this.setState({ theLargestDistance: null });
+                    } else {
+                        this.setState({ theLargestDistance });
                     }
-                })
-                .then(response => response.json())
-                .then(firstTraining => {
-                    this.setState({ firstTraining });
-                });
-
-            fetch(config.domain + '/trainings/last/user/' + TCgId,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    }
-                })
-                .then(response => response.json())
-                .then(lastTraining => {
-                    this.setState({ lastTraining });
                 });
 
             fetch(config.domain + '/trainings/user/' + TCgId,
@@ -295,87 +291,22 @@ class ListOfMonths extends Component {
     }
 
     render() {
-        const { isFetching, isWorkoutDate, actualYear, sumValuesYear, sumValuesMonth,  today, todayWorkout, theLargestTime, theLargestDistance, theLargestCalories } = this.state;
+        const { isFetching, isWorkoutDate, actualYear, sumValuesYear, sumValuesMonth, today, todayWorkout, theLargestTime, theLargestDistance, theLargestCalories } = this.state;
         return (
             <div className="App-matches">
                 {isFetching && <div><Loader /></div>}
 
-                {!isFetching && isWorkoutDate &&
+                {!isFetching && isWorkoutDate && isWorkoutDate !== null &&
                     <div className="content-container">
                         <div className="left">
                             <section id="today">
-                                <div className="today-bar">
-                                    <div className="center">
-                                        {actualYear &&
-                                            <div className="statistic-bar-conteiner">
-                                                <div className="statistic-bar-title">
-                                                    <div className="statistic-bar-elem">
-                                                        <span>Today is &#128467; <b>{this.formatDate(today)}</b></span>
-                                                    </div>
-                                                    <div className="statistic-bar-elem">
-                                                        <div className="add-workout">
-                                                            {todayWorkout === null &&
-                                                                <span
-                                                                    data-toggle='modal'
-                                                                    data-target='#workoutDay'
-                                                                    id={this.formatDate(today)}
-                                                                >Add workout</span>}
-
-                                                            {todayWorkout !== null &&
-                                                                <span
-                                                                    data-toggle='modal'
-                                                                    data-target='#workoutDay'
-                                                                    id={this.formatDate(today)}
-                                                                    trainingId={todayWorkout._id}
-                                                                >Edit workout</span>}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {todayWorkout !== null &&
-                                                    <div>
-                                                        <div className="statistic-bar-content">
-                                                            <span className="badge margin-top5">&#128170; Your today training:</span>
-                                                        </div>
-                                                        <div className="statistic-bar-content">
-                                                            {todayWorkout.description &&
-                                                                <span className="badge badge-inverse background-description">{todayWorkout.description}</span>
-                                                            }
-                                                        </div>
-                                                        <div className="statistic-bar-content">
-                                                            <div className="statistic-bar-elem bold">
-                                                                {todayWorkout.time !== 0 &&
-                                                                    <span>&#128336; {todayWorkout.time} min (~ {Math.round(todayWorkout.time / 60, 1)}h)</span>
-                                                                }
-                                                                {todayWorkout.time === 0 &&
-                                                                    <span>&#128336; 0 min (~ 0h)</span>
-                                                                }
-                                                            </div>
-                                                            <div className="statistic-bar-elem">
-                                                                {todayWorkout.distance !== 0 &&
-                                                                    <span>&#128099; {todayWorkout.distance} km</span>
-                                                                }
-                                                                {todayWorkout.distance === 0 &&
-                                                                    <span>&#128099; 0 km</span>
-                                                                }
-                                                            </div>
-                                                            <div className="statistic-bar-elem">
-                                                                {todayWorkout.calories !== 0 &&
-                                                                    <span>&#128293; {todayWorkout.calories} kcal</span>
-                                                                }
-                                                                {todayWorkout.calories === 0 &&
-                                                                    <span>&#128293; 0 kcal</span>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                }
-
-
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
+                                {todayWorkout && todayWorkout !== null &&
+                                    <TodayCard
+                                        training={todayWorkout}
+                                        actualYear={actualYear}
+                                        today={today}
+                                    />
+                                }
                             </section>
 
                             <section id="statistics">
@@ -385,7 +316,7 @@ class ListOfMonths extends Component {
                                     </div>
                                 }
 
-                                {sumValuesMonth &&
+                                {sumValuesMonth && sumValuesMonth !== null &&
                                     <StatisticCard
                                         title="In this month"
                                         subtitle={`${sumValuesMonth.count} workouts`}
@@ -393,7 +324,7 @@ class ListOfMonths extends Component {
                                     />
                                 }
 
-                                {sumValuesYear &&
+                                {sumValuesYear && sumValuesYear !== null &&
                                     <StatisticCard
                                         title="In this year"
                                         subtitle={`${sumValuesYear.count} workouts`}
@@ -401,7 +332,7 @@ class ListOfMonths extends Component {
                                     />
                                 }
 
-                                {theLargestTime &&
+                                {theLargestTime && theLargestTime !== null &&
                                     <StatisticCard
                                         title="The largest time"
                                         subtitle=""
@@ -409,7 +340,7 @@ class ListOfMonths extends Component {
                                     />
                                 }
 
-                                {theLargestDistance &&
+                                {theLargestDistance && theLargestDistance !== null &&
                                     <StatisticCard
                                         title="The largest distance"
                                         subtitle=""
@@ -417,7 +348,7 @@ class ListOfMonths extends Component {
                                     />
                                 }
 
-{theLargestCalories &&
+                                {theLargestCalories && theLargestCalories !== null &&
                                     <StatisticCard
                                         title="The largest calories"
                                         subtitle=""
