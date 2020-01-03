@@ -171,25 +171,32 @@ export class TrainingsService {
             },
         );
 
-        const time = await this.trainingModel.aggregate([{
+        const matchTime = await this.trainingModel.aggregate([{
             $match: { $and: [{ userId: training.userId }, { time: { $gte: 1 } }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
         },
         { $group: { _id: null, time: { $sum: '$time' } } },
         ]);
 
-        const distance = await this.trainingModel.aggregate([{
+        const matchDistance = await this.trainingModel.aggregate([{
             $match: { $and: [{ userId: training.userId }, { distance: { $gte: 1 } }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
         },
         { $group: { _id: null, distance: { $sum: '$distance' } } },
         ]);
 
-        const calories = await this.trainingModel.aggregate([{
+        const matchCalories = await this.trainingModel.aggregate([{
             $match: { $and: [{ userId: training.userId }, { calories: { $gte: 1 } }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
         },
         { $group: { _id: null, calories: { $sum: '$calories' } } },
         ]);
 
-        return { 0: {time: time[0].time, distance: distance[0].distance, calories: calories[0].calories}, count };
+        return {
+            0: {
+                time: matchTime && matchTime[0] ? matchTime[0].time : null,
+                distance: matchTime && matchDistance[0] ? matchDistance[0].distance : null,
+                calories: matchTime && matchCalories[0] ? matchCalories[0].calories : null,
+            },
+            count,
+        };
     }
 
     async sumTraingsDataByMonth(year: string, month: string, training: ITraining) {
@@ -204,7 +211,7 @@ export class TrainingsService {
             },
         );
 
-        const time = await this.trainingModel.aggregate([{
+        const matchTime = await this.trainingModel.aggregate([{
             $match: {
                 $and: [{ userId: training.userId }, { time: { $gte: 1 } }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }],
             },
@@ -212,7 +219,7 @@ export class TrainingsService {
         { $group: { _id: null, time: { $sum: '$time' } } },
         ]);
 
-        const distance = await this.trainingModel.aggregate([{
+        const matchDistance = await this.trainingModel.aggregate([{
             $match: {
                 $and: [{ userId: training.userId }, { distance: { $gte: 1 } }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }],
             },
@@ -220,7 +227,7 @@ export class TrainingsService {
         { $group: { _id: null, distance: { $sum: '$distance' } } },
         ]);
 
-        const calories = await this.trainingModel.aggregate([{
+        const matchCalories = await this.trainingModel.aggregate([{
             $match: {
                 $and: [{ userId: training.userId }, { calories: { $gte: 1 } }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }],
             },
@@ -228,6 +235,14 @@ export class TrainingsService {
         { $group: { _id: null, calories: { $sum: '$calories' } } },
         ]);
 
-        return { 0: {time: time[0].time, distance: distance[0].distance, calories: calories[0].calories}, count };
+        return {
+            0:
+            {
+                time: matchTime && matchTime[0] ? matchTime[0].time : null,
+                distance: matchTime && matchDistance[0] ? matchDistance[0].distance : null,
+                calories: matchTime && matchCalories[0] ? matchCalories[0].calories : null,
+            },
+            count,
+        };
     }
 }

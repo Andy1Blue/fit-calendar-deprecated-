@@ -150,7 +150,11 @@ class ListOfMonths extends Component {
                 })
                 .then(response => response.json())
                 .then(sumValuesYear => {
-                    this.setState({ sumValuesYear });
+                    if (sumValuesYear.statusCode === 500) {
+                        this.setState({ sumValuesYear: null });
+                    } else {
+                        this.setState({ sumValuesYear });
+                    }
                 });
 
             fetch(config.domain + '/trainings/sum/user/' + TCgId + '/year/' + year + '/month/' + month,
@@ -162,7 +166,11 @@ class ListOfMonths extends Component {
                 })
                 .then(response => response.json())
                 .then(sumValuesMonth => {
-                    this.setState({ sumValuesMonth });
+                    if (sumValuesMonth.statusCode === 500) {
+                        this.setState({ sumValuesMonth: null });
+                    } else {
+                        this.setState({ sumValuesMonth });
+                    }
                 });
 
             fetch(config.domain + '/trainings/calories/user/' + TCgId + '/year/' + year,
@@ -305,13 +313,13 @@ class ListOfMonths extends Component {
                             </section>
 
                             <section id="statistics">
-                                {(sumValuesMonth || sumValuesYear) &&
+                                {(sumValuesMonth && sumValuesMonth[0] || sumValuesYear && sumValuesYear[0]) &&
                                     <div className="col">
                                         <h2>Statistics</h2>
                                     </div>
                                 }
 
-                                {sumValuesMonth && sumValuesMonth !== null &&
+                                {sumValuesMonth && sumValuesMonth[0] && sumValuesMonth !== null &&
                                     <StatisticCard
                                         title="In this month"
                                         subtitle={`${sumValuesMonth.count} workouts`}
@@ -319,7 +327,7 @@ class ListOfMonths extends Component {
                                     />
                                 }
 
-                                {sumValuesYear && sumValuesYear !== null &&
+                                {sumValuesYear && sumValuesYear[0] && sumValuesYear !== null &&
                                     <StatisticCard
                                         title="In this year"
                                         subtitle={`${sumValuesYear.count} workouts`}
@@ -327,7 +335,7 @@ class ListOfMonths extends Component {
                                     />
                                 }
 
-                                {theLargestTime && theLargestTime !== null &&
+                                {theLargestTime && theLargestTime[0] && theLargestTime[0].time > 0 && theLargestTime !== null &&
                                     <StatisticCard
                                         title="The largest time"
                                         subtitle=""
@@ -335,7 +343,7 @@ class ListOfMonths extends Component {
                                     />
                                 }
 
-                                {theLargestDistance && theLargestDistance !== null &&
+                                {theLargestDistance && theLargestDistance[0] && theLargestDistance[0].distance > 0 && theLargestDistance !== null &&
                                     <StatisticCard
                                         title="The largest distance"
                                         subtitle=""
@@ -343,7 +351,7 @@ class ListOfMonths extends Component {
                                     />
                                 }
 
-                                {theLargestCalories && theLargestCalories !== null &&
+                                {theLargestCalories && theLargestCalories[0] && theLargestCalories[0].calories > 0 && theLargestCalories !== null &&
                                     <StatisticCard
                                         title="The largest calories"
                                         subtitle=""
