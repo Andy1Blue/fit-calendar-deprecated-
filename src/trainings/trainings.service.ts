@@ -163,7 +163,7 @@ export class TrainingsService {
         let count = 0;
 
         this.trainingModel.countDocuments(
-            { $and: [{ userId: training.userId }, { trainingDate: { $regex: year, $options: 'i' } }] },
+            { $and: [{ userId: training.userId }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
             (err, c) => {
                 if (!err) {
                     count = c;
@@ -214,7 +214,7 @@ export class TrainingsService {
 
         const distance = await this.trainingModel.aggregate([{
             $match: {
-                $and: [{ userId: training.userId }, { distance: { $gte: 1 } }, { trainingDate: { $regex: month + '' + year, $options: 'i' } }],
+                $and: [{ userId: training.userId }, { distance: { $gte: 1 } }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }],
             },
         },
         { $group: { _id: null, distance: { $sum: '$distance' } } },
@@ -222,7 +222,7 @@ export class TrainingsService {
 
         const calories = await this.trainingModel.aggregate([{
             $match: {
-                $and: [{ userId: training.userId }, { calories: { $gte: 1 } }, { trainingDate: { $regex: month + '' + year, $options: 'i' } }],
+                $and: [{ userId: training.userId }, { calories: { $gte: 1 } }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }],
             },
         },
         { $group: { _id: null, calories: { $sum: '$calories' } } },
