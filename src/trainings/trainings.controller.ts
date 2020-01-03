@@ -35,37 +35,55 @@ export class TrainingsController {
 
     @Get('/user/:userId')
     async getTranings(@Param('userId') userId: string) {
-        const userTranings = await this.trainingsService.getTrainingsForUser({userId});
+        const userTranings = await this.trainingsService.getTrainingsForUser({ userId });
         return userTranings;
     }
 
     @Get('/user/:userId/id/:id')
     async getTraning(@Param('id') id: string, @Param('userId') userId: string) {
-        const training = await this.trainingsService.getSingleTraining({userId, id});
+        const training = await this.trainingsService.getSingleTraining({ userId, id });
         return training;
     }
 
     @Get('/first/user/:userId')
     async getFirstTraning(@Param('id') traningId: string, @Param('userId') userId: string) {
-        const training = await this.trainingsService.getFirstTrainingForUser({userId});
+        const training = await this.trainingsService.getFirstTrainingForUser({ userId });
+        return training;
+    }
+
+    @Get('/calories/user/:userId/year/:year')
+    async getTheLargestAmountOfCalories(@Param('userId') userId: string, @Param('year') year: string) {
+        const training = await this.trainingsService.getTheLargestAmountOfCaloriesForUser(year, { userId });
+        return training;
+    }
+
+    @Get('/distance/user/:userId/year/:year')
+    async getTheLargestAmountOfDistance(@Param('userId') userId: string, @Param('year') year: string) {
+        const training = await this.trainingsService.getTheLargestAmountOfDistanceForUser(year, { userId });
+        return training;
+    }
+
+    @Get('/time/user/:userId/year/:year')
+    async getTheLargestAmountOfTime(@Param('userId') userId: string, @Param('year') year: string) {
+        const training = await this.trainingsService.getTheLargestAmountOfTimeForUser(year, { userId });
         return training;
     }
 
     @Get('/last/user/:userId')
     async getLastTraning(@Param('id') traningId: string, @Param('userId') userId: string) {
-        const training = await this.trainingsService.getLastTrainingForUser({userId});
+        const training = await this.trainingsService.getLastTrainingForUser({ userId });
         return training;
     }
 
     @Get('/sum/user/:userId/year/:year')
     async getSumTraningDataByYear(@Param('userId') userId: string, @Param('year') year: string) {
-        const result = await this.trainingsService.sumTraingsDataByYear(year, {userId});
+        const result = await this.trainingsService.sumTraingsDataByYear(year, { userId });
         return result;
     }
 
     @Get('/sum/user/:userId/year/:year/month/:month')
     async getSumTraningDataByMonth(@Param('userId') userId: string, @Param('year') year: string, @Param('month') month: string) {
-        const result = await this.trainingsService.sumTraingsDataByMonth(year, month, {userId});
+        const result = await this.trainingsService.sumTraingsDataByMonth(year, month, { userId });
         return result;
     }
 
@@ -92,7 +110,7 @@ export class TrainingsController {
 
     @Delete('/user/:userId/id/:id')
     async removeTraining(@Param('userId') userId: string, @Param('id') id: string) {
-        await this.trainingsService.deleteTraining({userId, id});
+        await this.trainingsService.deleteTraining({ userId, id });
         return null;
     }
 }

@@ -21,6 +21,9 @@ class ListOfMonths extends Component {
         sumValuesMonth: null,
         firstTraining: null,
         lastTraining: null,
+        theLargestDistance: null,
+        theLargestCalories: null,
+        theLargestTime: null,
     }
 
     refresh = () => {
@@ -158,6 +161,42 @@ class ListOfMonths extends Component {
                 .then(response => response.json())
                 .then(sumValuesMonth => {
                     this.setState({ sumValuesMonth });
+                });
+
+                fetch(config.domain + '/trainings/calories/user/' + TCgId + '/year/' + year,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                .then(response => response.json())
+                .then(theLargestCalories => {
+                    this.setState({ theLargestCalories });
+                });
+
+                fetch(config.domain + '/trainings/time/user/' + TCgId + '/year/' + year,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                .then(response => response.json())
+                .then(theLargestTime => {
+                    this.setState({ theLargestTime });
+                });
+
+                fetch(config.domain + '/trainings/distance/user/' + TCgId + '/year/' + year,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                .then(response => response.json())
+                .then(theLargestDistance => {
+                    this.setState({ theLargestDistance });
                 });
 
             fetch(config.domain + '/trainings/first/user/' + TCgId,

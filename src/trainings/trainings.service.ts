@@ -117,6 +117,48 @@ export class TrainingsService {
         }
     }
 
+    async getTheLargestAmountOfDistanceForUser(year, training: ITraining) {
+        const theLargestAmountOfDistance = await this.trainingModel.find(
+            {
+                $and: [{ userId: training.userId }, { trainingDate: { $regex: year, $options: 'i' } }],
+            },
+        ).sort({ distance: -1 }).limit(1);
+
+        if (!theLargestAmountOfDistance) {
+            throw new NotFoundException('Could not find training for specify user.');
+        }
+
+        return theLargestAmountOfDistance as Training[];
+    }
+
+    async getTheLargestAmountOfTimeForUser(year, training: ITraining) {
+        const theLargestAmountOfTime = await this.trainingModel.find(
+            {
+                $and: [{ userId: training.userId }, { trainingDate: { $regex: year, $options: 'i' } }],
+            },
+        ).sort({ time: -1 }).limit(1);
+
+        if (!theLargestAmountOfTime) {
+            throw new NotFoundException('Could not find training for specify user.');
+        }
+
+        return theLargestAmountOfTime as Training[];
+    }
+
+    async getTheLargestAmountOfCaloriesForUser(year, training: ITraining) {
+        const theLargestAmountOfCalories = await this.trainingModel.find(
+            {
+                $and: [{ userId: training.userId }, { trainingDate: { $regex: year, $options: 'i' } }],
+            },
+        ).sort({ calories: -1 }).limit(1);
+
+        if (!theLargestAmountOfCalories) {
+            throw new NotFoundException('Could not find training for specify user.');
+        }
+
+        return theLargestAmountOfCalories as Training[];
+    }
+
     async sumTraingsDataByYear(year, training: ITraining) {
         let count = 0;
 
