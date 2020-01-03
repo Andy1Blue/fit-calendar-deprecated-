@@ -150,11 +150,7 @@ class ListOfMonths extends Component {
                 })
                 .then(response => response.json())
                 .then(sumValuesYear => {
-                    if (sumValuesYear.statusCode === 500) {
-                        this.setState({ sumValuesYear: null });
-                    } else {
-                        this.setState({ sumValuesYear });
-                    }
+                    this.setState({ sumValuesYear });
                 });
 
             fetch(config.domain + '/trainings/sum/user/' + TCgId + '/year/' + year + '/month/' + month,
@@ -166,11 +162,7 @@ class ListOfMonths extends Component {
                 })
                 .then(response => response.json())
                 .then(sumValuesMonth => {
-                    if (sumValuesMonth.statusCode === 500) {
-                        this.setState({ sumValuesMonth: null });
-                    } else {
-                        this.setState({ sumValuesMonth });
-                    }
+                    this.setState({ sumValuesMonth });
                 });
 
             fetch(config.domain + '/trainings/calories/user/' + TCgId + '/year/' + year,

@@ -14,10 +14,6 @@ class StatisticCard extends Component {
         return result;
     }
 
-    componentDidMount() {
-        console.log(this.props.title, this.props.subtitle, this.props.trainings)
-    }
-
     render() {
         const { title, subtitle, trainings } = this.props;
 
