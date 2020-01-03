@@ -300,13 +300,16 @@ class ListOfMonths extends Component {
                     <div className="content-container">
                         <div className="left">
                             <section id="today">
-                                {todayWorkout && todayWorkout !== null &&
+                                <div className="col">
+                                    <h2>Today</h2>
+                                </div>
+                                <div>
                                     <TodayCard
                                         training={todayWorkout}
                                         actualYear={actualYear}
                                         today={today}
                                     />
-                                }
+                                </div>
                             </section>
 
                             <section id="statistics">

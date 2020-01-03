@@ -24,14 +24,31 @@
 #card .center .statistic-bar-conteiner .statistic-bar-content {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
 }
 
-#card .center .statistic-bar-conteiner .statistic-bar-title .statistic-bar-elem,
-#card .center .statistic-bar-conteiner .statistic-bar-content .statistic-bar-elem {
+#card .center .statistic-bar-conteiner .statistic-bar-title .statistic-bar-elem {
     display: flex;
     flex-direction: column;
     padding: 5px;
+    justify-content: start;
+    text-align: center;
+}
+
+#card .center .statistic-bar-conteiner .statistic-bar-content .statistic-bar-elem {
+    min-width: 98px;
+    max-width: 98px;
+    display: flex;
+    flex-direction: column;
+    padding: 2px;
+    justify-content: start;
+    text-align: center;
+}
+
+#card .center .statistic-bar-conteiner .statistic-bar-title .statistic-bar-elem div span:nth-child(2),
+#card .center .statistic-bar-conteiner .statistic-bar-content .statistic-bar-elem div span:nth-child(2) {
+    display: block;
+    font-size: 10px;
 }
 
 #card .center .statistic-bar-conteiner .statistic-bar-title .statistic-bar-elem:nth-child(1) {
@@ -42,4 +59,10 @@
 #card .center .statistic-bar-conteiner .statistic-bar-content .statistic-bar-elem:nth-child(1) {
     font-weight: bold;
     font-size: 14px;
+}
+
+@media only screen and (max-width: 1305px) {
+    #card .center .statistic-bar-conteiner {
+        width: 95%;
+    }
 }

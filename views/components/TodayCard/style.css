@@ -32,6 +32,7 @@
 }
 
 #today-card .today-bar .center .statistic-bar-conteiner .statistic-bar-title .statistic-bar-elem .add-workout {
+    cursor: pointer;
     font-weight: bold;
     font-size: 14px;
 }
@@ -39,16 +40,30 @@
 #today-card .today-bar .center .statistic-bar-conteiner div .statistic-bar-content {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 #today-card .today-bar .center .statistic-bar-conteiner div .statistic-bar-content .statistic-bar-elem {
+    min-width: 98px;
+    max-width: 98px;
     display: flex;
     flex-direction: column;
-    padding: 5px;
+    padding: 2px;
+}
+
+#today-card .today-bar .center .statistic-bar-conteiner div .statistic-bar-content .statistic-bar-elem div span:nth-child(2),
+#today-card .today-bar .center .statistic-bar-conteiner div .statistic-bar-content .statistic-bar-elem div span:nth-child(2) {
+    display: block;
+    font-size: 10px;
 }
 
 #today-card .today-bar .center .statistic-bar-conteiner div .statistic-bar-content .statistic-bar-elem:nth-child(1) {
     font-weight: bold;
     font-size: 14px;
+}
+
+@media only screen and (max-width: 1305px) {
+    #today-card .today-bar .center .statistic-bar-conteiner {
+        width: 95%;
+    }
 }

@@ -15,7 +15,7 @@ class StatisticCard extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.title,this.props.subtitle,this.props.trainings)
+        console.log(this.props.title, this.props.subtitle, this.props.trainings)
     }
 
     render() {
@@ -40,26 +40,32 @@ class StatisticCard extends Component {
                             <div className="statistic-bar-content">
                                 <div className="statistic-bar-elem bold">
                                     {trainings[0].time !== null &&
-                                        <span>&#128336; {trainings[0].time}<br/>min (~ {Math.round(trainings[0].time / 60, 1)}h)</span>
+                                        <div><span>&#128336; {trainings[0].time}</span>
+                                            <span>min (~ {Math.round(trainings[0].time / 60, 1)}h)</span></div>
                                     }
                                     {trainings[0].time === null &&
-                                        <span>&#128336; 0<br/>min (~ 0h)</span>
+                                        <div><span>&#128336; 0</span>
+                                            <span>min (~ 0h)</span></div>
                                     }
                                 </div>
                                 <div className="statistic-bar-elem">
                                     {trainings[0].distance !== null &&
-                                        <span>&#128099; {trainings[0].distance}<br/>km</span>
+                                        <div><span>&#128099; {trainings[0].distance}</span>
+                                            <span>km</span></div>
                                     }
                                     {trainings[0].distance === null &&
-                                        <span>&#128099; 0<br/>km</span>
+                                        <div><span>&#128099; 0</span>
+                                            <span>km</span></div>
                                     }
                                 </div>
                                 <div className="statistic-bar-elem">
                                     {trainings[0].calories !== null &&
-                                        <span>&#128293; {trainings[0].calories}<br/>kcal</span>
+                                        <div><span>&#128293; {trainings[0].calories}</span>
+                                            <span>kcal</span></div>
                                     }
                                     {trainings[0].calories === null &&
-                                        <span>&#128293; 0<br/>kcal</span>
+                                        <div><span>&#128293; 0</span>
+                                            <span>kcal</span></div>
                                     }
                                 </div>
                             </div>
