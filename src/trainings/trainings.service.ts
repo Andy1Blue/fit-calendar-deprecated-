@@ -172,19 +172,19 @@ export class TrainingsService {
         );
 
         const time = await this.trainingModel.aggregate([{
-            $match: { $and: [{ userId: training.userId }, { time: { $gte: 1 } }, { trainingDate: { $regex: year, $options: 'i' } }] },
+            $match: { $and: [{ userId: training.userId }, { time: { $gte: 1 } }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
         },
         { $group: { _id: null, time: { $sum: '$time' } } },
         ]);
 
         const distance = await this.trainingModel.aggregate([{
-            $match: { $and: [{ userId: training.userId }, { distance: { $gte: 1 } }, { trainingDate: { $regex: year, $options: 'i' } }] },
+            $match: { $and: [{ userId: training.userId }, { distance: { $gte: 1 } }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
         },
         { $group: { _id: null, distance: { $sum: '$distance' } } },
         ]);
 
         const calories = await this.trainingModel.aggregate([{
-            $match: { $and: [{ userId: training.userId }, { calories: { $gte: 1 } }, { trainingDate: { $regex: year, $options: 'i' } }] },
+            $match: { $and: [{ userId: training.userId }, { calories: { $gte: 1 } }, { trainingDate: { '$regex': year, '$options': 'i' } }] },
         },
         { $group: { _id: null, calories: { $sum: '$calories' } } },
         ]);
@@ -196,7 +196,7 @@ export class TrainingsService {
         let count = 0;
 
         this.trainingModel.countDocuments(
-            { $and: [{ userId: training.userId }, { trainingDate: { $regex: month + '' + year, $options: 'i' } }] },
+            { $and: [{ userId: training.userId }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }] },
             (err, c) => {
                 if (!err) {
                     count = c;
@@ -206,7 +206,7 @@ export class TrainingsService {
 
         const time = await this.trainingModel.aggregate([{
             $match: {
-                $and: [{ userId: training.userId }, { time: { $gte: 1 } }, { trainingDate: { $regex: month + '' + year, $options: 'i' } }],
+                $and: [{ userId: training.userId }, { time: { $gte: 1 } }, { trainingDate: { '$regex': month + '' + year, '$options': 'i' } }],
             },
         },
         { $group: { _id: null, time: { $sum: '$time' } } },
