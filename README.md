@@ -1,6 +1,6 @@
-﻿﻿<center><img src="https://raw.githubusercontent.com/Andy1Blue/fit-calendar/master/views/assets/logo-calendar.png"></center>
+﻿﻿![icon](https://raw.githubusercontent.com/Andy1Blue/fit-calendar/master/views/assets/logo-calendar.png)
 
-<center>Training calendar</center>
+Training calendar
 ====
 
 ## Description
