@@ -17,7 +17,11 @@ require('dotenv').config();
       + process.env.MONGOOSE_PASSWORD +
       '@'
       + process.env.MONGOOSE_HOST +
-      '?retryWrites=true&w=majority'
+      '?retryWrites=true&w=majority',
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
     ),
   ],
   controllers: [AppController],
