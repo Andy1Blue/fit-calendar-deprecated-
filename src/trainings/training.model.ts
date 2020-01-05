@@ -12,7 +12,7 @@ export const TrainingSchema = new mongoose.Schema({
     isActive: Boolean,
 });
 
-export interface Training extends mongoose.Document{
+export interface Training extends mongoose.Document {
     id: string;
     trainingDate: string;
     description: string;
