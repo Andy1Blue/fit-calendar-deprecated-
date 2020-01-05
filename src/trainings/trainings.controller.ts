@@ -51,6 +51,12 @@ export class TrainingsController {
         return training;
     }
 
+    @Get('/last/user/:userId')
+    async getLastTraning(@Param('id') traningId: string, @Param('userId') userId: string) {
+        const training = await this.trainingsService.getLastTrainingForUser({ userId });
+        return training;
+    }
+
     @Get('/calories/user/:userId/year/:year')
     async getTheLargestAmountOfCalories(@Param('userId') userId: string, @Param('year') year: string) {
         const training = await this.trainingsService.getTheLargestAmountOfCaloriesForUser(year, { userId });
@@ -66,12 +72,6 @@ export class TrainingsController {
     @Get('/time/user/:userId/year/:year')
     async getTheLargestAmountOfTime(@Param('userId') userId: string, @Param('year') year: string) {
         const training = await this.trainingsService.getTheLargestAmountOfTimeForUser(year, { userId });
-        return training;
-    }
-
-    @Get('/last/user/:userId')
-    async getLastTraning(@Param('id') traningId: string, @Param('userId') userId: string) {
-        const training = await this.trainingsService.getLastTrainingForUser({ userId });
         return training;
     }
 

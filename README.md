@@ -1,4 +1,4 @@
-﻿﻿Training calendar
+﻿﻿![icon](https://raw.githubusercontent.com/Andy1Blue/fit-calendar/master/views/assets/logo-calendar.png){: height="36px" width="36px"} Training calendar
 ====
 
 ## Description
@@ -50,6 +50,6 @@ $ pm2 start ecosystem.config.js
 ## Test
 
 ```bash
-# unit tests
-$ npm run test
+# unit tests ans e2e
+$ npm run tests
 ```
