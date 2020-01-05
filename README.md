@@ -1,4 +1,6 @@
-﻿﻿![icon](https://raw.githubusercontent.com/Andy1Blue/fit-calendar/master/views/assets/logo-calendar.png){: height="36px" width="36px"} Training calendar
+﻿﻿![icon](https://raw.githubusercontent.com/Andy1Blue/fit-calendar/master/views/assets/logo-calendar.png)
+
+Training calendar
 ====
 
 ## Description
