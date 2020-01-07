@@ -97,7 +97,7 @@ class ListOfMonths extends Component {
                     if (day + "" + month + "" + year === today) {
                         elem.className = 'rect-workout rect-active-today';
                     } else {
-                        elem.className = 'rect-workout rect-active';
+                        elem.className = 'rect-workout rect-active redColor';
                     }
                     elem.setAttribute("trainingId", idList[i])
                     elem.setAttribute("comment", day + "." + month + "." + year + " [" + description[i] + "]");

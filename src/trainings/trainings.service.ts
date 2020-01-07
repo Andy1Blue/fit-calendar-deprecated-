@@ -30,6 +30,7 @@ export class TrainingsService {
 
         const newTraining = new this.trainingModel({
             trainingDate: training.trainingDate,
+            colorTag: training.colorTag,
             description: training.description,
             distance: training.distance,
             calories: training.calories,
@@ -105,6 +106,10 @@ export class TrainingsService {
 
         if (training.time >= 0) {
             updatedTraining.time = training.time;
+        }
+
+        if (training.colorTag) {
+            updatedTraining.colorTag = training.colorTag;
         }
 
         updatedTraining.save();

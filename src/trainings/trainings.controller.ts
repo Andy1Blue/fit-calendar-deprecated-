@@ -8,6 +8,7 @@ export class TrainingsController {
     @Post()
     async addTraining(
         @Body('trainingDate') trainingDate: string,
+        @Body('colorTag') colorTag: string,
         @Body('description') description: string,
         @Body('distance') distance: number | null,
         @Body('calories') calories: number | null,
@@ -17,6 +18,7 @@ export class TrainingsController {
         const generatedId = await this.trainingsService.insertTraining(
             {
                 trainingDate,
+                colorTag,
                 description,
                 distance,
                 calories,
@@ -91,6 +93,7 @@ export class TrainingsController {
     async updateTraining(
         @Param('userId') userId: string,
         @Param('id') id: string,
+        @Body('colorTag') colorTag: string,
         @Body('description') description: string,
         @Body('distance') distance: number,
         @Body('calories') calories: number,
@@ -99,7 +102,8 @@ export class TrainingsController {
             {
                 userId,
                 id,
-                description,
+                             colorTag,
+                             description,
                 distance,
                 calories,
                 time,

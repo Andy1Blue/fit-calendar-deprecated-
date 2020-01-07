@@ -1,10 +1,3 @@
-/*
- *
- * App component
- *
- */
-
-// Imports
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
 import './style.css';
@@ -21,10 +14,12 @@ class App extends Component {
         TCgId: null,
         showDay: false,
         targetDay: null,
+        targetColorTag: null,
         refresh: false,
         targetDayTId: null,
         alertText: null,
         dayObject: {
+            colorTag: null,
             description: null,
             distance: null,
             calories: null,
@@ -42,6 +37,7 @@ class App extends Component {
             } else {
                 this.setState({
                     showDayLoader: false, dayObject: {
+                        colorTag: null,
                         description: null,
                         distance: null,
                         calories: null,
@@ -52,7 +48,6 @@ class App extends Component {
         }
     }
 
-    // Close the day editing panel
     closeDay = () => {
         this.setState({ showDay: false });
     }
@@ -72,8 +67,11 @@ class App extends Component {
                 })
                 .then(response => response.json())
                 .then(response => {
+                    console.log(response)
                     this.setState({
                         dayObject: {
+                            targetColorTag: response.colorTag,
+                            colorTag: response.colorTag,
                             description: response.description,
                             distance: response.distance,
                             calories: response.calories,
@@ -83,6 +81,7 @@ class App extends Component {
                 }).catch(e => {
                     this.setState({
                         dayObject: {
+                            colorTag: null,
                             description: null,
                             distance: null,
                             calories: null,
@@ -102,9 +101,11 @@ class App extends Component {
             const distanceValue = document.getElementById("distance").value;
             const caloriesValue = document.getElementById("calories").value;
             const timeValue = document.getElementById("time").value;
+            let targetColorTag = this.state.targetColorTag;
 
             const data = {
                 "trainingDate": targetDateChanged,
+                "colorTag": targetColorTag,
                 'description': descriptionValue,
                 'distance': distanceValue,
                 'calories': caloriesValue,
@@ -139,8 +140,10 @@ class App extends Component {
             const distanceValue = document.getElementById("distance").value;
             const caloriesValue = document.getElementById("calories").value;
             const timeValue = document.getElementById("time").value;
+            let targetColorTag = this.state.targetColorTag;
 
             const data = {
+                'colorTag': targetColorTag,
                 'description': descriptionValue,
                 'distance': distanceValue == '' ? 0 : distanceValue,
                 'calories': caloriesValue == '' ? 0 : caloriesValue,
@@ -164,7 +167,6 @@ class App extends Component {
         }
     }
 
-    // // Delete to db and close the day editing panel
     deleteDay = () => {
         // TODO: Add alert to confirm deleting...
         const TCgId = localStorage.getItem('TCgId');
@@ -187,13 +189,13 @@ class App extends Component {
     }
 
     showAlert = (alertText) => {
-         this.setState({ alertText });
+        this.setState({ alertText });
         $('#workoutDay').modal('hide');
         $('#alert').modal('show');
 
-        setTimeout(()=>{
+        setTimeout(() => {
             $('#alert').modal('hide');
-        },2000)
+        }, 2000)
     }
 
     checkTextareaIsEmpty = () => {
@@ -202,6 +204,16 @@ class App extends Component {
             document.getElementById("description").value === ' ' ||
             document.getElementById("description").value === null;
         this.setState({ isDescriptionInactive: check });
+    }
+
+    setColorTag = (e,color) => {
+        document.getElementById('defaultColor').classList.remove('colorTag--borderder');
+        document.getElementById('redColor').classList.remove('colorTag--borderder');
+        document.getElementById('blueColor').classList.remove('colorTag--borderder');
+
+        document.getElementById(e.target.id).classList.add('colorTag--borderder');
+  
+        this.setState({ targetColorTag: color });
     }
 
     addToDescription = (e) => {
@@ -225,7 +237,7 @@ class App extends Component {
     }
 
     render() {
-        const { isFetching, TCgId, showDay, targetDay, refresh, dayObject, showDayLoader, isDescriptionInactive,alertText } = this.state;
+        const { isFetching, TCgId, showDay, targetDay, refresh, dayObject, showDayLoader, isDescriptionInactive, alertText } = this.state;
         return (
             <div className="App">
                 {isFetching && <div><Loader /></div>}
@@ -265,6 +277,22 @@ class App extends Component {
                                                 </button>
                                                 {!showDayLoader &&
                                                     <div>
+                                                        <div class="colorTag">
+                                                            <div id="defaultColor" class={!dayObject.colorTag || dayObject.colorTag === null || dayObject.colorTag === "0" ||
+                                                                dayObject.colorTag === "default"
+                                                                ? 'colorTag--borderder colorTag--color' : 'colorTag--color'}
+                                                                onClick={() => this.setColorTag(event,'default')}
+                                                            ></div>
+                                                            <div id="redColor" class={dayObject.colorTag === "red"
+                                                                ? 'colorTag--borderder colorTag--color' : 'colorTag--color'}
+                                                                onClick={() => this.setColorTag(event,'red')
+                                                                }></div>
+                                                            <div id="blueColor" class={dayObject.colorTag === "blue"
+                                                                ? 'colorTag--borderder colorTag--color' : 'colorTag--color'}
+                                                                onClick={() => this.setColorTag(event,'blue')
+                                                                }></div>
+                                                        </div>
+
                                                         Day: {targetDay}
 
                                                         <br />
