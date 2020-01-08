@@ -61,7 +61,7 @@
     font-size: 14px;
 }
 
-@media only screen and (max-width: 1305px) {
+@media only screen and (max-width: 1000px) {
     #card .center .statistic-bar-conteiner {
         width: 95%;
     }

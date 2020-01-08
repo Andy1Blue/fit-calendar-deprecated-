@@ -15,6 +15,7 @@ class ListOfMonths extends Component {
         isWorkoutDate: [],
         TCgId: null,
         description: [],
+        colorTags: [],
         idList: [],
         actualYear: null,
         actualMonth: null,
@@ -82,6 +83,7 @@ class ListOfMonths extends Component {
         const isWorkoutDate = this.state.isWorkoutDate;
         const description = this.state.description;
         const idList = this.state.idList;
+        const colorTags = this.state.colorTags;
 
         if (isWorkoutDate) {
             const elem = document.createElement("rect");
@@ -90,14 +92,52 @@ class ListOfMonths extends Component {
             const workoutDateLength = isWorkoutDate.length > 0 ? isWorkoutDate.length : 10;
             for (let i = 0; i < workoutDateLength; i++) {
                 if (day + "" + month + "" + year === isWorkoutDate[i]) {
-                    elem.className = 'rect-workout';
+                    elem.className = 'rect-workout standardColor';
                     elem.innerHTML = day;
+
+                    if (colorTags[i] === "default") {
+                        elem.className = 'rect-workout defaultColor';
+                    }
+
+                    if (colorTags[i] === "red") {
+                        elem.className = 'rect-workout redColor';
+                    }
+
+                    if (colorTags[i] === "blue") {
+                        elem.className = 'rect-workout blueColor';
+                    }
 
                     elem.setAttribute("id", day + "." + month + "." + year);
                     if (day + "" + month + "" + year === today) {
-                        elem.className = 'rect-workout rect-active-today';
+                        elem.className = 'rect-standard rect-today defaultColor';
+
+                        if (colorTags[i] === "default") {
+                            elem.className = 'rect-standard rect-today defaultColor';
+                        }
+
+                        if (colorTags[i] === "red") {
+                            elem.className = 'rect-standard rect-today redColor';
+                        }
+
+                        if (colorTags[i] === "blue") {
+                            elem.className = 'rect-standard rect-today blueColor';
+                        }
+                    
                     } else {
-                        elem.className = 'rect-workout rect-active redColor';
+                        elem.className = 'rect-workout defaultColor';
+
+                        if (colorTags[i] === "default") {
+                            elem.className = 'rect-workout defaultColor';
+                        }
+    
+                        if (colorTags[i] === "red") {
+                            elem.className = 'rect-workout redColor';
+                        }
+    
+                        if (colorTags[i] === "blue") {
+                            elem.className = 'rect-workout blueColor';
+                        }
+    
                     }
                     elem.setAttribute("trainingId", idList[i])
                     elem.setAttribute("comment", day + "." + month + "." + year + " [" + description[i] + "]");
@@ -105,7 +145,7 @@ class ListOfMonths extends Component {
                     elem.setAttribute("data-target", '#workoutDay');
                     break;
                 } else {
-                    elem.className = 'rect-standard';
+                    elem.className = 'rect-standard standardColor';
                     elem.innerHTML = day;
 
                     elem.setAttribute("id", day + "." + month + "." + year);
@@ -114,7 +154,11 @@ class ListOfMonths extends Component {
                     elem.setAttribute("data-target", '#workoutDay');
 
                     if (day + "" + month + "" + year === today) {
-                        elem.className = 'rect-standard rect-today';
+                        if (colorTags[i] === "red") {
+                            elem.className = 'rect-standard rect-today redColor';
+                        } else {
+                            elem.className = 'rect-standard rect-today';
+                        }
                     }
                 }
             }
@@ -232,17 +276,19 @@ class ListOfMonths extends Component {
                 .then(response => {
                     let isWorkoutDate = [];
                     let description = [];
+                    let colorTags = [];
                     let idList = [];
                     for (let i = 0; i < response.length; i++) {
                         isWorkoutDate.push(response[i]['trainingDate']);
                         description.push(response[i]['description']);
+                        colorTags.push(response[i]['colorTag']);
                         idList.push(response[i]['_id']);
 
                         if (response[i]['trainingDate'] === this.state.today) {
                             this.setState({ todayWorkout: response[i] });
                         }
                     }
-                    this.setState({ isWorkoutDate, isFetching: false, description, idList });
+                    this.setState({ isWorkoutDate, isFetching: false, description, idList, colorTags });
                     this.generateReacts();
                 });
             this.refresh();

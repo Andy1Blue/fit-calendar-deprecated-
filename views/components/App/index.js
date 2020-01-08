@@ -31,6 +31,7 @@ class App extends Component {
 
     // Show the day editing panel
     showDay = (e) => {
+        this.setState({ showDayLoader: true, showDay: true });
         if (e.target.attributes.getNamedItem('id') !== null) {
             if (e.target.attributes.getNamedItem('trainingId')) {
                 this.isDay(e.target.attributes.getNamedItem('id').value, e.target.attributes.getNamedItem('trainingId').value);
@@ -53,7 +54,6 @@ class App extends Component {
     }
 
     isDay = (day, trainingId) => {
-        this.setState({ showDayLoader: true, showDay: true });
         if (localStorage.getItem('TCgId') !== null) {
             const TCgId = localStorage.getItem('TCgId');
             const targetDateChanged = day.replace(/\./g, "");
@@ -67,7 +67,6 @@ class App extends Component {
                 })
                 .then(response => response.json())
                 .then(response => {
-                    console.log(response)
                     this.setState({
                         dayObject: {
                             targetColorTag: response.colorTag,
@@ -149,7 +148,7 @@ class App extends Component {
                 'calories': caloriesValue == '' ? 0 : caloriesValue,
                 'time': timeValue == '' ? 0 : timeValue
             }
-            console.log({ data })
+
             fetch(config.domain + '/trainings/user/' + TCgId + '/id/' + targetDayTId,
                 {
                     method: "PATCH",
@@ -206,13 +205,13 @@ class App extends Component {
         this.setState({ isDescriptionInactive: check });
     }
 
-    setColorTag = (e,color) => {
+    setColorTag = (e, color) => {
         document.getElementById('defaultColor').classList.remove('colorTag--borderder');
         document.getElementById('redColor').classList.remove('colorTag--borderder');
         document.getElementById('blueColor').classList.remove('colorTag--borderder');
 
         document.getElementById(e.target.id).classList.add('colorTag--borderder');
-  
+
         this.setState({ targetColorTag: color });
     }
 
@@ -264,7 +263,7 @@ class App extends Component {
                         }
                     </div>
 
-                    <div class="modal fade" id="workoutDay" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="workoutDay" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
 
@@ -281,15 +280,15 @@ class App extends Component {
                                                             <div id="defaultColor" class={!dayObject.colorTag || dayObject.colorTag === null || dayObject.colorTag === "0" ||
                                                                 dayObject.colorTag === "default"
                                                                 ? 'colorTag--borderder colorTag--color' : 'colorTag--color'}
-                                                                onClick={() => this.setColorTag(event,'default')}
+                                                                onClick={() => this.setColorTag(event, 'default')}
                                                             ></div>
                                                             <div id="redColor" class={dayObject.colorTag === "red"
                                                                 ? 'colorTag--borderder colorTag--color' : 'colorTag--color'}
-                                                                onClick={() => this.setColorTag(event,'red')
+                                                                onClick={() => this.setColorTag(event, 'red')
                                                                 }></div>
                                                             <div id="blueColor" class={dayObject.colorTag === "blue"
                                                                 ? 'colorTag--borderder colorTag--color' : 'colorTag--color'}
-                                                                onClick={() => this.setColorTag(event,'blue')
+                                                                onClick={() => this.setColorTag(event, 'blue')
                                                                 }></div>
                                                         </div>
 
@@ -299,17 +298,18 @@ class App extends Component {
 
                                                         &#128336;
 
-                                            <input type="number" id="time" class="input-number" placeholder="min" onChange={e => {
-                                                            this.setState({
-                                                                dayObject: {
-                                                                    description: dayObject.description,
-                                                                    time: e.target.value,
-                                                                    calories: dayObject.calories,
-                                                                    distance: dayObject.distance,
-                                                                }
-                                                            })
-                                                            this.checkTextareaIsEmpty()
-                                                        }} value={dayObject.time === 0 ? '' : dayObject.time}></input>
+                                            <input type="number" id="time" class="input-number" placeholder="min"
+                                                            onChange={e => {
+                                                                this.setState({
+                                                                    dayObject: {
+                                                                        description: dayObject.description,
+                                                                        time: e.target.value,
+                                                                        calories: dayObject.calories,
+                                                                        distance: dayObject.distance,
+                                                                    }
+                                                                })
+                                                                this.checkTextareaIsEmpty()
+                                                            }} value={dayObject.time === 0 ? '' : dayObject.time}></input>
 
                                                         &#128293;
 
@@ -377,7 +377,7 @@ class App extends Component {
                         </div>
                     </div>
 
-                    <div class="modal fade" id="alert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="alert" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-body">

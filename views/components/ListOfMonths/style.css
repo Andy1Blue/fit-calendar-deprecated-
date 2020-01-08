@@ -78,16 +78,26 @@
 }
 
 .rect-active-today {
-    background-color: #de49ba;
     border-bottom: 5px solid #c0993e;
 }
 
-.rect-active {
+.defaultColor {
     background-color: #de49ba;
 }
 
-.rect-standard {
+.redColor {
+    background-color: #b82a2a;
+}
+
+.blueColor {
+    background-color: #615edd;
+}
+
+.standardColor {
     background-color: #6e2364;
+}
+
+.rect-standard {
     cursor: pointer;
     color: #7c838c;
     font-family: 'Roboto, sans-serif';
@@ -96,6 +106,7 @@
 }
 
 .rect-today {
+    color: #fff;
     border-bottom: 5px solid #c0993e;
 }
 
@@ -147,7 +158,7 @@ rect:hover:after {
     background-color: #4e4c5d;
 }
 
-@media only screen and (max-width: 1305px) {
+@media only screen and (max-width: 1000px) {
     .content-container {
         width: 100%;
     }
@@ -157,12 +168,12 @@ rect:hover:after {
     }
 
     .statistic-bar-conteiner {
-    width: 100%;
-}
+        width: 100%;
+    }
 
-#today {
-    width: 100%;
-}
+    #today {
+        width: 100%;
+    }
 
     .training-table-content {
         width: 90%;
