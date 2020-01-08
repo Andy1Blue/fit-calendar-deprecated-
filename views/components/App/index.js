@@ -350,6 +350,7 @@ class App extends Component {
                                                             <br />
                                                             <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [GYM] </span>
                                                             <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}> [SPINNING] </span>
+                                                            <span class="btn btn-secondary margin1 small" onClick={this.addToDescription}>[M]</span>
                                                         </small>
 
                                                         <br />Comment:<br />
