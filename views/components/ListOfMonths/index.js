@@ -502,87 +502,127 @@ class ListOfMonths extends Component {
                 </div>
               </section>
 
-              <section id="statistics">
-                {((sumValuesMonth && sumValuesMonth[0]) ||
-                  (sumValuesYear && sumValuesYear[0])) && (
-                  <div className="col">
-                    <h2>Statistics</h2>
-                  </div>
-                )}
-
-                {sumValuesMonth &&
-                  sumValuesMonth[0] &&
-                  sumValuesMonth !== null && (
-                    <StatisticCard
-                      title="In this month"
-                      subtitle={`${sumValuesMonth.count} workouts`}
-                      trainings={sumValuesMonth}
-                    />
+              {actualYear === this.actualYear() && (
+                <section id="statistics">
+                  {((sumValuesMonth && sumValuesMonth[0]) ||
+                    (sumValuesYear && sumValuesYear[0])) && (
+                    <div className="col">
+                      <h2>Statistics</h2>
+                    </div>
                   )}
 
-                {sumValuesLastMonth &&
-                  sumValuesLastMonth[0] &&
-                  sumValuesLastMonth !== null && (
-                    <StatisticCard
-                      title="In last month"
-                      subtitle={`${sumValuesLastMonth.count} workouts`}
-                      trainings={sumValuesLastMonth}
-                    />
+                  {sumValuesMonth &&
+                    sumValuesMonth[0] &&
+                    sumValuesMonth !== null && (
+                      <StatisticCard
+                        title="In this month"
+                        subtitle={`${sumValuesMonth.count} workouts`}
+                        trainings={sumValuesMonth}
+                      />
+                    )}
+
+                  {sumValuesLastMonth &&
+                    sumValuesLastMonth[0] &&
+                    sumValuesLastMonth !== null && (
+                      <StatisticCard
+                        title="In last month"
+                        subtitle={`${sumValuesLastMonth.count} workouts`}
+                        trainings={sumValuesLastMonth}
+                      />
+                    )}
+
+                  {sumValuesYear &&
+                    sumValuesYear[0] &&
+                    sumValuesYear !== null && (
+                      <StatisticCard
+                        title="In this year"
+                        subtitle={`${sumValuesYear.count} workouts`}
+                        trainings={sumValuesYear}
+                      />
+                    )}
+
+                  {sumValuesLastYear &&
+                    sumValuesLastYear[0] &&
+                    sumValuesLastYear !== null && (
+                      <StatisticCard
+                        title="In last year"
+                        subtitle={`${sumValuesLastYear.count} workouts`}
+                        trainings={sumValuesLastYear}
+                      />
+                    )}
+
+                  {((theLargestTime &&
+                    theLargestTime[0] &&
+                    theLargestTime[0].time > 0 &&
+                    theLargestTime !== null) ||
+                    (theLargestDistance &&
+                      theLargestDistance[0] &&
+                      theLargestDistance[0].distance > 0 &&
+                      theLargestDistance !== null) ||
+                    (theLargestCalories &&
+                      theLargestCalories[0] &&
+                      theLargestCalories[0].calories > 0 &&
+                      theLargestCalories !== null)) && (
+                    <div className="col">
+                      <h3>Records</h3>
+                    </div>
                   )}
 
-                {sumValuesYear &&
-                  sumValuesYear[0] &&
-                  sumValuesYear !== null && (
-                    <StatisticCard
-                      title="In this year"
-                      subtitle={`${sumValuesYear.count} workouts`}
-                      trainings={sumValuesYear}
-                    />
+                  {theLargestTime &&
+                    theLargestTime[0] &&
+                    theLargestTime[0].time > 0 &&
+                    theLargestTime !== null && (
+                      <StatisticCard
+                        title="The largest time"
+                        subtitle=""
+                        trainings={theLargestTime}
+                      />
+                    )}
+
+                  {theLargestDistance &&
+                    theLargestDistance[0] &&
+                    theLargestDistance[0].distance > 0 &&
+                    theLargestDistance !== null && (
+                      <StatisticCard
+                        title="The largest distance"
+                        subtitle=""
+                        trainings={theLargestDistance}
+                      />
+                    )}
+
+                  {theLargestCalories &&
+                    theLargestCalories[0] &&
+                    theLargestCalories[0].calories > 0 &&
+                    theLargestCalories !== null && (
+                      <StatisticCard
+                        title="The largest calories"
+                        subtitle=""
+                        trainings={theLargestCalories}
+                      />
+                    )}
+                </section>
+              )}
+
+              {actualYear !== this.actualYear() && (
+                <section id="statistics">
+                  {((sumValuesMonth && sumValuesMonth[0]) ||
+                    (sumValuesYear && sumValuesYear[0])) && (
+                    <div className="col">
+                      <h3>Summary of the year</h3>
+                    </div>
                   )}
 
-                {sumValuesLastYear &&
-                  sumValuesLastYear[0] &&
-                  sumValuesLastYear !== null && (
-                    <StatisticCard
-                      title="In last year"
-                      subtitle={`${sumValuesLastYear.count} workouts`}
-                      trainings={sumValuesLastYear}
-                    />
-                  )}
-
-                {theLargestTime &&
-                  theLargestTime[0] &&
-                  theLargestTime[0].time > 0 &&
-                  theLargestTime !== null && (
-                    <StatisticCard
-                      title="The largest time"
-                      subtitle=""
-                      trainings={theLargestTime}
-                    />
-                  )}
-
-                {theLargestDistance &&
-                  theLargestDistance[0] &&
-                  theLargestDistance[0].distance > 0 &&
-                  theLargestDistance !== null && (
-                    <StatisticCard
-                      title="The largest distance"
-                      subtitle=""
-                      trainings={theLargestDistance}
-                    />
-                  )}
-
-                {theLargestCalories &&
-                  theLargestCalories[0] &&
-                  theLargestCalories[0].calories > 0 &&
-                  theLargestCalories !== null && (
-                    <StatisticCard
-                      title="The largest calories"
-                      subtitle=""
-                      trainings={theLargestCalories}
-                    />
-                  )}
-              </section>
+                  {sumValuesYear &&
+                    sumValuesYear[0] &&
+                    sumValuesYear !== null && (
+                      <StatisticCard
+                        title={`In ${actualYear} year`}
+                        subtitle={`${sumValuesYear.count} workouts`}
+                        trainings={sumValuesYear}
+                      />
+                    )}
+                </section>
+              )}
             </div>
 
             <div class="right">
