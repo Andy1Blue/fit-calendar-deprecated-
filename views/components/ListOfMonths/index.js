@@ -22,7 +22,9 @@ class ListOfMonths extends Component {
     actualMonth: null,
     actualDay: null,
     sumValuesYear: null,
+    sumValuesLastYear: null,
     sumValuesMonth: null,
+    sumValuesLastMonth: null,
     firstTraining: null,
     lastTraining: null,
     theLargestDistance: null,
@@ -55,8 +57,9 @@ class ListOfMonths extends Component {
   };
 
   addYear = () => {
-    let actualYear = this.state.actualYear + 1;
-    this.setState({ actualYear });
+    this.setState(prevState => {
+      return { actualYear: prevState.actualYear + 1, isFetching: true };
+    });
 
     for (let i = 1; i <= 12; i++) {
       document
@@ -64,14 +67,15 @@ class ListOfMonths extends Component {
         .querySelector('.App .App-matches .container .m' + i).innerHTML = '';
     }
 
-    this.fetchData();
-    this.refresh();
-    this.forceUpdate();
+    setTimeout(() => {
+      this.fetchData();
+    }, 500);
   };
 
   subtractYear = () => {
-    let actualYear = this.state.actualYear - 1;
-    this.setState({ actualYear });
+    this.setState(prevState => {
+      return { actualYear: prevState.actualYear - 1, isFetching: true };
+    });
 
     for (let i = 1; i <= 12; i++) {
       document
@@ -79,9 +83,9 @@ class ListOfMonths extends Component {
         .querySelector('.App .App-matches .container .m' + i).innerHTML = '';
     }
 
-    this.fetchData();
-    this.refresh();
-    this.forceUpdate();
+    setTimeout(() => {
+      this.fetchData();
+    }, 500);
   };
 
   daysInMonth = (month, year) => {
@@ -187,7 +191,7 @@ class ListOfMonths extends Component {
           elem.setAttribute('data-target', '#workoutDay');
 
           if (day + '' + month + '' + year === today) {
-                      elem.className = 'rect-standard rect-today standardColor';
+            elem.className = 'rect-standard rect-today standardColor';
           }
         }
       }
@@ -216,12 +220,15 @@ class ListOfMonths extends Component {
         month = this.actualMonth();
       }
 
-      fetch(config.domain + '/trainings/sum/user/' + TCgId + '/year/' + year, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+      const promiseSumValuesYear = fetch(
+        config.domain + '/trainings/sum/user/' + TCgId + '/year/' + year,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
         .then(response => response.json())
         .then(sumValuesYear => {
           if (sumValuesYear.statusCode === 500) {
@@ -231,7 +238,7 @@ class ListOfMonths extends Component {
           }
         });
 
-      fetch(
+      const promiseSumValuesMonth = fetch(
         config.domain +
           '/trainings/sum/user/' +
           TCgId +
@@ -255,7 +262,56 @@ class ListOfMonths extends Component {
           }
         });
 
-      fetch(
+      let lastMonth = month === '01' ? '12' : parseInt(month) - 1;
+      lastMonth = lastMonth.length === 2 ? lastMonth : `0${lastMonth}`;
+
+      let lastYearByMonth = month === '01' ? year - 1 : year;
+
+      const promiseSumValuesLastMonth = fetch(
+        config.domain +
+          '/trainings/sum/user/' +
+          TCgId +
+          '/year/' +
+          lastYearByMonth +
+          '/month/' +
+          lastMonth,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(sumValuesLastMonth => {
+          if (sumValuesLastMonth.statusCode === 500) {
+            this.setState({ sumValuesLastMonth: null });
+          } else {
+            this.setState({ sumValuesLastMonth });
+          }
+        });
+
+      let lastYear = year - 1;
+
+      const promiseSumValuesLastYear = fetch(
+        config.domain + '/trainings/sum/user/' + TCgId + '/year/' + lastYear,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(sumValuesLastYear => {
+          if (sumValuesLastYear.statusCode === 500) {
+            this.setState({ sumValuesLastYear: null });
+          } else {
+            this.setState({ sumValuesLastYear });
+          }
+        });
+
+      const promiseTheLargestCalories = fetch(
         config.domain + '/trainings/calories/user/' + TCgId + '/year/' + year,
         {
           method: 'GET',
@@ -273,12 +329,15 @@ class ListOfMonths extends Component {
           }
         });
 
-      fetch(config.domain + '/trainings/time/user/' + TCgId + '/year/' + year, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+      const promiseTheLargestTime = fetch(
+        config.domain + '/trainings/time/user/' + TCgId + '/year/' + year,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
         .then(response => response.json())
         .then(theLargestTime => {
           if (theLargestTime.statusCode === 500) {
@@ -288,7 +347,7 @@ class ListOfMonths extends Component {
           }
         });
 
-      fetch(
+      const promiseTheLargestDistance = fetch(
         config.domain + '/trainings/distance/user/' + TCgId + '/year/' + year,
         {
           method: 'GET',
@@ -306,7 +365,7 @@ class ListOfMonths extends Component {
           }
         });
 
-      fetch(config.domain + '/trainings/user/' + TCgId, {
+      const promiseWorkout = fetch(config.domain + '/trainings/user/' + TCgId, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -332,16 +391,31 @@ class ListOfMonths extends Component {
           }
           this.setState({
             isWorkoutDate,
-            isFetching: false,
             description,
             idList,
             colorTags,
             type,
           });
-          this.generateReacts();
         });
-      this.refresh();
-      this.forceUpdate();
+
+      const promises = [
+        promiseSumValuesMonth,
+        promiseSumValuesLastMonth,
+        promiseSumValuesYear,
+        promiseSumValuesLastYear,
+        promiseTheLargestCalories,
+        promiseTheLargestDistance,
+        promiseTheLargestTime,
+        promiseWorkout,
+      ];
+
+      Promise.allSettled(promises).then(results => {
+        this.setState({
+          isFetching: false,
+        });
+        this.forceUpdate();
+        this.generateReacts();
+      });
     } else {
       this.setState({ isWorkoutDate: [], isFetching: false });
     }
@@ -395,7 +469,9 @@ class ListOfMonths extends Component {
       isWorkoutDate,
       actualYear,
       sumValuesYear,
+      sumValuesLastYear,
       sumValuesMonth,
+      sumValuesLastMonth,
       today,
       todayWorkout,
       theLargestTime,
@@ -444,6 +520,16 @@ class ListOfMonths extends Component {
                     />
                   )}
 
+                {sumValuesLastMonth &&
+                  sumValuesLastMonth[0] &&
+                  sumValuesLastMonth !== null && (
+                    <StatisticCard
+                      title="In last month"
+                      subtitle={`${sumValuesLastMonth.count} workouts`}
+                      trainings={sumValuesLastMonth}
+                    />
+                  )}
+
                 {sumValuesYear &&
                   sumValuesYear[0] &&
                   sumValuesYear !== null && (
@@ -451,6 +537,16 @@ class ListOfMonths extends Component {
                       title="In this year"
                       subtitle={`${sumValuesYear.count} workouts`}
                       trainings={sumValuesYear}
+                    />
+                  )}
+
+                {sumValuesLastYear &&
+                  sumValuesLastYear[0] &&
+                  sumValuesLastYear !== null && (
+                    <StatisticCard
+                      title="In last year"
+                      subtitle={`${sumValuesLastYear.count} workouts`}
+                      trainings={sumValuesLastYear}
                     />
                   )}
 
