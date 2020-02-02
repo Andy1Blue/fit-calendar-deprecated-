@@ -136,7 +136,7 @@ export class TrainingsService {
     if (training.type && training.type !== '-') {
       updatedTraining.type = training.type;
     } else {
-      updatedTraining.type =null;
+      updatedTraining.type = null;
     }
 
     updatedTraining.save();
@@ -213,6 +213,7 @@ export class TrainingsService {
         $and: [
           { userId: training.userId },
           { trainingDate: { $regex: year, $options: 'i' } },
+          { type: { $not: { $regex: /^ABSENCE.*/ } } },
         ],
       },
       (err, c) => {
@@ -285,6 +286,7 @@ export class TrainingsService {
         $and: [
           { userId: training.userId },
           { trainingDate: { $regex: month + '' + year, $options: 'i' } },
+          { type: { $not: { $regex: /^ABSENCE.*/ } } },
         ],
       },
       (err, c) => {

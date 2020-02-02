@@ -88,7 +88,7 @@ class App extends Component {
             targetDay: day,
             targetDayTId: trainingId,
             showDayLoader: false,
-            isDescriptionInactive: true
+            isDescriptionInactive: false
           });
         })
         .catch(e => {

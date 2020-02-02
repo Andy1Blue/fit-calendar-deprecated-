@@ -55,8 +55,8 @@ class ListOfMonths extends Component {
   };
 
   addYear = () => {
-    let a = this.state.actualYear;
-    this.setState({ actualYear: a + 1 });
+    let actualYear = this.state.actualYear + 1;
+    this.setState({ actualYear });
 
     for (let i = 1; i <= 12; i++) {
       document
@@ -70,8 +70,8 @@ class ListOfMonths extends Component {
   };
 
   subtractYear = () => {
-    let a = this.state.actualYear;
-    this.setState({ actualYear: a - 1 });
+    let actualYear = this.state.actualYear - 1;
+    this.setState({ actualYear });
 
     for (let i = 1; i <= 12; i++) {
       document
