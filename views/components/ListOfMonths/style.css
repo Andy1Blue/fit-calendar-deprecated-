@@ -70,6 +70,14 @@
     color: rgb(226, 226, 226);
 }
 
+.react-absence {
+    cursor: pointer;
+    color: #fff;
+    font-family: 'Roboto, sans-serif';
+    font-size: 8px;
+    background-color: #b82a2a;
+}
+
 .rect-workout {
     cursor: pointer;
     color: #fff;
@@ -85,8 +93,8 @@
     background-color: #de49ba;
 }
 
-.redColor {
-    background-color: #b82a2a;
+.orangeColor {
+    background-color: #b8822a;
 }
 
 .blueColor {

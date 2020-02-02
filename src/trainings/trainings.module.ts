@@ -5,9 +5,10 @@ import { TrainingsService } from './trainings.service';
 import { TrainingSchema } from './training.model';
 
 @Module({
-    imports: [MongooseModule.forFeature([{ name: 'Training', schema: TrainingSchema }])],
-    controllers: [TrainingsController],
-    providers: [TrainingsService],
+  imports: [
+    MongooseModule.forFeature([{ name: 'Training', schema: TrainingSchema }]),
+  ],
+  controllers: [TrainingsController],
+  providers: [TrainingsService],
 })
-
-export class TrainingsModule { }
+export class TrainingsModule {}

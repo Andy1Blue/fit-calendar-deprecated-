@@ -129,8 +129,9 @@ body {
 }
 
 .colorTag {
-  position: absolute;
-  text-align: start;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .colorTag--color {
@@ -149,14 +150,18 @@ body {
   border: 1px solid #fff;
 }
 
+.marginFormTopBottom {
+  padding: 10px 0 10px 0;
+}
+
 #defaultColor {
   background-color: #de49ba;
   height: 20px;
   width: 20px;
 }
 
-#redColor {
-  background-color: #b82a2a;
+#orangeColor {
+  background-color: #b8822a;
   height: 20px;
   width: 20px;
 }
@@ -165,6 +170,13 @@ body {
   background-color: #615edd;
   height: 20px;
   width: 20px;
+}
+
+ #type {
+  display: flex;
+  width:240px;
+  margin: auto;
+  text-align: center;
 }
 
 @media only screen and (max-width: 1000px) {
