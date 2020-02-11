@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TrainingsModule } from '../trainings/trainings.module';
+import { LogsModule } from '../logs/logs.module';
 
 // tslint:disable-next-line: no-var-requires
 require('dotenv').config();
@@ -21,6 +22,7 @@ const dbData =
 @Module({
   imports: [
     TrainingsModule,
+    LogsModule,
     MongooseModule.forRoot(dbData, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
