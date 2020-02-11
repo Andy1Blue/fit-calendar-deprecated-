@@ -51,7 +51,7 @@ class App extends Component {
           },
           showDay: true,
           targetDay: e.target.attributes.getNamedItem('id').value,
-          isDescriptionInactive: true
+          isDescriptionInactive: true,
         });
       }
     }
@@ -70,6 +70,7 @@ class App extends Component {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'key': config.secretKey,
         },
       })
         .then(response => response.json())
@@ -82,13 +83,13 @@ class App extends Component {
               distance: response.distance,
               calories: response.calories,
               time: response.time,
-              type: response.type
+              type: response.type,
             },
             showDay: true,
             targetDay: day,
             targetDayTId: trainingId,
             showDayLoader: false,
-            isDescriptionInactive: false
+            isDescriptionInactive: false,
           });
         })
         .catch(e => {
@@ -108,7 +109,7 @@ class App extends Component {
           });
         });
     }
-      };
+  };
 
   // // Save to db and close the day editing panel
   saveDay = () => {
@@ -137,6 +138,7 @@ class App extends Component {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'key': config.secretKey,
         },
         body: JSON.stringify(data),
       })
@@ -177,6 +179,7 @@ class App extends Component {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
+            'key': config.secretKey,
           },
           body: JSON.stringify(data),
         },
@@ -199,6 +202,7 @@ class App extends Component {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'key': config.secretKey,
       },
     }).then(response => {
       this.setState({ showDay: false });
@@ -230,7 +234,9 @@ class App extends Component {
     document
       .getElementById('defaultColor')
       .classList.remove('colorTag--borderder');
-    document.getElementById('orangeColor').classList.remove('colorTag--borderder');
+    document
+      .getElementById('orangeColor')
+      .classList.remove('colorTag--borderder');
     document
       .getElementById('blueColor')
       .classList.remove('colorTag--borderder');
@@ -347,7 +353,9 @@ class App extends Component {
                                       ? 'colorTag--borderder colorTag--color'
                                       : 'colorTag--color'
                                   }
-                                  onClick={() => this.setColorTag(event, 'orange')}
+                                  onClick={() =>
+                                    this.setColorTag(event, 'orange')
+                                  }
                                 ></div>
                                 <div
                                   id="blueColor"
@@ -361,11 +369,9 @@ class App extends Component {
                                   }
                                 ></div>
                               </div>
-
                               <div class="marginFormTopBottom">
                                 Day: {targetDay}
                               </div>
-
                               &#128336;
                               <input
                                 type="number"
@@ -436,8 +442,10 @@ class App extends Component {
                               <div class="marginFormTopBottom">
                                 Type of activity:
                                 <select class="form-control" id="type">
-                            { dayObject.type && <option>{dayObject.type}</option> }
-                               <option>-</option> 
+                                  {dayObject.type && (
+                                    <option>{dayObject.type}</option>
+                                  )}
+                                  <option>-</option>
                                   <option>Tabata</option>
                                   <option>Mini band</option>
                                   <option>Indoor run</option>

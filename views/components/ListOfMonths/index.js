@@ -226,6 +226,7 @@ class ListOfMonths extends Component {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'key': config.secretKey,
           },
         },
       )
@@ -250,6 +251,7 @@ class ListOfMonths extends Component {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'key': config.secretKey,
           },
         },
       )
@@ -279,6 +281,7 @@ class ListOfMonths extends Component {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'key': config.secretKey,
           },
         },
       )
@@ -299,6 +302,7 @@ class ListOfMonths extends Component {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'key': config.secretKey,
           },
         },
       )
@@ -317,6 +321,7 @@ class ListOfMonths extends Component {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'key': config.secretKey,
           },
         },
       )
@@ -335,6 +340,7 @@ class ListOfMonths extends Component {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'key': config.secretKey,
           },
         },
       )
@@ -353,6 +359,7 @@ class ListOfMonths extends Component {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'key': config.secretKey,
           },
         },
       )
@@ -369,6 +376,7 @@ class ListOfMonths extends Component {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'key': config.secretKey,
         },
       })
         .then(response => response.json())
