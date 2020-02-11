@@ -70,7 +70,7 @@ class App extends Component {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'key': config.secretKey,
+          key: config.secretKey,
         },
       })
         .then(response => response.json())
@@ -111,7 +111,7 @@ class App extends Component {
     }
   };
 
-  // // Save to db and close the day editing panel
+  // Save to db and close the day editing panel
   saveDay = () => {
     if (localStorage.getItem('TCgId') !== null) {
       const TCgId = localStorage.getItem('TCgId');
@@ -126,7 +126,7 @@ class App extends Component {
       const data = {
         trainingDate: targetDateChanged,
         colorTag: targetColorTag,
-        description: descriptionValue,
+        description: descriptionValue + ' ',
         distance: distanceValue,
         calories: caloriesValue,
         time: timeValue,
@@ -138,7 +138,7 @@ class App extends Component {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'key': config.secretKey,
+          key: config.secretKey,
         },
         body: JSON.stringify(data),
       })
@@ -179,7 +179,7 @@ class App extends Component {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
-            'key': config.secretKey,
+            key: config.secretKey,
           },
           body: JSON.stringify(data),
         },
@@ -202,7 +202,7 @@ class App extends Component {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'key': config.secretKey,
+        key: config.secretKey,
       },
     }).then(response => {
       this.setState({ showDay: false });
@@ -523,7 +523,7 @@ class App extends Component {
                                     class="btn btn-secondary margin1 small"
                                     onClick={this.addToDescription}
                                   >
-                                    [M]
+                                    [PERIOD]
                                   </span>
                                 </small>
                               </div>
