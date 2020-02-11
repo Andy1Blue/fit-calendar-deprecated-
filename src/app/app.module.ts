@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TrainingsModule } from '../trainings/trainings.module';
-import { LogsModule } from '../logs/logs.module';
+import { LogsModule } from '../userLogs/logs.module';
 
 // tslint:disable-next-line: no-var-requires
 require('dotenv').config();
