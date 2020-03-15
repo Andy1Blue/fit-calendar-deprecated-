@@ -49,6 +49,12 @@ $ npm run build:react
 $ pm2 start ecosystem.config.js
 ```
 
+## Docker
+
+```
+docker-compose -f docker-compose.yml up -d --build
+```
+
 ## Test
 
 ```bash

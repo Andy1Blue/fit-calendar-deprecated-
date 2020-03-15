@@ -1,0 +1,14 @@
+FROM node:12 as build
+
+WORKDIR ./
+
+COPY package.json ./package.json
+
+RUN npm install --silent
+COPY ./ ./
+RUN npm run build:react
+
+FROM nginx:1.16.1
+COPY --from=build ./views/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
