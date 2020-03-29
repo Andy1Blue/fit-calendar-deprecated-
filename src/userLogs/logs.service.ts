@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Log } from './log.model';
-import { ILog } from './log.interface';
+import { Log } from './schemas/log.schema';
+import { ILog } from './interfaces/log.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import e = require('express');

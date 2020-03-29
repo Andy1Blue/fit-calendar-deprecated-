@@ -1,14 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-// tslint:disable-next-line: no-var-requires
-require('dotenv').config();
+import { ConfigModule } from '@nestjs/config';
+
+ConfigModule.forRoot({
+  envFilePath: '.env',
+  isGlobal: true,
+});
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: console,
+  });
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT);
-  console.log('Starting on port: ', process.env.PORT);
 }
 bootstrap();

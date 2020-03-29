@@ -1,12 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TrainingsModule } from '../trainings/trainings.module';
-import { LogsModule } from '../userLogs/logs.module';
-
-// tslint:disable-next-line: no-var-requires
-require('dotenv').config();
+import { TrainingsModule } from './trainings/trainings.module';
+import { LogsModule } from './userLogs/logs.module';
 
 const dbData =
   process.env.MONGOOSE_USER === null || process.env.MONGOOSE_USER === ''
@@ -28,7 +23,5 @@ const dbData =
       useUnifiedTopology: true,
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

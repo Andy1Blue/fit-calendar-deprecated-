@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Training } from './training.model';
-import { ITraining } from './training.interface';
+import { Training } from './schemas/training.schema';
+import { ITraining } from './interfaces/training.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import e = require('express');

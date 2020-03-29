@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../src/app/app.module';
-import { Training } from '../src/trainings/training.model';
+import { AppModule } from '../../src/app.module';
+import { Training } from '../../src/trainings/schemas/training.schema';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -38,8 +38,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('GET all trainings', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/trainings/');
+    const res = await request(app.getHttpServer()).get('/trainings/');
     expect(res.status).toEqual(200);
     expect(res.body[0]).toHaveProperty('userId');
     expect(res.body[0]).toHaveProperty('trainingDate');
@@ -50,8 +49,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('GET trainings for specify user', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/trainings/user/TestUser');
+    const res = await request(app.getHttpServer()).get(
+      '/trainings/user/TestUser',
+    );
 
     expect(res.status).toEqual(200);
     expect(res.body[0]).toHaveProperty('userId');
@@ -63,8 +63,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('GET specify single training for specify user', async () => {
-    const res = await request(app.getHttpServer())
-      .get(`/trainings/user/TestUser/id/${idForTestUser}`);
+    const res = await request(app.getHttpServer()).get(
+      `/trainings/user/TestUser/id/${idForTestUser}`,
+    );
 
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('userId', 'TestUser');
@@ -76,15 +77,17 @@ describe('AppController (e2e)', () => {
   });
 
   it('GET non-exist single training for non-exist specify user', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/trainings/user/nonexisttestuser/id/nonexistid');
+    const res = await request(app.getHttpServer()).get(
+      '/trainings/user/nonexisttestuser/id/nonexistid',
+    );
 
     expect(res.body.message).toEqual('Could not find training or user.');
   });
 
   it('GET first training for specify user', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/trainings/first/user/TestUser/');
+    const res = await request(app.getHttpServer()).get(
+      '/trainings/first/user/TestUser/',
+    );
 
     expect(res.status).toEqual(200);
     expect(res.body[0]).toHaveProperty('userId');
@@ -96,8 +99,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('GET last training for specify user', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/trainings/last/user/TestUser/');
+    const res = await request(app.getHttpServer()).get(
+      '/trainings/last/user/TestUser/',
+    );
 
     expect(res.status).toEqual(200);
     expect(res.body[0]).toHaveProperty('userId');
@@ -109,8 +113,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('GET training with the largest amount of calories for specify user and specify year', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/trainings/calories/user/TestUser/year/2020');
+    const res = await request(app.getHttpServer()).get(
+      '/trainings/calories/user/TestUser/year/2020',
+    );
 
     expect(res.status).toEqual(200);
     expect(res.body[0]).toHaveProperty('userId');
@@ -122,8 +127,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('GET training with the largest amount of distance for specify user and specify year', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/trainings/distance/user/TestUser/year/2020');
+    const res = await request(app.getHttpServer()).get(
+      '/trainings/distance/user/TestUser/year/2020',
+    );
 
     expect(res.status).toEqual(200);
     expect(res.body[0]).toHaveProperty('userId');
@@ -135,8 +141,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('GET training with the largest amount of time for specify user and specify year', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/trainings/time/user/TestUser/year/2020');
+    const res = await request(app.getHttpServer()).get(
+      '/trainings/time/user/TestUser/year/2020',
+    );
 
     expect(res.status).toEqual(200);
     expect(res.body[0]).toHaveProperty('userId');
@@ -148,8 +155,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('GET sum of trainings for specify user and specify year', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/trainings/sum/user/TestUser/year/2020');
+    const res = await request(app.getHttpServer()).get(
+      '/trainings/sum/user/TestUser/year/2020',
+    );
 
     expect(res.status).toEqual(200);
     expect(res.body[0]).toHaveProperty('time', 123);
@@ -158,8 +166,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('GET sum of trainings for specify user and specify year', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/trainings/sum/user/TestUser/year/2020/month/01');
+    const res = await request(app.getHttpServer()).get(
+      '/trainings/sum/user/TestUser/year/2020/month/01',
+    );
 
     expect(res.status).toEqual(200);
     expect(res.body[0]).toHaveProperty('time', 123);
@@ -182,8 +191,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('DELETE single training for specify user', async () => {
-    const res = await request(app.getHttpServer())
-      .delete(`/trainings/user/TestUser/id/${idForTestUser}`);
+    const res = await request(app.getHttpServer()).delete(
+      `/trainings/user/TestUser/id/${idForTestUser}`,
+    );
 
     expect(res.status).toEqual(200);
     expect(res.body).toEqual({});
