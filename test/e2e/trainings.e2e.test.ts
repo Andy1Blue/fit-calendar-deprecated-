@@ -5,6 +5,7 @@ import { AppModule } from '../../src/app.module';
 
 describe('AppController Trainings (e2e)', () => {
   let app: INestApplication;
+  let idForTestUser: string;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -12,11 +13,12 @@ describe('AppController Trainings (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe());
     await app.init();
   });
 
-  let idForTestUser = '' as string;
+  afterEach(() => {
+    app.close();
+  });
 
   it('POST add training', async () => {
     const res = await request(app.getHttpServer())
@@ -200,9 +202,5 @@ describe('AppController Trainings (e2e)', () => {
 
     expect(res.status).toEqual(200);
     expect(res.body).toEqual({});
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });

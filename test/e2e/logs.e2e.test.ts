@@ -5,6 +5,7 @@ import { AppModule } from '../../src/app.module';
 
 describe('AppController Logs (e2e)', () => {
   let app: INestApplication;
+  let idForTestUser: string;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -16,7 +17,9 @@ describe('AppController Logs (e2e)', () => {
     await app.init();
   });
 
-  let idForTestUser = '' as string;
+  afterEach(() => {
+    app.close();
+  });
 
   it('POST add log', async () => {
     const res = await request(app.getHttpServer())
@@ -62,9 +65,5 @@ describe('AppController Logs (e2e)', () => {
 
     expect(res.status).toEqual(200);
     expect(res.body).toEqual({});
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });
