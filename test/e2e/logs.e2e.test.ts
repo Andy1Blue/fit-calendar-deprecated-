@@ -13,7 +13,6 @@ describe('AppController Logs (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe());
     await app.init();
   });
 
