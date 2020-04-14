@@ -220,6 +220,39 @@ class ListOfMonths extends Component {
         month = this.actualMonth();
       }
 
+      // test fetch comparision
+    fetch(
+        config.domain + '/trainings/compare/user/' + TCgId + '/to/' + config.compareToUserId + '/year/' + year,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'key': config.secretKey,
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(response => {
+          console.log('Compare by year:');
+          console.log(response);
+        });
+        fetch(
+          config.domain + '/trainings/compare/user/' + TCgId + '/to/' + config.compareToUserId + '/year/' + year +'/month/' +
+          month,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'key': config.secretKey,
+            },
+          },
+        )
+          .then(response => response.json())
+          .then(response => {
+            console.log('Compare by month:');
+            console.log(response);
+          });
+
       const promiseSumValuesYear = fetch(
         config.domain + '/trainings/sum/user/' + TCgId + '/year/' + year,
         {

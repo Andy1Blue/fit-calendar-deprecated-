@@ -346,4 +346,289 @@ export class TrainingsService {
       count,
     };
   }
-}
+
+  async compareSumTraingsDataByYear(
+    year: string,
+    training: ITraining,
+    userIdToCompare: string,
+  ) {
+    let countUser = 0;
+    let countUserToCompare = 0;
+
+    this.trainingModel.countDocuments(
+      {
+        $and: [
+          { userId: training.userId },
+          { trainingDate: { $regex: year, $options: 'i' } },
+          { type: { $not: { $regex: /^ABSENCE.*/ } } },
+        ],
+      },
+      (err, c) => {
+        if (!err) {
+          countUser = c;
+        }
+      },
+    );
+
+    this.trainingModel.countDocuments(
+      {
+        $and: [
+          { userId: userIdToCompare },
+          { trainingDate: { $regex: year, $options: 'i' } },
+          { type: { $not: { $regex: /^ABSENCE.*/ } } },
+        ],
+      },
+      (err, c) => {
+        if (!err) {
+          countUserToCompare = c;
+        }
+      },
+    );
+
+    const matchTimeUser = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: training.userId },
+            { time: { $gte: 1 } },
+            { trainingDate: { $regex: year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, time: { $sum: '$time' } } },
+    ]);
+
+    const matchDistanceUser = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: training.userId },
+            { distance: { $gte: 1 } },
+            { trainingDate: { $regex: year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, distance: { $sum: '$distance' } } },
+    ]);
+
+    const matchCaloriesUser = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: training.userId },
+            { calories: { $gte: 1 } },
+            { trainingDate: { $regex: year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, calories: { $sum: '$calories' } } },
+    ]);
+
+    const matchTimeUserToCompare = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: userIdToCompare },
+            { time: { $gte: 1 } },
+            { trainingDate: { $regex: year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, time: { $sum: '$time' } } },
+    ]);
+
+    const matchDistanceUserToCompare = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: userIdToCompare },
+            { distance: { $gte: 1 } },
+            { trainingDate: { $regex: year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, distance: { $sum: '$distance' } } },
+    ]);
+
+    const matchCaloriesUserToCompare = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: userIdToCompare },
+            { calories: { $gte: 1 } },
+            { trainingDate: { $regex: year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, calories: { $sum: '$calories' } } },
+    ]);
+
+    return {
+      compare: {
+        user: {
+          0: {
+            time: matchTimeUser && matchTimeUser[0] ? matchTimeUser[0].time : null,
+            distance:
+            matchTimeUser && matchDistanceUser[0] ? matchDistanceUser[0].distance : null,
+            calories:
+            matchTimeUser && matchCaloriesUser[0] ? matchCaloriesUser[0].calories : null,
+          },
+          countUser,
+        },
+        userToCompare: {
+          0: {
+            time: matchTimeUserToCompare && matchTimeUserToCompare[0] ? matchTimeUserToCompare[0].time : null,
+            distance:
+            matchTimeUserToCompare && matchDistanceUserToCompare[0] ? matchDistanceUserToCompare[0].distance : null,
+            calories:
+            matchTimeUserToCompare && matchCaloriesUserToCompare[0] ? matchCaloriesUserToCompare[0].calories : null,
+          },
+          countUserToCompare,
+        },
+      },
+    };
+  }
+
+  async compareSumTraingsDataByMonth(
+    month: string,
+    year: string,
+    training: ITraining,
+    userIdToCompare: string,
+  ) {
+    let countUser = 0;
+    let countUserToCompare = 0;
+
+    this.trainingModel.countDocuments(
+      {
+        $and: [
+          { userId: training.userId },
+          { trainingDate: { $regex: month + '' + year, $options: 'i' } },
+          { type: { $not: { $regex: /^ABSENCE.*/ } } },
+        ],
+      },
+      (err, c) => {
+        if (!err) {
+          countUser = c;
+        }
+      },
+    );
+
+    this.trainingModel.countDocuments(
+      {
+        $and: [
+          { userId: userIdToCompare },
+          { trainingDate: { $regex: month + '' + year, $options: 'i' } },
+          { type: { $not: { $regex: /^ABSENCE.*/ } } },
+        ],
+      },
+      (err, c) => {
+        if (!err) {
+          countUserToCompare = c;
+        }
+      },
+    );
+
+    const matchTimeUser = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: training.userId },
+            { time: { $gte: 1 } },
+            { trainingDate: { $regex: month + '' + year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, time: { $sum: '$time' } } },
+    ]);
+
+    const matchDistanceUser = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: training.userId },
+            { distance: { $gte: 1 } },
+            { trainingDate: { $regex: month + '' + year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, distance: { $sum: '$distance' } } },
+    ]);
+
+    const matchCaloriesUser = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: training.userId },
+            { calories: { $gte: 1 } },
+            { trainingDate: { $regex: month + '' + year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, calories: { $sum: '$calories' } } },
+    ]);
+
+    const matchTimeUserToCompare = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: userIdToCompare },
+            { time: { $gte: 1 } },
+            { trainingDate: { $regex: month + '' + year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, time: { $sum: '$time' } } },
+    ]);
+
+    const matchDistanceUserToCompare = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: userIdToCompare },
+            { distance: { $gte: 1 } },
+            { trainingDate: { $regex: month + '' + year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, distance: { $sum: '$distance' } } },
+    ]);
+
+    const matchCaloriesUserToCompare = await this.trainingModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { userId: userIdToCompare },
+            { calories: { $gte: 1 } },
+            { trainingDate: { $regex: month + '' + year, $options: 'i' } },
+          ],
+        },
+      },
+      { $group: { _id: null, calories: { $sum: '$calories' } } },
+    ]);
+
+    return {
+      compare: {
+        user: {
+          0: {
+            time: matchTimeUser && matchTimeUser[0] ? matchTimeUser[0].time : null,
+            distance:
+            matchTimeUser && matchDistanceUser[0] ? matchDistanceUser[0].distance : null,
+            calories:
+            matchTimeUser && matchCaloriesUser[0] ? matchCaloriesUser[0].calories : null,
+          },
+          countUser,
+        },
+        userToCompare: {
+          0: {
+            time: matchTimeUserToCompare && matchTimeUserToCompare[0] ? matchTimeUserToCompare[0].time : null,
+            distance:
+            matchTimeUserToCompare && matchDistanceUserToCompare[0] ? matchDistanceUserToCompare[0].distance : null,
+            calories:
+            matchTimeUserToCompare && matchCaloriesUserToCompare[0] ? matchCaloriesUserToCompare[0].calories : null,
+          },
+          countUserToCompare,
+        },
+      },
+    };
+  }
+  }
