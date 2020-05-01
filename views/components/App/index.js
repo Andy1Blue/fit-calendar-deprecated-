@@ -71,6 +71,7 @@ class App extends Component {
         headers: {
           'Content-Type': 'application/json',
           key: config.secretKey,
+          userid: TCgId,
         },
       })
         .then(response => response.json())
@@ -139,6 +140,7 @@ class App extends Component {
         headers: {
           'Content-Type': 'application/json',
           key: config.secretKey,
+          userid: TCgId,
         },
         body: JSON.stringify(data),
       })
@@ -180,6 +182,7 @@ class App extends Component {
           headers: {
             'Content-Type': 'application/json',
             key: config.secretKey,
+            userid: TCgId,
           },
           body: JSON.stringify(data),
         },
@@ -203,6 +206,7 @@ class App extends Component {
       headers: {
         'Content-Type': 'application/json',
         key: config.secretKey,
+        userid: TCgId,
       },
     }).then(response => {
       this.setState({ showDay: false });

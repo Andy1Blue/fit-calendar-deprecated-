@@ -17,6 +17,7 @@ class GoogleLogin extends Component {
     gId: null,
     gImg: null,
     processing: false,
+    authorization: false,
   };
 
   addLog = () => {
@@ -46,16 +47,35 @@ class GoogleLogin extends Component {
     if (localStorage.getItem('TCgId') !== null) {
       this.addLog();
 
-      this.setState({
-        givenName: localStorage.getItem('TCgivenName'),
-        gId: localStorage.getItem('TCgId'),
-        gImg: localStorage.getItem('TCgImg'),
+      fetch(
+        config.domain + '/trainings/user/' + TCgId + '/id/' + targetDayTId,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: TCgId,
+          },
+        },
+      ).then(response => {
+        if (response.statusCode !== 404) {
+          this.setState({
+            givenName: localStorage.getItem('TCgivenName'),
+            gId: localStorage.getItem('TCgId'),
+            gImg: localStorage.getItem('TCgImg'),
+            authorization: true,
+          });
+        } else {
+          this.setState({
+            authorization: false,
+          });
+        }
       });
     }
   }
 
   render() {
-    const { givenName, gId, gImg } = this.state;
+    const { givenName, gId, gImg, authorization } = this.state;
 
     const responseGoogle = response => {
       // If response from Google API is not null, create local storage with
@@ -96,7 +116,7 @@ class GoogleLogin extends Component {
 
     return (
       <div>
-        {gId !== null ? (
+        {gId !== null && authorization !== false ? (
           <nav className="navbar navbar-expand-md navbar-dark">
             <a className="navbar-brand" href="#home">
               <img className="logo" src={logo} alt="logo" /> FitCalendar
