@@ -7,15 +7,46 @@ import {
   Param,
   Patch,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { TrainingsService } from './trainings.service';
+import { WhitelistsService } from '../whitelists/whitelists.service';
+import { IWhitelist } from '../whitelists/interfaces/whitelist.interface';
+import { IHeader } from './interfaces/header.interface';
 
 // tslint:disable-next-line: no-var-requires
 require('dotenv').config();
 
 @Controller('trainings')
 export class TrainingsController {
-  constructor(private readonly trainingsService: TrainingsService) {}
+  constructor(
+    private readonly trainingsService: TrainingsService,
+    private readonly whitelistsService: WhitelistsService,
+  ) {}
+
+  isUserAuthorization = async (headers: IHeader) => {
+    let result = false;
+
+    const whitelistedUser: IWhitelist = await this.whitelistsService.getWhitelists(
+      headers.userid,
+    );
+
+    if (
+      whitelistedUser.isActive &&
+      whitelistedUser.userId &&
+      headers.userid &&
+      headers.key
+    ) {
+      result =
+        whitelistedUser.isActive &&
+        headers.userid === whitelistedUser.userId &&
+        headers.key === process.env.SECRET_KEY
+          ? true
+          : false;
+    }
+
+    return result;
+  };
 
   @Post()
   async addTraining(
@@ -27,9 +58,9 @@ export class TrainingsController {
     @Body('time') time: number | null,
     @Body('userId') userId: string,
     @Body('type') type: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const generatedId = await this.trainingsService.insertTraining({
         trainingDate,
         colorTag,
@@ -42,29 +73,29 @@ export class TrainingsController {
       });
       return { id: generatedId };
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
   @Get()
-  async getAllTranings(@Headers() headers) {
-    if (headers.key === process.env.SECRET_KEY) {
+  async getAllTranings(@Headers() headers: IHeader) {
+    if (await this.isUserAuthorization(headers)) {
       const allTrainings = await this.trainingsService.getTranings();
       return allTrainings;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
   @Get('/user/:userId')
   async getTranings(@Param('userId') userId: string, @Headers() headers) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const userTranings = await this.trainingsService.getTrainingsForUser({
         userId,
       });
       return userTranings;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -72,16 +103,16 @@ export class TrainingsController {
   async getTraning(
     @Param('id') id: string,
     @Param('userId') userId: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const training = await this.trainingsService.getSingleTraining({
         userId,
         id,
       });
       return training;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -89,15 +120,15 @@ export class TrainingsController {
   async getFirstTraning(
     @Param('id') traningId: string,
     @Param('userId') userId: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const training = await this.trainingsService.getFirstTrainingForUser({
         userId,
       });
       return training;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -105,15 +136,15 @@ export class TrainingsController {
   async getLastTraning(
     @Param('id') traningId: string,
     @Param('userId') userId: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const training = await this.trainingsService.getLastTrainingForUser({
         userId,
       });
       return training;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -121,16 +152,16 @@ export class TrainingsController {
   async getTheLargestAmountOfCalories(
     @Param('userId') userId: string,
     @Param('year') year: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const training = await this.trainingsService.getTheLargestAmountOfCaloriesForUser(
         year,
         { userId },
       );
       return training;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -138,16 +169,16 @@ export class TrainingsController {
   async getTheLargestAmountOfDistance(
     @Param('userId') userId: string,
     @Param('year') year: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const training = await this.trainingsService.getTheLargestAmountOfDistanceForUser(
         year,
         { userId },
       );
       return training;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -155,16 +186,16 @@ export class TrainingsController {
   async getTheLargestAmountOfTime(
     @Param('userId') userId: string,
     @Param('year') year: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const training = await this.trainingsService.getTheLargestAmountOfTimeForUser(
         year,
         { userId },
       );
       return training;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -172,15 +203,15 @@ export class TrainingsController {
   async getSumTraningDataByYear(
     @Param('userId') userId: string,
     @Param('year') year: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const result = await this.trainingsService.sumTraingsDataByYear(year, {
         userId,
       });
       return result;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -189,9 +220,9 @@ export class TrainingsController {
     @Param('userId') userId: string,
     @Param('year') year: string,
     @Param('month') month: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const result = await this.trainingsService.sumTraingsDataByMonth(
         year,
         month,
@@ -199,7 +230,7 @@ export class TrainingsController {
       );
       return result;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -213,9 +244,9 @@ export class TrainingsController {
     @Body('calories') calories: number,
     @Body('time') time: number,
     @Body('type') type: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       await this.trainingsService.updateTraining({
         userId,
         id,
@@ -228,7 +259,7 @@ export class TrainingsController {
       });
       return null;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -236,13 +267,13 @@ export class TrainingsController {
   async removeTraining(
     @Param('userId') userId: string,
     @Param('id') id: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       await this.trainingsService.deleteTraining({ userId, id });
       return null;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -251,9 +282,9 @@ export class TrainingsController {
     @Param('userId') userId: string,
     @Param('year') year: string,
     @Param('userIdToCompare') userIdToCompare: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const result = await this.trainingsService.compareSumTraingsDataByYear(
         year,
         {
@@ -263,7 +294,7 @@ export class TrainingsController {
       );
       return result;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 
@@ -273,9 +304,9 @@ export class TrainingsController {
     @Param('year') year: string,
     @Param('month') month: string,
     @Param('userIdToCompare') userIdToCompare: string,
-    @Headers() headers,
+    @Headers() headers: IHeader,
   ) {
-    if (headers.key === process.env.SECRET_KEY) {
+    if (await this.isUserAuthorization(headers)) {
       const result = await this.trainingsService.compareSumTraingsDataByMonth(
         month,
         year,
@@ -286,7 +317,7 @@ export class TrainingsController {
       );
       return result;
     } else {
-      return null;
+      throw new BadRequestException('No authorisation');
     }
   }
 }

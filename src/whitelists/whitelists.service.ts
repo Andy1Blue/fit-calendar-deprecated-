@@ -11,8 +11,13 @@ export class WhitelistsService {
     @InjectModel('Whitelist') private readonly WhitelistModel: Model<Whitelist>,
   ) {}
 
-  async getWhitelists() {
-    const result = await this.WhitelistModel.find().exec();
-    return result as Whitelist[];
+  async getWhitelists(userId: string) {
+    const whitelistedUser = await this.WhitelistModel.findOne({ userId }).exec();
+
+    if (!whitelistedUser) {
+      throw new NotFoundException('Could not find whitelisted user.');
+    }
+
+    return whitelistedUser as Whitelist;
   }
 }
