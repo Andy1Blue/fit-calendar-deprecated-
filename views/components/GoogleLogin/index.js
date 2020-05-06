@@ -36,43 +36,12 @@ class GoogleLogin extends Component {
         headers: {
           'Content-Type': 'application/json',
           key: config.secretKey,
+          userid: TCgId,
         },
         body: JSON.stringify(data),
       });
     }
   };
-
-  componentDidMount() {
-    // When local storage with Google ID exists, assign it to state
-    if (localStorage.getItem('TCgId') !== null) {
-      this.addLog();
-
-      fetch(
-        config.domain + '/trainings/user/' + TCgId + '/id/' + targetDayTId,
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-        },
-      ).then(response => {
-        if (response.statusCode !== 404) {
-          this.setState({
-            givenName: localStorage.getItem('TCgivenName'),
-            gId: localStorage.getItem('TCgId'),
-            gImg: localStorage.getItem('TCgImg'),
-            authorization: true,
-          });
-        } else {
-          this.setState({
-            authorization: false,
-          });
-        }
-      });
-    }
-  }
 
   render() {
     const { givenName, gId, gImg, authorization } = this.state;
@@ -81,19 +50,51 @@ class GoogleLogin extends Component {
       // If response from Google API is not null, create local storage with
       // name, Google ID and avatar (in local sotrage and in state)
       if (response !== null) {
-        console.log(response);
-        this.setState({
-          givenName: response.profileObj.givenName,
-          gId: response.profileObj.googleId,
-          gImg: response.profileObj.imageUrl,
-        });
-        localStorage.setItem('TCgivenName', response.profileObj.givenName);
+        localStorage.setItem(
+          'TCgivenName',
+          response.profileObj.givenName,
+        );
         localStorage.setItem('TCgId', response.profileObj.googleId);
         localStorage.setItem('TCgImg', response.profileObj.imageUrl);
-      }
 
-      // Redirecting, TODO: change to a different way
-      window.location.href = config.url;
+        // When local storage with Google ID exists, assign it to state
+        if (localStorage.getItem('TCgId') !== null) {
+          const TCgId = localStorage.getItem('TCgId');
+          this.addLog();
+
+          fetch(config.domain + '/whitelists/user/' + TCgId, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              key: config.secretKey,
+              userid: TCgId,
+            },
+          })
+            .then(response => response.json())
+            .then(response => {
+              if (response) {
+                console.log('google login', response);
+                this.setState({
+                  givenName: response.profileObj.givenName,
+                  gId: response.profileObj.googleId,
+                  gImg: response.profileObj.imageUrl,
+                });
+
+                // TODO: save it in store in redux
+                this.setState({
+                  authorization: true,
+                });
+              } else {
+                this.setState({
+                  authorization: false,
+                });
+              }
+            });
+        }
+
+        // Redirecting, TODO: change to a different way
+        // window.location.href = config.url;
+      }
     };
 
     const logout = () => {

@@ -11,6 +11,16 @@ export class WhitelistsService {
     @InjectModel('Whitelist') private readonly WhitelistModel: Model<Whitelist>,
   ) {}
 
+  async isWhitelisted(userId: string) {
+    const whitelistedUser = await this.WhitelistModel.findOne({ userId }).exec();
+
+    if (!whitelistedUser) {
+      return false;
+    }
+
+    return true;
+  }
+
   async getWhitelists(userId: string) {
     const whitelistedUser = await this.WhitelistModel.findOne({ userId }).exec();
 
