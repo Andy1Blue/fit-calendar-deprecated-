@@ -311,22 +311,22 @@ class App extends Component {
             </div>
 
             <div
-              class="modal fade"
+              className="modal fade"
               id="workoutDay"
               tabIndex="-1"
               role="dialog"
               aria-labelledby="exampleModalLabel"
               aria-hidden="true"
             >
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-body">
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-body">
                     {showDay && (
-                      <div id="red-toast" class="padding10">
+                      <div id="red-toast" className="padding10">
                         <div>
                           <button
                             type="button"
-                            class="close"
+                            className="close"
                             data-dismiss="modal"
                             aria-label="Close"
                           >
@@ -334,10 +334,10 @@ class App extends Component {
                           </button>
                           {!showDayLoader && (
                             <div>
-                              <div class="colorTag">
+                              <div className="colorTag">
                                 <div
                                   id="defaultColor"
-                                  class={
+                                  className={
                                     !dayObject.colorTag ||
                                     dayObject.colorTag === null ||
                                     dayObject.colorTag === '0' ||
@@ -351,7 +351,7 @@ class App extends Component {
                                 ></div>
                                 <div
                                   id="orangeColor"
-                                  class={
+                                  className={
                                     dayObject.colorTag === 'orange'
                                       ? 'colorTag--borderder colorTag--color'
                                       : 'colorTag--color'
@@ -362,7 +362,7 @@ class App extends Component {
                                 ></div>
                                 <div
                                   id="blueColor"
-                                  class={
+                                  className={
                                     dayObject.colorTag === 'blue'
                                       ? 'colorTag--borderder colorTag--color'
                                       : 'colorTag--color'
@@ -372,14 +372,14 @@ class App extends Component {
                                   }
                                 ></div>
                               </div>
-                              <div class="marginFormTopBottom">
+                              <div className="marginFormTopBottom">
                                 Day: {targetDay}
                               </div>
                               &#128336;
                               <input
                                 type="number"
                                 id="time"
-                                class="input-number"
+                                className="input-number"
                                 placeholder="min"
                                 onChange={e => {
                                   this.setState({
@@ -392,7 +392,7 @@ class App extends Component {
                                   });
                                   this.checkTextareaIsEmpty();
                                 }}
-                                value={
+                                defaultValue={
                                   dayObject.time === 0 ? '' : dayObject.time
                                 }
                               ></input>
@@ -400,7 +400,7 @@ class App extends Component {
                               <input
                                 type="number"
                                 id="calories"
-                                class="input-number"
+                                className="input-number"
                                 placeholder="kcal"
                                 onChange={e => {
                                   this.setState({
@@ -413,7 +413,7 @@ class App extends Component {
                                   });
                                   this.checkTextareaIsEmpty();
                                 }}
-                                value={
+                                defaultValue={
                                   dayObject.calories === 0
                                     ? ''
                                     : dayObject.calories
@@ -423,7 +423,7 @@ class App extends Component {
                               <input
                                 type="number"
                                 id="distance"
-                                class="input-number"
+                                className="input-number"
                                 placeholder="km"
                                 onChange={e => {
                                   this.setState({
@@ -436,15 +436,15 @@ class App extends Component {
                                   });
                                   this.checkTextareaIsEmpty();
                                 }}
-                                value={
+                                defaultValue={
                                   dayObject.distance === 0
                                     ? ''
                                     : dayObject.distance
                                 }
                               ></input>
-                              <div class="marginFormTopBottom">
+                              <div className="marginFormTopBottom">
                                 Type of activity:
-                                <select class="form-control" id="type">
+                                <select className="form-control" id="type">
                                   {dayObject.type && (
                                     <option>{dayObject.type}</option>
                                   )}
@@ -460,26 +460,26 @@ class App extends Component {
                                   <option>ABSENCE</option>
                                 </select>
                               </div>
-                              <div class="marginFormTopBottom">
+                              <div className="marginFormTopBottom">
                                 <small>
                                   Quick add:
                                   <br />
                                   <span
-                                    class="btn btn-secondary margin1 small"
+                                    className="btn btn-secondary margin1 small"
                                     onClick={this.addToDescription}
                                   >
                                     {' '}
                                     [INDOOR RUN]{' '}
                                   </span>
                                   <span
-                                    class="btn btn-secondary margin1 small"
+                                    className="btn btn-secondary margin1 small"
                                     onClick={this.addToDescription}
                                   >
                                     {' '}
                                     [TABATA]{' '}
                                   </span>
                                   <span
-                                    class="btn btn-secondary margin1 small"
+                                    className="btn btn-secondary margin1 small"
                                     onClick={this.addToDescription}
                                   >
                                     {' '}
@@ -487,21 +487,21 @@ class App extends Component {
                                   </span>
                                   <br />
                                   <span
-                                    class="btn btn-secondary margin1 small"
+                                    className="btn btn-secondary margin1 small"
                                     onClick={this.addToDescription}
                                   >
                                     {' '}
                                     [RUN]{' '}
                                   </span>
                                   <span
-                                    class="btn btn-secondary margin1 small"
+                                    className="btn btn-secondary margin1 small"
                                     onClick={this.addToDescription}
                                   >
                                     {' '}
                                     [WALK]{' '}
                                   </span>
                                   <span
-                                    class="btn btn-secondary margin1 small"
+                                    className="btn btn-secondary margin1 small"
                                     onClick={this.addToDescription}
                                   >
                                     {' '}
@@ -509,28 +509,28 @@ class App extends Component {
                                   </span>
                                   <br />
                                   <span
-                                    class="btn btn-secondary margin1 small"
+                                    className="btn btn-secondary margin1 small"
                                     onClick={this.addToDescription}
                                   >
                                     {' '}
                                     [GYM]{' '}
                                   </span>
                                   <span
-                                    class="btn btn-secondary margin1 small"
+                                    className="btn btn-secondary margin1 small"
                                     onClick={this.addToDescription}
                                   >
                                     {' '}
                                     [SPINNING]{' '}
                                   </span>
                                   <span
-                                    class="btn btn-secondary margin1 small"
+                                    className="btn btn-secondary margin1 small"
                                     onClick={this.addToDescription}
                                   >
                                     [PERIOD]
                                   </span>
                                 </small>
                               </div>
-                              <div class="marginFormTopBottom">
+                              <div className="marginFormTopBottom">
                                 Comment:
                                 <br />
                                 {dayObject.description && (
@@ -548,6 +548,7 @@ class App extends Component {
                                 )}
                                 {!dayObject.description && (
                                   <textarea
+                                  defaultValue="Won't focus" 
                                     onChange={this.checkTextareaIsEmpty}
                                     id="description"
                                   ></textarea>
@@ -599,17 +600,17 @@ class App extends Component {
             </div>
 
             <div
-              class="modal fade"
+              className="modal fade"
               id="alert"
               tabIndex="-1"
               role="dialog"
               aria-labelledby="exampleModalLabel"
               aria-hidden="true"
             >
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-body">
-                    <div id="red-toast" class="padding10">
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-body">
+                    <div id="red-toast" className="padding10">
                       {alertText}
                     </div>
                   </div>

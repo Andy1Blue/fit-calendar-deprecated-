@@ -676,7 +676,7 @@ class ListOfMonths extends Component {
               )}
             </div>
 
-            <div class="right">
+            <div className="right">
               <div className="container" id="calendar">
                 <div className="calendar-year">
                   <button onClick={this.subtractYear}>&#10148;</button>{' '}

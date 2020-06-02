@@ -16,7 +16,6 @@ Libraries and technologies used in the project:
 - [React.js](https://facebook.github.io/react/)
 - [Bootstrap](https://v4-alpha.getbootstrap.com)
 
-
 ## Installation
 
 ```bash
@@ -31,22 +30,13 @@ Create `/views/components/Config/index.js` file.
 
 ```bash
 # development
-$ npm run start
+$ npm run dev
 
-# watch mode
-$ npm run start:dev
-
-# production mode
+# backend production mode
 $ npm run start:prod
-
-# views development mode
-$ npm run start:react
 
 # build views for production
 $ npm run build:react
-
-# using PM2
-$ pm2 start ecosystem.config.js
 ```
 
 ## Docker
@@ -58,6 +48,6 @@ docker-compose -f docker-compose.yml up -d --build
 ## Test
 
 ```bash
-# unit tests ans e2e
+# unit tests and e2e
 $ npm run tests
 ```
