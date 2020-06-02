@@ -686,7 +686,6 @@ class ListOfMonths extends Component {
                 <div className="row">
                   <div className="traning-table-content">
                     <div className="col">
-                      {/* <div className="m0"></div> */}
                       <div className="m1"></div>
                       <div className="m2"></div>
                       <div className="m3"></div>
