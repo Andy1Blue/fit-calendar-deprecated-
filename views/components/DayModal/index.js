@@ -9,110 +9,110 @@ class DayModal extends Component {
     document.getElementById('description').value += target.innerText;
   };
 
-    // Save to db and close the day editing panel
-    saveDay = () => {
-      if (localStorage.getItem('TCgId') !== null) {
-        const TCgId = localStorage.getItem('TCgId');
-        const targetDateChanged = this.props.targetDay.replace(/\./g, '');
-        const descriptionValue = document.getElementById('description').value;
-        const distanceValue = document.getElementById('distance').value;
-        const caloriesValue = document.getElementById('calories').value;
-        const timeValue = document.getElementById('time').value;
-        const typeValue = document.getElementById('type').value;
-        let targetColorTag = this.props.targetColorTag;
-  
-        const data = {
-          trainingDate: targetDateChanged,
-          colorTag: targetColorTag,
-          description: descriptionValue + ' ',
-          distance: distanceValue,
-          calories: caloriesValue,
-          time: timeValue,
-          userId: TCgId,
-          type: typeValue == '-' ? null : typeValue,
-        };
-  
-        fetch(config.domain + '/trainings', {
-          method: 'POST',
+  // Save to db and close the day editing panel
+  saveDay = () => {
+    if (localStorage.getItem('TCgId') !== null) {
+      const TCgId = localStorage.getItem('TCgId');
+      const targetDateChanged = this.props.targetDay.replace(/\./g, '');
+      const descriptionValue = document.getElementById('description').value;
+      const distanceValue = document.getElementById('distance').value;
+      const caloriesValue = document.getElementById('calories').value;
+      const timeValue = document.getElementById('time').value;
+      const typeValue = document.getElementById('type').value;
+      let targetColorTag = this.props.targetColorTag;
+
+      const data = {
+        trainingDate: targetDateChanged,
+        colorTag: targetColorTag,
+        description: descriptionValue + ' ',
+        distance: distanceValue,
+        calories: caloriesValue,
+        time: timeValue,
+        userId: TCgId,
+        type: typeValue == '-' ? null : typeValue,
+      };
+
+      fetch(config.domain + '/trainings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          key: config.secretKey,
+          userid: TCgId,
+        },
+        body: JSON.stringify(data),
+      })
+        .then(response => response.json())
+        .then(response => {
+          // this.setState({ showDay: false });
+          this.props.refresh();
+          this.props.forceUpdate();
+          this.props.showAlert('Workout added!');
+        });
+    }
+  };
+
+  updateDay = () => {
+    if (localStorage.getItem('TCgId') !== null) {
+      const TCgId = localStorage.getItem('TCgId');
+      const targetDayTId = this.props.targetDayTId;
+      const targetDateChanged = this.props.targetDay.replace(/\./g, '');
+      const descriptionValue = document.getElementById('description').value;
+      const distanceValue = document.getElementById('distance').value;
+      const caloriesValue = document.getElementById('calories').value;
+      const timeValue = document.getElementById('time').value;
+      const typeValue = document.getElementById('type').value;
+      let targetColorTag = this.props.targetColorTag;
+
+      const data = {
+        colorTag: targetColorTag,
+        description: descriptionValue,
+        distance: distanceValue == '' ? 0 : distanceValue,
+        calories: caloriesValue == '' ? 0 : caloriesValue,
+        time: timeValue == '' ? 0 : timeValue,
+        type: typeValue == '-' ? null : typeValue,
+      };
+
+      fetch(
+        config.domain + '/trainings/user/' + TCgId + '/id/' + targetDayTId,
+        {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             key: config.secretKey,
             userid: TCgId,
           },
           body: JSON.stringify(data),
-        })
-          .then(response => response.json())
-          .then(response => {
-            // this.setState({ showDay: false });
-            this.props.refresh();
-            this.props.forceUpdate();
-            this.props.showAlert('Workout added!');
-          });
-      }
-    };
-  
-    updateDay = () => {
-      if (localStorage.getItem('TCgId') !== null) {
-        const TCgId = localStorage.getItem('TCgId');
-        const targetDayTId = this.props.targetDayTId;
-        const targetDateChanged = this.props.targetDay.replace(/\./g, '');
-        const descriptionValue = document.getElementById('description').value;
-        const distanceValue = document.getElementById('distance').value;
-        const caloriesValue = document.getElementById('calories').value;
-        const timeValue = document.getElementById('time').value;
-        const typeValue = document.getElementById('type').value;
-        let targetColorTag = this.props.targetColorTag;
-  
-        const data = {
-          colorTag: targetColorTag,
-          description: descriptionValue,
-          distance: distanceValue == '' ? 0 : distanceValue,
-          calories: caloriesValue == '' ? 0 : caloriesValue,
-          time: timeValue == '' ? 0 : timeValue,
-          type: typeValue == '-' ? null : typeValue,
-        };
-  
-        fetch(
-          config.domain + '/trainings/user/' + TCgId + '/id/' + targetDayTId,
-          {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              key: config.secretKey,
-              userid: TCgId,
-            },
-            body: JSON.stringify(data),
-          },
-        ).then(response => {
-          // this.setState({ showDay: false });
-          this.props.refresh();
-          this.props.forceUpdate();
-          this.props.showAlert('Workout updated!');
-        });
-      }
-    };
-  
-    deleteDay = () => {
-      // TODO: Add alert to confirm deleting...
-      const TCgId = localStorage.getItem('TCgId');
-      const targetDateChanged = this.props.targetDay.replace(/\./g, '');
-      const targetDayTId = this.props.targetDayTId;
-  
-      fetch(config.domain + '/trainings/user/' + TCgId + '/id/' + targetDayTId, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          key: config.secretKey,
-          userid: TCgId,
         },
-      }).then(response => {
-        console.log(response)
+      ).then(response => {
         // this.setState({ showDay: false });
         this.props.refresh();
-        this.forceUpdate();
-        this.props.showAlert('Workout deleted!');
+        this.props.forceUpdate();
+        this.props.showAlert('Workout updated!');
       });
-    };
+    }
+  };
+
+  deleteDay = () => {
+    // TODO: Add alert to confirm deleting...
+    const TCgId = localStorage.getItem('TCgId');
+    const targetDateChanged = this.props.targetDay.replace(/\./g, '');
+    const targetDayTId = this.props.targetDayTId;
+
+    fetch(config.domain + '/trainings/user/' + TCgId + '/id/' + targetDayTId, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        key: config.secretKey,
+        userid: TCgId,
+      },
+    }).then(response => {
+      console.log(response);
+      // this.setState({ showDay: false });
+      this.props.refresh();
+      this.forceUpdate();
+      this.props.showAlert('Workout deleted!');
+    });
+  };
 
   render() {
     const {
@@ -120,7 +120,7 @@ class DayModal extends Component {
       targetDay,
       dayObject,
       showDayLoader,
-      isDescriptionInactive
+      isDescriptionInactive,
     } = this.props;
     return (
       <div

@@ -3,7 +3,7 @@ import './style.css';
 
 class Alert extends Component {
   render() {
-    const {alertText} = this.props;
+    const { alertText } = this.props;
     return (
       <div
         className="modal fade"

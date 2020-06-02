@@ -221,8 +221,14 @@ class ListOfMonths extends Component {
       }
 
       // test fetch comparision
-    fetch(
-        config.domain + '/trainings/compare/user/' + TCgId + '/to/' + config.compareToUserId + '/year/' + year,
+      fetch(
+        config.domain +
+          '/trainings/compare/user/' +
+          TCgId +
+          '/to/' +
+          config.compareToUserId +
+          '/year/' +
+          year,
         {
           method: 'GET',
           headers: {
@@ -237,23 +243,30 @@ class ListOfMonths extends Component {
           console.log('Compare by year:');
           console.log(response);
         });
-        fetch(
-          config.domain + '/trainings/compare/user/' + TCgId + '/to/' + config.compareToUserId + '/year/' + year +'/month/' +
+      fetch(
+        config.domain +
+          '/trainings/compare/user/' +
+          TCgId +
+          '/to/' +
+          config.compareToUserId +
+          '/year/' +
+          year +
+          '/month/' +
           month,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              key: config.secretKey,
-              userid: TCgId,
-            },
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: TCgId,
           },
-        )
-          .then(response => response.json())
-          .then(response => {
-            console.log('Compare by month:');
-            console.log(response);
-          });
+        },
+      )
+        .then(response => response.json())
+        .then(response => {
+          console.log('Compare by month:');
+          console.log(response);
+        });
 
       const promiseSumValuesYear = fetch(
         config.domain + '/trainings/sum/user/' + TCgId + '/year/' + year,
