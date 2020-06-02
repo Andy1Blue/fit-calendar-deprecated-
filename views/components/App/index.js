@@ -1,4 +1,3 @@
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
 import './style.css';
 import ListOfMonths from '../ListOfMonths';

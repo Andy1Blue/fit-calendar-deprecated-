@@ -1,10 +1,3 @@
-/*
- *
- * Component for logging in with Google
- *
- */
-
-// Imports
 import React, { Component } from 'react';
 import './style.css';
 import GoogleAuth from 'react-google-login';
