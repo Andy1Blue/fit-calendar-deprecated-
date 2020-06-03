@@ -15,7 +15,7 @@ Libraries and technologies used in the project:
 - [TypeScript](https://www.typescriptlang.org/)
 - [React.js](https://facebook.github.io/react/)
 - [Bootstrap](https://v4-alpha.getbootstrap.com)
-- [SCSS](https://sass-lang.com)
+- [SASS](https://sass-lang.com)
 
 ## Installation
 

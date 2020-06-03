@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './style.scss';
+import AppContext from '../../context';
 
 class Alert extends Component {
   render() {
-    const { alertText } = this.props;
+    // const { alertText } = this.props;
     return (
       <div
         className="modal fade"
@@ -16,7 +17,9 @@ class Alert extends Component {
           <div className="modal-content">
             <div className="modal-body">
               <div id="red-toast" className="padding10">
-                {alertText}
+                <AppContext.Consumer>
+                  {context => <p>{context.alertText}</p>}
+                </AppContext.Consumer>
               </div>
             </div>
           </div>

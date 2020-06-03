@@ -71,10 +71,11 @@ body {
   background-color: #1b1927;
   z-index: 999;
   color: white;
-  border: 1px solid black;
+  // border: 1px solid black;
   animation: show 0.5s;
   font-size: 22px;
-  border-radius: 10px;
+  // border-radius: 10px;
+  box-shadow: 0 20px 30px -10px rgba(#000, .4);
 }
 
 .modal {
