@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './style.css';
+import './style.scss';
 import Loader from '../Loader';
 import config from '../Config';
 

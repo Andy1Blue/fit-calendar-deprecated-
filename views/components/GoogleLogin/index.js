@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './style.css';
+import './style.scss';
 import GoogleAuth from 'react-google-login';
 import config from '../Config';
 

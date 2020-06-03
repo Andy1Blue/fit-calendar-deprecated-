@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './style.css';
+import './style.scss';
 import Loader from '../Loader';
 import StatisticCard from '../StatisticCard';
 import TodayCard from '../TodayCard';

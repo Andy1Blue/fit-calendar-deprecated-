@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './style.css';
+import './style.scss';
 import config from '../Config';
 import logo from '../../assets/logo-calendar.png';
 
