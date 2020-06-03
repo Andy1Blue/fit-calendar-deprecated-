@@ -7,6 +7,7 @@ import logo from '../../assets/logo-calendar.png';
 import Loader from '../Loader';
 import config from '../Config';
 import DayModal from '../DayModal';
+import AppHeader from '../AppHeader';
 
 class App extends Component {
   state = {
@@ -152,6 +153,18 @@ class App extends Component {
     this.setState({ refresh: false });
   };
 
+  google = data => {
+    const TCgId = localStorage.getItem('TCgId');
+    this.setState({
+      TCgId,
+      isLogin: true,
+      isFetching: false,
+      givenName: data.givenName,
+      gId: data.gId,
+      gImg: data.gImg,
+    });
+  };
+
   componentDidMount() {
     if (localStorage.getItem('TCgId') !== null) {
       const TCgId = localStorage.getItem('TCgId');
@@ -173,6 +186,9 @@ class App extends Component {
       isDescriptionInactive,
       alertText,
       targetDayTId,
+      givenName,
+      gId,
+      gImg,
     } = this.state;
     return (
       <div className="App">
@@ -181,13 +197,14 @@ class App extends Component {
             <Loader />
           </div>
         )}
+
         {TCgId === null && !isFetching && (
           <header className="App-header">
             <div className="welcome-container">
               <img className="logo-welcome-page" src={logo} alt="logo" />
               <p>FitCalendar</p>
               <div>
-                <GoogleLogin />
+                <GoogleLogin google={this.google} />
                 <div className="footer">FitCalendar</div>
               </div>
             </div>
@@ -196,7 +213,7 @@ class App extends Component {
         {TCgId !== null && !isFetching && (
           <div>
             <div>
-              <GoogleLogin />
+              <AppHeader name={givenName} id={gId} img={gImg} />
             </div>
 
             <div onClick={this.showDay}>

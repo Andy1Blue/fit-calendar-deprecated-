@@ -20,7 +20,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "start:react": "webpack-dev-server --mode development --hot --open",
+    "start:react": "webpack-dev-server --mode development --hot",
     "build:react": "webpack --mode production",
     "dev": "concurrently \"npm run start:dev\" \"npm run start:react\""
   },
