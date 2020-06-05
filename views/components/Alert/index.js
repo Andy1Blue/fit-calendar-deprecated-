@@ -17,7 +17,7 @@ class Alert extends Component {
             <div className="modal-body">
               <div id="red-toast" className="padding10">
                 <AppContext.Consumer>
-                  {context => <p>{context.alertText}</p>}
+                  {(context) => <p>{context.alertText}</p>}
                 </AppContext.Consumer>
               </div>
             </div>

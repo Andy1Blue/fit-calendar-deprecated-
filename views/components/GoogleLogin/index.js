@@ -23,7 +23,7 @@ class GoogleLogin extends Component {
         category: 'Login',
       };
 
-      fetch(config.domain + '/logs', {
+      fetch(`${config.domain}/logs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ class GoogleLogin extends Component {
     }
   };
 
-  responseGoogle = response => {
+  responseGoogle = (response) => {
     const TCgId = localStorage.getItem('TCgId');
     // If response from Google API is not null, create local storage with
     // name, Google ID and avatar (in local sotrage and in state)
@@ -57,7 +57,7 @@ class GoogleLogin extends Component {
       if (TCgId !== null) {
         this.addLog();
 
-        fetch(config.domain + '/whitelists/user/' + TCgId, {
+        fetch(`${config.domain}/whitelists/user/${TCgId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -65,8 +65,8 @@ class GoogleLogin extends Component {
             userid: TCgId,
           },
         })
-          .then(response => response.json())
-          .then(response => {
+          .then((response) => response.json())
+          .then((response) => {
             if (response) {
               // TODO: save it in store in redux
               this.setState({
@@ -109,7 +109,7 @@ class GoogleLogin extends Component {
           buttonText="Sign in with Google"
           onSuccess={this.responseGoogle}
           onFailure={this.responseGoogle}
-          cookiePolicy={'single_host_origin'}
+          cookiePolicy="single_host_origin"
         />
       </div>
     );

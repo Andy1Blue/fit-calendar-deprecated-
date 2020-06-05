@@ -19,7 +19,9 @@ class AppHeader extends Component {
   }
 
   render() {
-    const { givenName, gId, gImg, authorization } = this.state;
+    const {
+      givenName, gId, gImg, authorization,
+    } = this.state;
     const TCgId = localStorage.getItem('TCgId');
 
     const logout = () => {
@@ -44,7 +46,9 @@ class AppHeader extends Component {
       <div>
         <nav className="navbar navbar-expand-md navbar-dark">
           <a className="navbar-brand" href="#home">
-            <img className="logo" src={logo} alt="logo" /> FitCalendar
+            <img className="logo" src={logo} alt="logo" />
+            {' '}
+            FitCalendar
           </a>
           <button
             className="navbar-toggler"
@@ -55,7 +59,7 @@ class AppHeader extends Component {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span className="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon" />
           </button>
           <div
             className="collapse navbar-collapse justify-content-end"
@@ -63,7 +67,11 @@ class AppHeader extends Component {
           >
             <ul className="navbar-nav">
               <li className="nav-item active">
-                Hello {givenName}!{' '}
+                Hello
+                {' '}
+                {givenName}
+                !
+                {' '}
                 <img src={gImg} alt="Google Avatar" width="30px" hight="30px" />
               </li>
               <li className="nav-item">

@@ -5,8 +5,8 @@ import config from '../Config';
 import AppProvider from '../../context';
 
 class DayModal extends Component {
-  addToDescription = e => {
-    const target = e.target;
+  addToDescription = (e) => {
+    const { target } = e;
     document.getElementById('description').value += target.innerText;
   };
 
@@ -29,7 +29,7 @@ class DayModal extends Component {
         aria-hidden="true"
       >
         <AppProvider.Consumer>
-          {context => (
+          {(context) => (
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-body">
@@ -50,17 +50,15 @@ class DayModal extends Component {
                               <div
                                 id="defaultColor"
                                 className={
-                                  !dayObject.colorTag ||
-                                  dayObject.colorTag === null ||
-                                  dayObject.colorTag === '0' ||
-                                  dayObject.colorTag === 'default'
+                                  !dayObject.colorTag
+                                  || dayObject.colorTag === null
+                                  || dayObject.colorTag === '0'
+                                  || dayObject.colorTag === 'default'
                                     ? 'colorTag--borderder colorTag--color'
                                     : 'colorTag--color'
                                 }
-                                onClick={() =>
-                                  this.setColorTag(event, 'default')
-                                }
-                              ></div>
+                                onClick={() => this.setColorTag(event, 'default')}
+                              />
                               <div
                                 id="orangeColor"
                                 className={
@@ -68,10 +66,8 @@ class DayModal extends Component {
                                     ? 'colorTag--borderder colorTag--color'
                                     : 'colorTag--color'
                                 }
-                                onClick={() =>
-                                  this.setColorTag(event, 'orange')
-                                }
-                              ></div>
+                                onClick={() => this.setColorTag(event, 'orange')}
+                              />
                               <div
                                 id="blueColor"
                                 className={
@@ -80,10 +76,12 @@ class DayModal extends Component {
                                     : 'colorTag--color'
                                 }
                                 onClick={() => this.setColorTag(event, 'blue')}
-                              ></div>
+                              />
                             </div>
                             <div className="marginFormTopBottom">
-                              Day: {targetDay}
+                              Day:
+                              {' '}
+                              {targetDay}
                             </div>
                             &#128336;
                             <input
@@ -91,7 +89,7 @@ class DayModal extends Component {
                               id="time"
                               className="input-number"
                               placeholder="min"
-                              onChange={e => {
+                              onChange={(e) => {
                                 this.setState({
                                   dayObject: {
                                     description: dayObject.description,
@@ -104,14 +102,14 @@ class DayModal extends Component {
                               defaultValue={
                                 dayObject.time === 0 ? '' : dayObject.time
                               }
-                            ></input>
+                            />
                             &#128293;
                             <input
                               type="number"
                               id="calories"
                               className="input-number"
                               placeholder="kcal"
-                              onChange={e => {
+                              onChange={(e) => {
                                 this.setState({
                                   dayObject: {
                                     description: dayObject.description,
@@ -126,14 +124,14 @@ class DayModal extends Component {
                                   ? ''
                                   : dayObject.calories
                               }
-                            ></input>
+                            />
                             &#128099;
                             <input
                               type="number"
                               id="distance"
                               className="input-number"
                               placeholder="km"
-                              onChange={e => {
+                              onChange={(e) => {
                                 this.setState({
                                   dayObject: {
                                     description: dayObject.description,
@@ -148,7 +146,7 @@ class DayModal extends Component {
                                   ? ''
                                   : dayObject.distance
                               }
-                            ></input>
+                            />
                             <div className="marginFormTopBottom">
                               Type of activity:
                               <select className="form-control" id="type">
@@ -176,43 +174,24 @@ class DayModal extends Component {
                                   onClick={this.addToDescription}
                                 >
                                   {' '}
-                                  [INDOOR RUN]{' '}
+                                  [INDOOR RUN]
+                                  {' '}
                                 </span>
                                 <span
                                   className="btn btn-secondary margin1 small"
                                   onClick={this.addToDescription}
                                 >
                                   {' '}
-                                  [TABATA]{' '}
+                                  [TABATA]
+                                  {' '}
                                 </span>
                                 <span
                                   className="btn btn-secondary margin1 small"
                                   onClick={this.addToDescription}
                                 >
                                   {' '}
-                                  [MINI BAND]{' '}
-                                </span>
-                                <br />
-                                <span
-                                  className="btn btn-secondary margin1 small"
-                                  onClick={this.addToDescription}
-                                >
+                                  [MINI BAND]
                                   {' '}
-                                  [RUN]{' '}
-                                </span>
-                                <span
-                                  className="btn btn-secondary margin1 small"
-                                  onClick={this.addToDescription}
-                                >
-                                  {' '}
-                                  [WALK]{' '}
-                                </span>
-                                <span
-                                  className="btn btn-secondary margin1 small"
-                                  onClick={this.addToDescription}
-                                >
-                                  {' '}
-                                  [BIKE]{' '}
                                 </span>
                                 <br />
                                 <span
@@ -220,14 +199,41 @@ class DayModal extends Component {
                                   onClick={this.addToDescription}
                                 >
                                   {' '}
-                                  [GYM]{' '}
+                                  [RUN]
+                                  {' '}
                                 </span>
                                 <span
                                   className="btn btn-secondary margin1 small"
                                   onClick={this.addToDescription}
                                 >
                                   {' '}
-                                  [SPINNING]{' '}
+                                  [WALK]
+                                  {' '}
+                                </span>
+                                <span
+                                  className="btn btn-secondary margin1 small"
+                                  onClick={this.addToDescription}
+                                >
+                                  {' '}
+                                  [BIKE]
+                                  {' '}
+                                </span>
+                                <br />
+                                <span
+                                  className="btn btn-secondary margin1 small"
+                                  onClick={this.addToDescription}
+                                >
+                                  {' '}
+                                  [GYM]
+                                  {' '}
+                                </span>
+                                <span
+                                  className="btn btn-secondary margin1 small"
+                                  onClick={this.addToDescription}
+                                >
+                                  {' '}
+                                  [SPINNING]
+                                  {' '}
                                 </span>
                                 <span
                                   className="btn btn-secondary margin1 small"
@@ -244,18 +250,18 @@ class DayModal extends Component {
                                 <textarea
                                   id="description"
                                   defaultValue={dayObject.description}
-                                  onChange={e => {
+                                  onChange={(e) => {
                                     this.setState({
                                       description: e.target.value,
                                     });
                                   }}
-                                ></textarea>
+                                />
                               )}
                               {!dayObject.description && (
                                 <textarea
                                   onChange={this.checkTextareaIsEmpty}
                                   id="description"
-                                ></textarea>
+                                />
                               )}
                             </div>
                             {!dayObject.description && (
