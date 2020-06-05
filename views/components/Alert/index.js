@@ -4,7 +4,6 @@ import AppContext from '../../context';
 
 class Alert extends Component {
   render() {
-    // const { alertText } = this.props;
     return (
       <div
         className="modal fade"

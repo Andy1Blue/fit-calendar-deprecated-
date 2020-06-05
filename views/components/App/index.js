@@ -34,7 +34,7 @@ class App extends Component {
   };
 
   // Show the day editing panel
-  showDay = e => {
+  showDay = (e) => {
     this.setState({ showDayLoader: true, showDay: true });
     if (e.target.attributes.getNamedItem('id') !== null) {
       if (e.target.attributes.getNamedItem('trainingId')) {
@@ -70,12 +70,12 @@ class App extends Component {
       const caloriesValue = document.getElementById('calories').value;
       const timeValue = document.getElementById('time').value;
       const typeValue = document.getElementById('type').value;
-      let targetColorTag = this.props.targetColorTag;
+      const { targetColorTag } = this.props;
 
       const data = {
         trainingDate: targetDateChanged,
         colorTag: targetColorTag,
-        description: descriptionValue + ' ',
+        description: `${descriptionValue} `,
         distance: distanceValue,
         calories: caloriesValue,
         time: timeValue,
@@ -83,7 +83,7 @@ class App extends Component {
         type: typeValue == '-' ? null : typeValue,
       };
 
-      fetch(config.domain + '/trainings', {
+      fetch(`${config.domain}/trainings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,8 +92,8 @@ class App extends Component {
         },
         body: JSON.stringify(data),
       })
-        .then(response => response.json())
-        .then(response => {
+        .then((response) => response.json())
+        .then((response) => {
           // this.setState({ showDay: false });
           this.refresh();
           this.forceUpdate();
@@ -105,14 +105,14 @@ class App extends Component {
   updateDay = () => {
     if (localStorage.getItem('TCgId') !== null) {
       const TCgId = localStorage.getItem('TCgId');
-      const targetDayTId = this.state.targetDayTId;
+      const { targetDayTId } = this.state;
       const targetDateChanged = this.state.targetDay.replace(/\./g, '');
       const descriptionValue = document.getElementById('description').value;
       const distanceValue = document.getElementById('distance').value;
       const caloriesValue = document.getElementById('calories').value;
       const timeValue = document.getElementById('time').value;
       const typeValue = document.getElementById('type').value;
-      let targetColorTag = this.props.targetColorTag;
+      const { targetColorTag } = this.props;
 
       const data = {
         colorTag: targetColorTag,
@@ -124,7 +124,7 @@ class App extends Component {
       };
 
       fetch(
-        config.domain + '/trainings/user/' + TCgId + '/id/' + targetDayTId,
+        `${config.domain}/trainings/user/${TCgId}/id/${targetDayTId}`,
         {
           method: 'PATCH',
           headers: {
@@ -134,7 +134,7 @@ class App extends Component {
           },
           body: JSON.stringify(data),
         },
-      ).then(response => {
+      ).then((response) => {
         // this.setState({ showDay: false });
         this.refresh();
         this.forceUpdate();
@@ -147,16 +147,16 @@ class App extends Component {
     // TODO: Add alert to confirm deleting...
     const TCgId = localStorage.getItem('TCgId');
     const targetDateChanged = this.state.targetDay.replace(/\./g, '');
-    const targetDayTId = this.state.targetDayTId;
+    const { targetDayTId } = this.state;
 
-    fetch(config.domain + '/trainings/user/' + TCgId + '/id/' + targetDayTId, {
+    fetch(`${config.domain}/trainings/user/${TCgId}/id/${targetDayTId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         key: config.secretKey,
         userid: TCgId,
       },
-    }).then(response => {
+    }).then((response) => {
       console.log(response);
       // this.setState({ showDay: false });
       this.refresh();
@@ -174,7 +174,7 @@ class App extends Component {
       const TCgId = localStorage.getItem('TCgId');
       const targetDateChanged = day.replace(/\./g, '');
 
-      fetch(config.domain + '/trainings/user/' + TCgId + '/id/' + trainingId, {
+      fetch(`${config.domain}/trainings/user/${TCgId}/id/${trainingId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -182,8 +182,8 @@ class App extends Component {
           userid: TCgId,
         },
       })
-        .then(response => response.json())
-        .then(response => {
+        .then((response) => response.json())
+        .then((response) => {
           this.setState({
             dayObject: {
               targetColorTag: response.colorTag,
@@ -201,7 +201,7 @@ class App extends Component {
             isDescriptionInactive: false,
           });
         })
-        .catch(e => {
+        .catch(() => {
           this.setState({
             dayObject: {
               colorTag: null,
@@ -220,7 +220,7 @@ class App extends Component {
     }
   };
 
-  showAlert = alertText => {
+  showAlert = (alertText) => {
     this.setState({ alertText });
     $('#workoutDay').modal('hide');
     $('#alert').modal('show');
@@ -231,10 +231,9 @@ class App extends Component {
   };
 
   checkTextareaIsEmpty = () => {
-    const isDescriptionInactive =
-      document.getElementById('description').value === '' ||
-      document.getElementById('description').value === ' ' ||
-      document.getElementById('description').value === null;
+    const isDescriptionInactive = document.getElementById('description').value === ''
+      || document.getElementById('description').value === ' '
+      || document.getElementById('description').value === null;
     this.setState({ isDescriptionInactive });
   };
 
@@ -259,7 +258,7 @@ class App extends Component {
     this.setState({ refresh: false });
   };
 
-  google = data => {
+  google = (data) => {
     const TCgId = localStorage.getItem('TCgId');
     this.setState({
       TCgId,
@@ -326,6 +325,7 @@ class App extends Component {
               </div>
             </header>
           )}
+
           {TCgId !== null && !isFetching && (
             <div>
               <div>
