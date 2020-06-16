@@ -1,7 +1,13 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,900);
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   background-color: #2e2b3d;
   font-size: 16px;
   color: #dedce6;
@@ -65,17 +71,6 @@ body {
 
 .padding10 {
   padding: 10px;
-}
-
-#red-toast {
-  background-color: #1b1927;
-  z-index: 999;
-  color: white;
-  // border: 1px solid black;
-  animation: show 0.5s;
-  font-size: 22px;
-  // border-radius: 10px;
-  box-shadow: 0 20px 30px -10px rgba(#000, .4);
 }
 
 .modal {
@@ -173,9 +168,9 @@ body {
   width: 20px;
 }
 
- #type {
+#type {
   display: flex;
-  width:240px;
+  width: 240px;
   margin: auto;
   text-align: center;
 }
