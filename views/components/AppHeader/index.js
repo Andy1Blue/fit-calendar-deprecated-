@@ -39,7 +39,7 @@ const AppHeader = ({ name, id, img }) => {
         <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item active">
-              Hello {name}! <img src={img} alt="Google Avatar" width="30px" hight="30px" />
+              Hello {name}! <img src={img} alt="Google Avatar" id={id} width="30px" hight="30px" />
             </li>
             <li className="nav-item">
               <a className="nav-link" href="#calendar">

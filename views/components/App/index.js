@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import './style.scss';
 import ListOfMonths from '../ListOfMonths';
-import GoogleLogin from '../GoogleLogin';
-import Alert from '../Alert';
+import { UserContext, GoogleLogin } from '../GoogleLogin';
+// import Alert from '../Alert';
 import logo from '../../assets/logo-calendar.png';
 import Loader from '../Loader';
 import config from '../Config';
@@ -10,77 +10,133 @@ import DayModal from '../DayModal';
 import AppHeader from '../AppHeader';
 import AppContext from '../../context';
 
-class App extends Component {
-  state = {
-    isFetching: false,
-    isLogin: false, // Local Sotorage TCgId exist
-    TCgId: null,
-    showDay: false,
-    targetDay: null,
-    targetColorTag: null,
-    refresh: false,
-    targetDayTId: null,
-    alertText: null,
-    dayObject: {
-      colorTag: null,
-      description: null,
-      distance: null,
-      calories: null,
-      time: null,
-      type: null,
-    },
-    showDayLoader: true,
-    isDescriptionInactive: false,
+const App = () => {
+  const [isFetching, setIsFetching] = useState(false);
+  const [isLogin, setIsLogin] = useState(false); // Local Sotorage TCgId exist
+  const [TCgId, setTCgId] = useState(actualTCgId);
+  const [showDay, setShowDay] = useState(false);
+  const [targetDay, setTargetDay] = useState(null);
+  const [targetColorTag, setTargetColorTag] = useState(null);
+  const [refresh, setRefresh] = useState(false);
+  const [targetDayTId, setTargetDayTId] = useState(null);
+  const [showDayLoader, setShowDayLoader] = useState(false);
+  const [isDescriptionInactive, setIsDescriptionInactive] = useState(false);
+  const [dayObject, setDayObject] = useState(null);
+  const [givenName, setGivenName] = useState(null);
+  const [gId, setgId] = useState(null);
+  const [gImg, setgImg] = useState(null);
+
+  const actualTCgId = localStorage.getItem('TCgId');
+
+  const refreshNow = () => {
+    setRefresh(true);
+    setRefresh(false);
   };
 
-  // Show the day editing panel
-  showDay = e => {
-    this.setState({ showDayLoader: true, showDay: true });
-    if (e.target.attributes.getNamedItem('id') !== null) {
-      if (e.target.attributes.getNamedItem('trainingId')) {
-        this.isDay(
-          e.target.attributes.getNamedItem('id').value,
-          e.target.attributes.getNamedItem('trainingId').value,
-        );
-      } else {
-        this.setState({
-          showDayLoader: false,
-          dayObject: {
+  const showAlert = () => {
+    $('#workoutDay').modal('hide');
+    $('#alert').modal('show');
+
+    setTimeout(() => {
+      $('#alert').modal('hide');
+    }, 2000);
+  };
+
+  const isDay = (day, trainingId) => {
+    if (actualTCgId !== null) {
+      // const targetDateChanged = day.replace(/\./g, '');
+
+      fetch(`${config.domain}/trainings/user/${TCgId}/id/${trainingId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          key: config.secretKey,
+          userid: TCgId,
+        },
+      })
+        .then(response => response.json())
+        .then(response => {
+          setDayObject({
+            targetColorTag: response.colorTag,
+            colorTag: response.colorTag,
+            description: response.description,
+            distance: response.distance,
+            calories: response.calories,
+            time: response.time,
+            type: response.type,
+          });
+          setShowDay(true);
+          setTargetDay(day);
+          setTargetDayTId(trainingId);
+          setShowDayLoader(false);
+          setIsDescriptionInactive(false);
+        })
+        .catch(() => {
+          setDayObject({
             colorTag: null,
             description: null,
             distance: null,
             calories: null,
             time: null,
-          },
-          showDay: true,
-          targetDay: e.target.attributes.getNamedItem('id').value,
-          isDescriptionInactive: false,
+            type: null,
+          });
+          setShowDay(false);
+          setTargetDay(null);
+          setTargetDayTId(null);
+          setIsDescriptionInactive(true);
         });
+    }
+  };
+
+  // Show the day editing panel
+  const showDayNow = e => {
+    setShowDayLoader(true);
+    setShowDay(true);
+
+    if (e.target.attributes.getNamedItem('id') !== null) {
+      if (e.target.attributes.getNamedItem('trainingId')) {
+        isDay(
+          e.target.attributes.getNamedItem('id').value,
+          e.target.attributes.getNamedItem('trainingId').value,
+        );
+      } else {
+        setShowDayLoader(false);
+        const dayObjectReset = {
+          colorTag: null,
+          description: null,
+          distance: null,
+          calories: null,
+          time: null,
+        };
+        setDayObject(dayObjectReset);
+        setShowDay(true);
+        setTargetDay(e.target.attributes.getNamedItem('id').value);
+        setIsDescriptionInactive(false);
       }
     }
   };
 
   // Save to db and close the day editing panel
-  saveDay = () => {
+  const saveDay = () => {
     if (localStorage.getItem('TCgId') !== null) {
-      const TCgId = localStorage.getItem('TCgId');
-      const targetDateChanged = this.state.targetDay.replace(/\./g, '');
+      const googleId = localStorage.getItem('TCgId');
+      const targetDateChanged = targetDay.replace(/\./g, '');
       const descriptionValue = document.getElementById('description').value;
       const distanceValue = document.getElementById('distance').value;
       const caloriesValue = document.getElementById('calories').value;
       const timeValue = document.getElementById('time').value;
       const typeValue = document.getElementById('type').value;
-      const { targetColorTag } = this.props;
+      // const { targetColorTag } = this.props;
 
       const data = {
         trainingDate: targetDateChanged,
-        colorTag: targetColorTag,
+        colorTag: null,
         description: `${descriptionValue} `,
         distance: distanceValue,
         calories: caloriesValue,
         time: timeValue,
-        userId: TCgId,
-        type: typeValue == '-' ? null : typeValue,
+        userId: googleId,
+        type: typeValue === '-' ? null : typeValue,
       };
 
       fetch(`${config.domain}/trainings`, {
@@ -93,34 +149,30 @@ class App extends Component {
         body: JSON.stringify(data),
       })
         .then(response => response.json())
-        .then(response => {
+        .then(() => {
           // this.setState({ showDay: false });
-          this.refresh();
-          this.forceUpdate();
-          this.showAlert('Workout added!');
+          refreshNow();
+          showAlert('Workout added!');
         });
     }
   };
 
-  updateDay = () => {
-    if (localStorage.getItem('TCgId') !== null) {
-      const TCgId = localStorage.getItem('TCgId');
-      const { targetDayTId } = this.state;
-      const targetDateChanged = this.state.targetDay.replace(/\./g, '');
+  const updateDay = () => {
+    if (actualTCgId !== null) {
       const descriptionValue = document.getElementById('description').value;
       const distanceValue = document.getElementById('distance').value;
       const caloriesValue = document.getElementById('calories').value;
       const timeValue = document.getElementById('time').value;
       const typeValue = document.getElementById('type').value;
-      const { targetColorTag } = this.props;
+      // const { targetColorTag } = this.props;
 
       const data = {
-        colorTag: targetColorTag,
+        colorTag: null,
         description: descriptionValue,
-        distance: distanceValue == '' ? 0 : distanceValue,
-        calories: caloriesValue == '' ? 0 : caloriesValue,
-        time: timeValue == '' ? 0 : timeValue,
-        type: typeValue == '-' ? null : typeValue,
+        distance: distanceValue === '' ? 0 : distanceValue,
+        calories: caloriesValue === '' ? 0 : caloriesValue,
+        time: timeValue === '' ? 0 : timeValue,
+        type: typeValue === '-' ? null : typeValue,
       };
 
       fetch(`${config.domain}/trainings/user/${TCgId}/id/${targetDayTId}`, {
@@ -131,217 +183,136 @@ class App extends Component {
           userid: TCgId,
         },
         body: JSON.stringify(data),
-      }).then(response => {
+      }).then(() => {
         // this.setState({ showDay: false });
-        this.refresh();
-        this.forceUpdate();
-        this.showAlert('Workout updated!');
+        refreshNow();
+        showAlert('Workout updated!');
       });
     }
   };
 
-  deleteDay = () => {
+  const deleteDay = () => {
     // TODO: Add alert to confirm deleting...
-    const TCgId = localStorage.getItem('TCgId');
-    const targetDateChanged = this.state.targetDay.replace(/\./g, '');
-    const { targetDayTId } = this.state;
-
-    fetch(`${config.domain}/trainings/user/${TCgId}/id/${targetDayTId}`, {
+    fetch(`${config.domain}/trainings/user/${actualTCgId}/id/${targetDayTId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         key: config.secretKey,
-        userid: TCgId,
+        userid: actualTCgId,
       },
-    }).then(response => {
-      console.log(response);
+    }).then(() => {
       // this.setState({ showDay: false });
-      this.refresh();
-      this.forceUpdate();
-      this.showAlert('Workout deleted!');
+      refreshNow();
+      showAlert('Workout deleted!');
     });
   };
 
-  closeDay = () => {
-    this.setState({ showDay: false });
+  const closeDay = () => {
+    setShowDay(false);
   };
 
-  isDay = (day, trainingId) => {
-    if (localStorage.getItem('TCgId') !== null) {
-      const TCgId = localStorage.getItem('TCgId');
-      const targetDateChanged = day.replace(/\./g, '');
-
-      fetch(`${config.domain}/trainings/user/${TCgId}/id/${trainingId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          key: config.secretKey,
-          userid: TCgId,
-        },
-      })
-        .then(response => response.json())
-        .then(response => {
-          this.setState({
-            dayObject: {
-              targetColorTag: response.colorTag,
-              colorTag: response.colorTag,
-              description: response.description,
-              distance: response.distance,
-              calories: response.calories,
-              time: response.time,
-              type: response.type,
-            },
-            showDay: true,
-            targetDay: day,
-            targetDayTId: trainingId,
-            showDayLoader: false,
-            isDescriptionInactive: false,
-          });
-        })
-        .catch(() => {
-          this.setState({
-            dayObject: {
-              colorTag: null,
-              description: null,
-              distance: null,
-              calories: null,
-              time: null,
-              type: null,
-            },
-            showDay: false,
-            targetDay: null,
-            targetDayTId: null,
-            isDescriptionInactive: true,
-          });
-        });
-    }
-  };
-
-  showAlert = alertText => {
-    this.setState({ alertText });
-    $('#workoutDay').modal('hide');
-    $('#alert').modal('show');
-
-    setTimeout(() => {
-      $('#alert').modal('hide');
-    }, 2000);
-  };
-
-  checkTextareaIsEmpty = () => {
-    const isDescriptionInactive =
+  const checkTextareaIsEmpty = () => {
+    const isDescriptionInactivee =
       document.getElementById('description').value === '' ||
       document.getElementById('description').value === ' ' ||
       document.getElementById('description').value === null;
-    this.setState({ isDescriptionInactive });
+    setIsDescriptionInactive(isDescriptionInactivee);
   };
 
-  setColorTag = (e, color) => {
+  const setColorTag = (e, color) => {
     document.getElementById('defaultColor').classList.remove('colorTag--borderder');
     document.getElementById('orangeColor').classList.remove('colorTag--borderder');
     document.getElementById('blueColor').classList.remove('colorTag--borderder');
-
     document.getElementById(e.target.id).classList.add('colorTag--borderder');
 
-    this.setState({ targetColorTag: color });
+    setTargetColorTag(color);
   };
 
-  refresh = () => {
-    this.setState({ refresh: true });
-    this.setState({ refresh: false });
-  };
-
-  google = data => {
-    const TCgId = localStorage.getItem('TCgId');
-    this.setState({
-      TCgId,
-      isLogin: true,
-      isFetching: false,
-      givenName: data.givenName,
-      gId: data.gId,
-      gImg: data.gImg,
-    });
-  };
-
-  componentDidMount() {
-    if (localStorage.getItem('TCgId') !== null) {
-      const TCgId = localStorage.getItem('TCgId');
-      this.setState({ TCgId, isLogin: true, isFetching: false });
-    } else {
-      this.setState({ isFetching: false });
+  const google = data => {
+    if (data) {
+      setTCgId(actualTCgId);
+      setIsLogin(true);
+      setIsFetching(false);
+      setGivenName(data.givenName);
+      setgId(data.gId);
+      setgImg(data.gImg);
     }
-  }
+  };
 
-  render() {
-    const {
-      isFetching,
-      TCgId,
-      showDay,
-      targetDay,
-      refresh,
-      dayObject,
-      showDayLoader,
-      isDescriptionInactive,
-      alertText,
-      targetDayTId,
-      givenName,
-      gId,
-      gImg,
-    } = this.state;
+  useEffect(() => {
+    const userContext = useContext(UserContext);
+    if (userContext.givenName !== null) {
+      google(userContext);
+    }
 
-    const contextElements = {
-      ...this.state,
-      showAlert: this.showAlert,
-      saveDay: this.saveDay,
-      deleteDay: this.deleteDay,
-      updateDay: this.updateDay,
-    };
+    if (actualTCgId !== null) {
+      setTCgId(actualTCgId);
+      setIsLogin(true);
+      setIsFetching(false);
+    } else {
+      setIsFetching(false);
+    }
+  });
 
-    return (
-      <div className="App">
-        <AppContext.Provider value={contextElements}>
-          {isFetching && (
-            <div>
-              <Loader />
-            </div>
-          )}
+  const contextElements = {
+    showAlert,
+    saveDay,
+    deleteDay,
+    updateDay,
+  };
 
-          {TCgId === null && !isFetching && (
-            <header className="App-header">
-              <div className="welcome-container">
-                <img className="logo-welcome-page" src={logo} alt="logo" />
-                <p>FitCalendar</p>
-                <div>
-                  <GoogleLogin google={this.google} />
-                  <div className="footer">FitCalendar</div>
-                </div>
+  return (
+    <div className="App">
+      <AppContext.Provider value={contextElements}>
+        {isFetching && (
+          <div>
+            <Loader />
+          </div>
+        )}
+
+        {TCgId === null && !isFetching && (
+          <header className="App-header">
+            <div className="welcome-container">
+              <img className="logo-welcome-page" src={logo} alt="logo" />
+              <p>FitCalendar</p>
+              <div>
+                <GoogleLogin />
+                <div className="footer">FitCalendar</div>
               </div>
-            </header>
-          )}
-
-          {TCgId !== null && !isFetching && (
-            <div>
-              <div>{!refresh && <AppHeader name={givenName} id={gId} img={gImg} />}</div>
-
-              <div onClick={this.showDay}>{!refresh && <ListOfMonths TCgId={TCgId} />}</div>
-
-              <DayModal
-                showDay={showDay}
-                targetDay={targetDay}
-                dayObject={dayObject}
-                showDayLoader={showDayLoader}
-                isDescriptionInactive={isDescriptionInactive}
-                targetDayTId={targetDayTId}
-                refresh={this.refresh}
-                showAlert={this.showAlert}
-                forceUpdate={this.forceUpdate}
-              />
             </div>
-          )}
+          </header>
+        )}
 
-        </AppContext.Provider>
-      </div>
-    );
-  }
-}
+        {TCgId !== null && !isFetching && (
+          <div>
+            <div>{!refresh && <AppHeader name={givenName} id={gId} img={gImg} />}</div>
+
+            <div
+              role="button"
+              styling="link"
+              tabIndex={0}
+              onClick={showDayNow}
+              onKeyDown={showDayNow}
+            >
+              {!refresh && <ListOfMonths TCgId={TCgId} />}
+            </div>
+
+            <DayModal
+              showDay={showDay}
+              targetDay={targetDay}
+              dayObject={dayObject}
+              showDayLoader={showDayLoader}
+              isDescriptionInactive={isDescriptionInactive}
+              targetDayTId={targetDayTId}
+              refresh={refresh}
+              showAlert={showAlert}
+              forceUpdate={refresh}
+            />
+          </div>
+        )}
+      </AppContext.Provider>
+    </div>
+  );
+};
 
 export default App;

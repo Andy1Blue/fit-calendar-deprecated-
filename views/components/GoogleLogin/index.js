@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './style.scss';
 import GoogleAuth from 'react-google-login';
 import config from '../Config';
 import Alert from '../Alert';
 
-class GoogleLogin extends Component {
-  state = {
-    givenName: null,
-    gId: null,
-    gImg: null,
-    processing: false,
-    authorization: false,
-  };
+const UserContext = (userData) => React.createContext(userData);
 
-  addLog = () => {
+const GoogleLogin = () => {
+  const [givenName, setGivenName] = useState(null);
+  const [gId, setgId] = useState(null);
+  const [gImg, setgImg] = useState(null);
+  const [processing, setProcessing] = useState(false);
+  const [authorization, setAuthorization] = useState(false);
+
+  const addLog = () => {
     if (localStorage.getItem('TCgId') !== null) {
       const TCgId = localStorage.getItem('TCgId');
       const name = localStorage.getItem('TCgivenName');
@@ -36,7 +36,7 @@ class GoogleLogin extends Component {
     }
   };
 
-  isWhitelisted = googleId => {
+  const isWhitelisted = googleId => {
     return new Promise((res, rej) => {
       fetch(`${config.domain}/whitelists/user/${googleId}`, {
         method: 'GET',
@@ -51,16 +51,12 @@ class GoogleLogin extends Component {
           if (response) {
             console.log(response);
             // TODO: save it in store in redux
-            this.setState({
-              authorization: true,
-              processing: true,
-            });
+            setAuthorization(true);
+            setProcessing(true);
             res(true);
           } else {
-            this.setState({
-              authorization: false,
-              processing: true,
-            });
+            setAuthorization(false);
+            setProcessing(true);
             res(false);
           }
         })
@@ -70,15 +66,19 @@ class GoogleLogin extends Component {
     });
   };
 
-  responseGoogle = response => {
+  const responseGoogle = response => {
     const TCgId = localStorage.getItem('TCgId');
-    this.isWhitelisted(response.profileObj.googleId).then(isWhitelisted => {
+    isWhitelisted(response.profileObj.googleId).then(whiteleisted => {
       // If response from Google API is not null, create local storage with
       // name, Google ID and avatar (in local sotrage and in state)
-      if (isWhitelisted && response !== null) {
+      if (whiteleisted && response !== null) {
         localStorage.setItem('TCgivenName', response.profileObj.givenName);
         localStorage.setItem('TCgId', response.profileObj.googleId);
         localStorage.setItem('TCgImg', response.profileObj.imageUrl);
+
+        setGivenName(response.profileObj.givenName);
+        setgId(response.profileObj.googleId);
+        setgImg(response.profileObj.imageUrl);
 
         const data = {
           givenName: response.profileObj.givenName,
@@ -86,25 +86,23 @@ class GoogleLogin extends Component {
           gImg: response.profileObj.imageUrl,
         };
 
-        this.props.google(data);
-        this.setState(data);
+        UserContext(data);
 
         // When local storage with Google ID exists, assign it to state
         if (TCgId !== null) {
-          this.addLog();
+          addLog();
         }
       }
     });
   };
 
-  logout = () => {
+  const logout = () => {
+    const TCgId = localStorage.getItem('TCgId');
     // If local storage with Google ID does not exist, remove local storage and state
     if (TCgId !== null) {
-      this.setState({
-        givenName: null,
-        gId: null,
-        gImg: null,
-      });
+      setGivenName(null);
+      setgId(null);
+      setgImg(null);
 
       localStorage.removeItem('TCgivenName');
       localStorage.removeItem('TCgId');
@@ -115,26 +113,24 @@ class GoogleLogin extends Component {
     window.location.href = config.url;
   };
 
-  render() {
-    return (
-      <div>
-        <GoogleAuth
-          className="google-login-button"
-          clientId={config.google}
-          buttonText="Sign in with Google"
-          onSuccess={this.responseGoogle}
-          onFailure={this.responseGoogle}
-          cookiePolicy="single_host_origin"
-        />
+  return (
+    <div>
+      <GoogleAuth
+        className="google-login-button"
+        clientId={config.google}
+        buttonText="Sign in with Google"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy="single_host_origin"
+      />
 
-        {this.state.authorization === false && this.state.processing === true && (
-          <div>
-            <Alert text="Can't authorize you! Try again!" />
-          </div>
-        )}
-      </div>
-    );
-  }
-}
+      {authorization === false && processing === true && (
+        <div>
+          <Alert text="Can't authorize you! Try again!" />
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default GoogleLogin;
+export {UserContext,GoogleLogin};
