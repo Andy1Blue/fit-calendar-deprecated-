@@ -1,12 +1,12 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import './style.scss';
 import GoogleAuth from 'react-google-login';
+import PropTypes from 'prop-types';
 import config from '../Config';
 import Alert from '../Alert';
 
-const UserContext = (userData) => React.createContext(userData);
-
-const GoogleLogin = () => {
+const GoogleLogin = ({google}) => {
   const [givenName, setGivenName] = useState(null);
   const [gId, setgId] = useState(null);
   const [gImg, setgImg] = useState(null);
@@ -80,13 +80,11 @@ const GoogleLogin = () => {
         setgId(response.profileObj.googleId);
         setgImg(response.profileObj.imageUrl);
 
-        const data = {
+        google({
           givenName: response.profileObj.givenName,
           gId: response.profileObj.googleId,
           gImg: response.profileObj.imageUrl,
-        };
-
-        UserContext(data);
+        })
 
         // When local storage with Google ID exists, assign it to state
         if (TCgId !== null) {
@@ -94,23 +92,6 @@ const GoogleLogin = () => {
         }
       }
     });
-  };
-
-  const logout = () => {
-    const TCgId = localStorage.getItem('TCgId');
-    // If local storage with Google ID does not exist, remove local storage and state
-    if (TCgId !== null) {
-      setGivenName(null);
-      setgId(null);
-      setgImg(null);
-
-      localStorage.removeItem('TCgivenName');
-      localStorage.removeItem('TCgId');
-      localStorage.removeItem('TCgImg');
-    }
-
-    // Redirecting, TODO: change it to a different way
-    window.location.href = config.url;
   };
 
   return (
@@ -133,4 +114,8 @@ const GoogleLogin = () => {
   );
 };
 
-export {UserContext,GoogleLogin};
+GoogleLogin.propTypes = {
+  google: PropTypes.any.isRequired,
+};
+
+export default GoogleLogin;

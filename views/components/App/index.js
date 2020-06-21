@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import './style.scss';
 import ListOfMonths from '../ListOfMonths';
-import { UserContext, GoogleLogin } from '../GoogleLogin';
+import GoogleLogin from '../GoogleLogin';
 // import Alert from '../Alert';
 import logo from '../../assets/logo-calendar.png';
 import Loader from '../Loader';
@@ -11,22 +11,19 @@ import AppHeader from '../AppHeader';
 import AppContext from '../../context';
 
 const App = () => {
+  const actualTCgId = localStorage.getItem('TCgId');
   const [isFetching, setIsFetching] = useState(false);
   const [isLogin, setIsLogin] = useState(false); // Local Sotorage TCgId exist
   const [TCgId, setTCgId] = useState(actualTCgId);
   const [showDay, setShowDay] = useState(false);
   const [targetDay, setTargetDay] = useState(null);
-  const [targetColorTag, setTargetColorTag] = useState(null);
   const [refresh, setRefresh] = useState(false);
   const [targetDayTId, setTargetDayTId] = useState(null);
   const [showDayLoader, setShowDayLoader] = useState(false);
-  const [isDescriptionInactive, setIsDescriptionInactive] = useState(false);
   const [dayObject, setDayObject] = useState(null);
   const [givenName, setGivenName] = useState(null);
   const [gId, setgId] = useState(null);
   const [gImg, setgImg] = useState(null);
-
-  const actualTCgId = localStorage.getItem('TCgId');
 
   const refreshNow = () => {
     setRefresh(true);
@@ -69,7 +66,7 @@ const App = () => {
           setTargetDay(day);
           setTargetDayTId(trainingId);
           setShowDayLoader(false);
-          setIsDescriptionInactive(false);
+          // setIsDescriptionInactive(false);
         })
         .catch(() => {
           setDayObject({
@@ -83,7 +80,7 @@ const App = () => {
           setShowDay(false);
           setTargetDay(null);
           setTargetDayTId(null);
-          setIsDescriptionInactive(true);
+          // setIsDescriptionInactive(true);
         });
     }
   };
@@ -111,7 +108,7 @@ const App = () => {
         setDayObject(dayObjectReset);
         setShowDay(true);
         setTargetDay(e.target.attributes.getNamedItem('id').value);
-        setIsDescriptionInactive(false);
+        // setIsDescriptionInactive(false);
       }
     }
   };
@@ -211,23 +208,6 @@ const App = () => {
     setShowDay(false);
   };
 
-  const checkTextareaIsEmpty = () => {
-    const isDescriptionInactivee =
-      document.getElementById('description').value === '' ||
-      document.getElementById('description').value === ' ' ||
-      document.getElementById('description').value === null;
-    setIsDescriptionInactive(isDescriptionInactivee);
-  };
-
-  const setColorTag = (e, color) => {
-    document.getElementById('defaultColor').classList.remove('colorTag--borderder');
-    document.getElementById('orangeColor').classList.remove('colorTag--borderder');
-    document.getElementById('blueColor').classList.remove('colorTag--borderder');
-    document.getElementById(e.target.id).classList.add('colorTag--borderder');
-
-    setTargetColorTag(color);
-  };
-
   const google = data => {
     if (data) {
       setTCgId(actualTCgId);
@@ -239,12 +219,18 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    const userContext = useContext(UserContext);
-    if (userContext.givenName !== null) {
-      google(userContext);
-    }
+  const contextElements = {
+    showAlert,
+    saveDay,
+    deleteDay,
+    updateDay,
+  };
 
+  useEffect(() => {
+    // if (userContext.givenName !== null) {
+    //   google(userContext);
+    // }
+    // console.log(userContext);
     if (actualTCgId !== null) {
       setTCgId(actualTCgId);
       setIsLogin(true);
@@ -253,13 +239,6 @@ const App = () => {
       setIsFetching(false);
     }
   });
-
-  const contextElements = {
-    showAlert,
-    saveDay,
-    deleteDay,
-    updateDay,
-  };
 
   return (
     <div className="App">
@@ -276,7 +255,7 @@ const App = () => {
               <img className="logo-welcome-page" src={logo} alt="logo" />
               <p>FitCalendar</p>
               <div>
-                <GoogleLogin />
+                <GoogleLogin google={google} />
                 <div className="footer">FitCalendar</div>
               </div>
             </div>
@@ -287,7 +266,7 @@ const App = () => {
           <div>
             <div>{!refresh && <AppHeader name={givenName} id={gId} img={gImg} />}</div>
 
-            <div
+            {/* <div
               role="button"
               styling="link"
               tabIndex={0}
@@ -295,19 +274,18 @@ const App = () => {
               onKeyDown={showDayNow}
             >
               {!refresh && <ListOfMonths TCgId={TCgId} />}
-            </div>
+            </div> */}
 
-            <DayModal
+            {/* <DayModal
               showDay={showDay}
               targetDay={targetDay}
               dayObject={dayObject}
               showDayLoader={showDayLoader}
-              isDescriptionInactive={isDescriptionInactive}
               targetDayTId={targetDayTId}
               refresh={refresh}
               showAlert={showAlert}
               forceUpdate={refresh}
-            />
+            /> */}
           </div>
         )}
       </AppContext.Provider>
