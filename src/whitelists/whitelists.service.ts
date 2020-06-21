@@ -14,7 +14,7 @@ export class WhitelistsService {
   async isWhitelisted(userId: string) {
     const whitelistedUser = await this.WhitelistModel.findOne({ userId }).exec();
 
-    if (!whitelistedUser) {
+    if (!whitelistedUser || !whitelistedUser.isActive) {
       return false;
     }
 

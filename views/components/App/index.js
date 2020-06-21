@@ -34,7 +34,7 @@ class App extends Component {
   };
 
   // Show the day editing panel
-  showDay = (e) => {
+  showDay = e => {
     this.setState({ showDayLoader: true, showDay: true });
     if (e.target.attributes.getNamedItem('id') !== null) {
       if (e.target.attributes.getNamedItem('trainingId')) {
@@ -92,8 +92,8 @@ class App extends Component {
         },
         body: JSON.stringify(data),
       })
-        .then((response) => response.json())
-        .then((response) => {
+        .then(response => response.json())
+        .then(response => {
           // this.setState({ showDay: false });
           this.refresh();
           this.forceUpdate();
@@ -123,18 +123,15 @@ class App extends Component {
         type: typeValue == '-' ? null : typeValue,
       };
 
-      fetch(
-        `${config.domain}/trainings/user/${TCgId}/id/${targetDayTId}`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-          body: JSON.stringify(data),
+      fetch(`${config.domain}/trainings/user/${TCgId}/id/${targetDayTId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          key: config.secretKey,
+          userid: TCgId,
         },
-      ).then((response) => {
+        body: JSON.stringify(data),
+      }).then(response => {
         // this.setState({ showDay: false });
         this.refresh();
         this.forceUpdate();
@@ -156,7 +153,7 @@ class App extends Component {
         key: config.secretKey,
         userid: TCgId,
       },
-    }).then((response) => {
+    }).then(response => {
       console.log(response);
       // this.setState({ showDay: false });
       this.refresh();
@@ -182,8 +179,8 @@ class App extends Component {
           userid: TCgId,
         },
       })
-        .then((response) => response.json())
-        .then((response) => {
+        .then(response => response.json())
+        .then(response => {
           this.setState({
             dayObject: {
               targetColorTag: response.colorTag,
@@ -220,7 +217,7 @@ class App extends Component {
     }
   };
 
-  showAlert = (alertText) => {
+  showAlert = alertText => {
     this.setState({ alertText });
     $('#workoutDay').modal('hide');
     $('#alert').modal('show');
@@ -231,22 +228,17 @@ class App extends Component {
   };
 
   checkTextareaIsEmpty = () => {
-    const isDescriptionInactive = document.getElementById('description').value === ''
-      || document.getElementById('description').value === ' '
-      || document.getElementById('description').value === null;
+    const isDescriptionInactive =
+      document.getElementById('description').value === '' ||
+      document.getElementById('description').value === ' ' ||
+      document.getElementById('description').value === null;
     this.setState({ isDescriptionInactive });
   };
 
   setColorTag = (e, color) => {
-    document
-      .getElementById('defaultColor')
-      .classList.remove('colorTag--borderder');
-    document
-      .getElementById('orangeColor')
-      .classList.remove('colorTag--borderder');
-    document
-      .getElementById('blueColor')
-      .classList.remove('colorTag--borderder');
+    document.getElementById('defaultColor').classList.remove('colorTag--borderder');
+    document.getElementById('orangeColor').classList.remove('colorTag--borderder');
+    document.getElementById('blueColor').classList.remove('colorTag--borderder');
 
     document.getElementById(e.target.id).classList.add('colorTag--borderder');
 
@@ -258,7 +250,7 @@ class App extends Component {
     this.setState({ refresh: false });
   };
 
-  google = (data) => {
+  google = data => {
     const TCgId = localStorage.getItem('TCgId');
     this.setState({
       TCgId,
@@ -328,13 +320,9 @@ class App extends Component {
 
           {TCgId !== null && !isFetching && (
             <div>
-              <div>
-                <AppHeader name={givenName} id={gId} img={gImg} />
-              </div>
+              <div>{!refresh && <AppHeader name={givenName} id={gId} img={gImg} />}</div>
 
-              <div onClick={this.showDay}>
-                {!refresh && <ListOfMonths TCgId={TCgId} />}
-              </div>
+              <div onClick={this.showDay}>{!refresh && <ListOfMonths TCgId={TCgId} />}</div>
 
               <DayModal
                 showDay={showDay}
@@ -350,7 +338,6 @@ class App extends Component {
             </div>
           )}
 
-          <Alert />
         </AppContext.Provider>
       </div>
     );
