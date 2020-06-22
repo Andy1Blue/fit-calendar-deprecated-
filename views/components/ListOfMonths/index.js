@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './style.scss';
 import GoogleLogin from 'react-google-login';
+import { getLocalStorageGoogleId } from '../../helpers';
 import Loader from '../Loader';
 import StatisticCard from '../StatisticCard';
 import TodayCard from '../TodayCard';
@@ -36,323 +37,26 @@ const ListOfMonths = () => {
 
   const getActualYear = () => new Date().getFullYear();
 
-  const aactualMonth = () => {
-    const getActualMonth = (new Date().getMonth() + 1).toString();
+  const getActualMonth = () => {
+    const todayMonth = (new Date().getMonth() + 1).toString();
 
-    setActualMonth(getActualMonth.length === 2 ? getActualMonth : `0${getActualMonth}`);
+    setActualMonth(todayMonth.length === 2 ? todayMonth : `0${todayMonth}`);
 
-    return getActualMonth.length === 2 ? getActualMonth : `0${getActualMonth}`;
+    return todayMonth.length === 2 ? todayMonth : `0${todayMonth}`;
   };
 
-  const aactualDay = () => {
-    const getActualDay = new Date().getDate().toString();
-    setActualDay(getActualDay.length === 2 ? getActualDay : `0${getActualDay}`);
+  const getActualDay = () => {
+    const todayDate = new Date().getDate().toString();
+    setActualDay(todayDate.length === 2 ? todayDate : `0${todayDate}`);
 
-    return getActualDay.length === 2 ? getActualDay : `0${getActualDay}`;
+    return todayDate.length === 2 ? todayDate : `0${todayDate}`;
   };
 
-  const fetchData = () => {
-    this.setState({ isFetching: true });
-    if (localStorage.getItem('TCgId') !== null) {
-      const TCgId = localStorage.getItem('TCgId');
+  const daysInMonth = (month, year) => new Date(year, month, 0).getDate();
 
-      let year = this.state.actualYear;
-
-      if (year === null) {
-        year = this.actualYear();
-      }
-
-      let month = this.state.actualMonth;
-
-      if (month === null) {
-        month = this.actualMonth();
-      }
-
-      // test fetch comparision
-      fetch(
-        `${config.domain}/trainings/compare/user/${TCgId}/to/${config.compareToUserId}/year/${year}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-        },
-      )
-        .then(response => response.json())
-        .then(response => {
-          console.log('Compare by year:');
-          console.log(response);
-        });
-      fetch(
-        `${config.domain}/trainings/compare/user/${TCgId}/to/${config.compareToUserId}/year/${year}/month/${month}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-        },
-      )
-        .then(response => response.json())
-        .then(response => {
-          console.log('Compare by month:');
-          console.log(response);
-        });
-
-      const promiseSumValuesYear = fetch(
-        `${config.domain}/trainings/sum/user/${TCgId}/year/${year}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-        },
-      )
-        .then(response => response.json())
-        .then(sumValuesYear => {
-          if (sumValuesYear.statusCode === 500) {
-            this.setState({ sumValuesYear: null });
-          } else {
-            this.setState({ sumValuesYear });
-          }
-        });
-
-      const promiseSumValuesMonth = fetch(
-        `${config.domain}/trainings/sum/user/${TCgId}/year/${year}/month/${month}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-        },
-      )
-        .then(response => response.json())
-        .then(sumValuesMonth => {
-          if (sumValuesMonth.statusCode === 500) {
-            this.setState({ sumValuesMonth: null });
-          } else {
-            this.setState({ sumValuesMonth });
-          }
-        });
-
-      let lastMonth = month === '01' ? '12' : parseInt(month) - 1;
-      lastMonth = lastMonth.length === 2 ? lastMonth : `0${lastMonth}`;
-
-      const lastYearByMonth = month === '01' ? year - 1 : year;
-
-      const promiseSumValuesLastMonth = fetch(
-        `${config.domain}/trainings/sum/user/${TCgId}/year/${lastYearByMonth}/month/${lastMonth}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-        },
-      )
-        .then(response => response.json())
-        .then(sumValuesLastMonth => {
-          if (sumValuesLastMonth.statusCode === 500) {
-            this.setState({ sumValuesLastMonth: null });
-          } else {
-            this.setState({ sumValuesLastMonth });
-          }
-        });
-
-      const lastYear = year - 1;
-
-      const promiseSumValuesLastYear = fetch(
-        `${config.domain}/trainings/sum/user/${TCgId}/year/${lastYear}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-        },
-      )
-        .then(response => response.json())
-        .then(sumValuesLastYear => {
-          if (sumValuesLastYear.statusCode === 500) {
-            this.setState({ sumValuesLastYear: null });
-          } else {
-            this.setState({ sumValuesLastYear });
-          }
-        });
-
-      const promiseTheLargestCalories = fetch(
-        `${config.domain}/trainings/calories/user/${TCgId}/year/${year}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-        },
-      )
-        .then(response => response.json())
-        .then(theLargestCalories => {
-          if (theLargestCalories.statusCode === 500) {
-            this.setState({ theLargestCalories: null });
-          } else {
-            this.setState({ theLargestCalories });
-          }
-        });
-
-      const promiseTheLargestTime = fetch(
-        `${config.domain}/trainings/time/user/${TCgId}/year/${year}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-        },
-      )
-        .then(response => response.json())
-        .then(theLargestTime => {
-          if (theLargestTime.statusCode === 500) {
-            this.setState({ theLargestTime: null });
-          } else {
-            this.setState({ theLargestTime });
-          }
-        });
-
-      const promiseTheLargestDistance = fetch(
-        `${config.domain}/trainings/distance/user/${TCgId}/year/${year}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            key: config.secretKey,
-            userid: TCgId,
-          },
-        },
-      )
-        .then(response => response.json())
-        .then(theLargestDistance => {
-          if (theLargestDistance.statusCode === 500) {
-            this.setState({ theLargestDistance: null });
-          } else {
-            this.setState({ theLargestDistance });
-          }
-        });
-
-      const promiseWorkout = fetch(`${config.domain}/trainings/user/${TCgId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          key: config.secretKey,
-          userid: TCgId,
-        },
-      })
-        .then(response => response.json())
-        .then(response => {
-          const isWorkoutDate = [];
-          const description = [];
-          const colorTags = [];
-          const idList = [];
-          const type = [];
-          for (let i = 0; i < response.length; i++) {
-            isWorkoutDate.push(response[i].trainingDate);
-            description.push(response[i].description);
-            colorTags.push(response[i].colorTag);
-            idList.push(response[i]._id);
-            type.push(response[i].type);
-
-            if (response[i].trainingDate === this.state.today) {
-              this.setState({ todayWorkout: response[i] });
-            }
-          }
-          this.setState({
-            isWorkoutDate,
-            description,
-            idList,
-            colorTags,
-            type,
-          });
-        });
-
-      const promises = [
-        promiseSumValuesMonth,
-        promiseSumValuesLastMonth,
-        promiseSumValuesYear,
-        promiseSumValuesLastYear,
-        promiseTheLargestCalories,
-        promiseTheLargestDistance,
-        promiseTheLargestTime,
-        promiseWorkout,
-      ];
-
-      Promise.allSettled(promises).then(results => {
-        this.setState({
-          isFetching: false,
-        });
-        this.forceUpdate();
-        this.generateReacts();
-      });
-    } else {
-      this.setState({ isWorkoutDate: [], isFetching: false });
-    }
-  };
-
-  const addYear = () => {
-    const prevactualYearRef = useRef();
-    useEffect(() => {
-      prevactualYearRef.current = actualYear;
-    });
-    const prevActualYear = prevActualYearRef.current;
-    setActualYear(prevState.actualYear + 1);
-    setIsFetching(true);
-
-    for (let i = 1; i <= 12; i++) {
-      document
-        .getElementById('root')
-        .querySelector(`.App .App-matches .container .m${i}`).innerHTML = '';
-    }
-
-    setTimeout(() => {
-      this.fetchData();
-    }, 500);
-  };
-
-  subtractYear = () => {
-    this.setState(prevState => ({ actualYear: prevState.actualYear - 1, isFetching: true }));
-
-    for (let i = 1; i <= 12; i++) {
-      document
-        .getElementById('root')
-        .querySelector(`.App .App-matches .container .m${i}`).innerHTML = '';
-    }
-
-    setTimeout(() => {
-      this.fetchData();
-    }, 500);
-  };
-
-  daysInMonth = (month, year) => new Date(year, month, 0).getDate();
-
-  addRect = (selector, day, month, year) => {
-    const { isWorkoutDate } = this.state;
-    const { description } = this.state;
-    const { idList } = this.state;
-    const { colorTags } = this.state;
-    const { type } = this.state;
-
+  const addRect = (selector, day, month, year) => {
     if (isWorkoutDate) {
       const elem = document.createElement('rect');
-      const { today } = this.state;
 
       const workoutDateLength = isWorkoutDate.length > 0 ? isWorkoutDate.length : 10;
       for (let i = 0; i < workoutDateLength; i++) {
@@ -447,13 +151,7 @@ const ListOfMonths = () => {
     }
   };
 
-  // TODO: DELETE
-  formatDate = data => {
-    const result = `${data.slice(0, 2)}.${data.slice(2, 4)}.${data.slice(4)}`;
-    return result;
-  };
-
-  generateReacts = () => {
+  const generateReacts = () => {
     if (isWorkoutDate) {
       // for (let i = 1; i <= 31; i++) {
       //     this.addTitle(i);
@@ -464,19 +162,302 @@ const ListOfMonths = () => {
         if (y.length > 2) {
           y = `${i}`;
         }
-        for (let j = 1; j <= this.daysInMonth(i, actualYear); j++) {
-          this.addRect(`m${i}`, String(`00${j}`).slice(-2), y, actualYear);
+        for (let j = 1; j <= daysInMonth(i, actualYear); j++) {
+          addRect(`m${i}`, String(`00${j}`).slice(-2), y, actualYear);
         }
       }
     }
   };
 
-  useEffect(() => {
-    setActualYear(actualYear());
-    setToday();
-    setToday(`${actualDay()}${actualMonth()}${actualYear()}`);
+  const fetchData = () => {
+    setIsFetching(true);
+    if (getLocalStorageGoogleId() !== null) {
+      const year = actualYear || getActualYear();
+      const month = actualMonth || getActualMonth();
 
-    if (localStorage.getItem('TCgId') !== null) {
+      // test fetch comparision
+      fetch(
+        `${config.domain}/trainings/compare/user/${getLocalStorageGoogleId()}/to/${config.compareToUserId}/year/${year}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: getLocalStorageGoogleId(),
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(response => {
+          console.log('Compare by year:');
+          console.log(response);
+        });
+      fetch(
+        `${config.domain}/trainings/compare/user/${getLocalStorageGoogleId()}/to/${config.compareToUserId}/year/${year}/month/${month}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: getLocalStorageGoogleId(),
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(response => {
+          console.log('Compare by month:');
+          console.log(response);
+        });
+
+      const promiseSumValuesYear = fetch(
+        `${config.domain}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${year}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: getLocalStorageGoogleId(),
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(sumValuesYearResponse => {
+          if (sumValuesYearResponse.statusCode === 500) {
+            setSumValuesYear(null);
+          } else {
+            setSumValuesYear(sumValuesYearResponse);
+          }
+        });
+
+      const promiseSumValuesMonth = fetch(
+        `${config.domain}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${year}/month/${month}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: getLocalStorageGoogleId(),
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(sumValuesMonthResponse => {
+          if (sumValuesMonth.statusCode === 500) {
+            setSumValuesMonth(null);
+          } else {
+            setSumValuesMonth(sumValuesMonthResponse);
+          }
+        });
+
+      let lastMonth = month === '01' ? '12' : parseInt(month) - 1;
+      lastMonth = lastMonth.length === 2 ? lastMonth : `0${lastMonth}`;
+
+      const lastYearByMonth = month === '01' ? year - 1 : year;
+
+      const promiseSumValuesLastMonth = fetch(
+        `${config.domain}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${lastYearByMonth}/month/${lastMonth}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: getLocalStorageGoogleId(),
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(sumValuesLastMonthResponse => {
+          if (sumValuesLastMonthResponse.statusCode === 500) {
+            setSumValuesLastMonth(null);
+          } else {
+            setSumValuesLastMonth(sumValuesLastMonthResponse);
+          }
+        });
+
+      const lastYear = year - 1;
+
+      const promiseSumValuesLastYear = fetch(
+        `${config.domain}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${lastYear}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: getLocalStorageGoogleId(),
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(sumValuesLastYearResponse => {
+          if (sumValuesLastYearResponse.statusCode === 500) {
+            setSumValuesLastYear(null);
+          } else {
+            setSumValuesLastYear(sumValuesLastYearResponse);
+          }
+        });
+
+      const promiseTheLargestCalories = fetch(
+        `${config.domain}/trainings/calories/user/${getLocalStorageGoogleId()}/year/${year}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: getLocalStorageGoogleId(),
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(theLargestCaloriesResponse => {
+          if (theLargestCaloriesResponse.statusCode === 500) {
+            setTheLargestCalories(null);
+          } else {
+            setTheLargestCalories(theLargestCaloriesResponse);
+          }
+        });
+
+      const promiseTheLargestTime = fetch(
+        `${config.domain}/trainings/time/user/${getLocalStorageGoogleId()}/year/${year}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: getLocalStorageGoogleId(),
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(theLargestTimeResponse => {
+          if (theLargestTimeResponse.statusCode === 500) {
+            setTheLargestTime(null);
+          } else {
+            setTheLargestTime(theLargestTimeResponse);
+          }
+        });
+
+      const promiseTheLargestDistance = fetch(
+        `${config.domain}/trainings/distance/user/${getLocalStorageGoogleId()}/year/${year}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: config.secretKey,
+            userid: getLocalStorageGoogleId(),
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(theLargestDistanceResponse => {
+          if (theLargestDistanceResponse.statusCode === 500) {
+            setTheLargestDistance(null);
+          } else {
+            setTheLargestDistance(theLargestDistanceResponse);
+          }
+        });
+
+      const promiseWorkout = fetch(`${config.domain}/trainings/user/${getLocalStorageGoogleId()}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          key: config.secretKey,
+          userid: getLocalStorageGoogleId(),
+        },
+      })
+        .then(response => response.json())
+        .then(response => {
+          const isWorkoutDateArray = [];
+          const descriptionArray = [];
+          const colorTagsArray = [];
+          const idListArray = [];
+          const typeArray = [];
+          for (let i = 0; i < response.length; i++) {
+            isWorkoutDateArray.push(response[i].trainingDate);
+            descriptionArray.push(response[i].description);
+            colorTagsArray.push(response[i].colorTag);
+            // eslint-disable-next-line no-underscore-dangle
+            idListArray.push(response[i]._id);
+            typeArray.push(response[i].type);
+
+            if (response[i].trainingDate === today) {
+              setTodayWorkout(response[i]);
+            }
+          }
+
+          setIsWorkoutDate(isWorkoutDateArray);
+          setDescription(descriptionArray);
+          setIdList(idListArray);
+          setColorTags(colorTagsArray);
+          setType(typeArray);
+        });
+
+      const promises = [
+        promiseSumValuesMonth,
+        promiseSumValuesLastMonth,
+        promiseSumValuesYear,
+        promiseSumValuesLastYear,
+        promiseTheLargestCalories,
+        promiseTheLargestDistance,
+        promiseTheLargestTime,
+        promiseWorkout,
+      ];
+
+      Promise.allSettled(promises).then(() => {
+        setIsFetching(false);
+        generateReacts();
+      });
+    } else {
+      setIsWorkoutDate([]);
+      setIsFetching(false);
+    }
+  };
+
+  const addYear = () => {
+    const prevActualYearRef = useRef();
+    useEffect(() => {
+      prevActualYearRef.current = actualYear;
+    });
+    const prevActualYear = prevActualYearRef.current;
+    setActualYear(prevActualYear.actualYear + 1);
+    setIsFetching(true);
+
+    for (let i = 1; i <= 12; i++) {
+      document
+        .getElementById('root')
+        .querySelector(`.App .App-matches .container .m${i}`).innerHTML = '';
+    }
+
+    setTimeout(() => {
+      fetchData();
+    }, 500);
+  };
+
+  const subtractYear = () => {
+    const prevSubtractYearRef = useRef();
+    useEffect(() => {
+      prevSubtractYearRef.current = actualYear;
+    });
+    const prevSubtractYear = prevSubtractYearRef.current;
+    setActualYear(prevSubtractYear.actualYear - 1);
+    setIsFetching(true);
+
+    for (let i = 1; i <= 12; i++) {
+      document
+        .getElementById('root')
+        .querySelector(`.App .App-matches .container .m${i}`).innerHTML = '';
+    }
+
+    setTimeout(() => {
+      fetchData();
+    }, 500);
+  };
+
+  useEffect(() => {
+    setActualYear(getActualYear());
+    setToday();
+    setToday(`${getActualDay()}${getActualMonth()}${getActualYear()}`);
+
+    if (getLocalStorageGoogleId() !== null) {
       fetchData();
     } else {
       GoogleLogin.logout();
@@ -503,7 +484,7 @@ const ListOfMonths = () => {
               </div>
             </section>
 
-            {actualYear === actualYear() && (
+            {actualYear === getActualYear() && (
               <section id="statistics">
                 {((sumValuesMonth && sumValuesMonth[0]) || (sumValuesYear && sumValuesYear[0])) && (
                   <div className="col">
@@ -595,7 +576,7 @@ const ListOfMonths = () => {
               </section>
             )}
 
-            {actualYear !== actualYear() && (
+            {actualYear !== getActualYear() && (
               <section id="statistics">
                 {((sumValuesMonth && sumValuesMonth[0]) || (sumValuesYear && sumValuesYear[0])) && (
                   <div className="col">

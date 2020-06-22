@@ -1,18 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './style.scss';
+import {
+  getLocalStorageGoogleId,
+  removeLocalStorageGoogleId,
+  removeLocalStorageGoogleName,
+  removeLocalStorageGoogleAvatar,
+} from '../../helpers';
 import config from '../Config';
 import logo from '../../assets/logo-calendar.png';
 
 const AppHeader = ({ name, id, img }) => {
-  const TCgId = localStorage.getItem('TCgId');
-
   const logout = () => {
     // If local storage with Google ID does not exist, remove local storage and state
-    if (TCgId !== null) {
-      localStorage.removeItem('TCgivenName');
-      localStorage.removeItem('TCgId');
-      localStorage.removeItem('TCgImg');
+    if (getLocalStorageGoogleId() !== null) {
+      removeLocalStorageGoogleId();
+      removeLocalStorageGoogleName();
+      removeLocalStorageGoogleAvatar();
     }
 
     // Redirecting, TODO: change it to a different way

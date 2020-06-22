@@ -266,7 +266,7 @@ const App = () => {
           <div>
             <div>{!refresh && <AppHeader name={givenName} id={gId} img={gImg} />}</div>
 
-            {/* <div
+            <div
               role="button"
               styling="link"
               tabIndex={0}
@@ -274,7 +274,7 @@ const App = () => {
               onKeyDown={showDayNow}
             >
               {!refresh && <ListOfMonths TCgId={TCgId} />}
-            </div> */}
+            </div>
 
             {/* <DayModal
               showDay={showDay}
