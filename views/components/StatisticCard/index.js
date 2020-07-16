@@ -89,7 +89,7 @@ const StatisticCard = ({ title, subtitle, trainings }) => {
 StatisticCard.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
-  trainings: PropTypes.shape.isRequired,
+  trainings: PropTypes.any.isRequired,
 };
 
 export default StatisticCard;

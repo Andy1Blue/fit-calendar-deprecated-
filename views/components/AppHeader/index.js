@@ -62,9 +62,9 @@ const AppHeader = ({ name, id, img }) => {
 };
 
 AppHeader.propTypes = {
-  name: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  img: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  id: PropTypes.string,
+  img: PropTypes.string,
 };
 
 export default AppHeader;

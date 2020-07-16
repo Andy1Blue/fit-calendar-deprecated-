@@ -123,8 +123,8 @@ const TodayCard = ({ training, actualYear, today }) => {
 };
 
 TodayCard.propTypes = {
-  training: PropTypes.shape.isRequired,
-  actualYear: PropTypes.string.isRequired,
+  training: PropTypes.object,
+  actualYear: PropTypes.number.isRequired,
   today: PropTypes.string.isRequired,
 };
 
