@@ -74,7 +74,7 @@ const Calendar = ({ actualYear, isWorkoutDate, colorTags, type, idList, descript
           if (type[i] === 'ABSENCE') {
             elem.setAttribute('comment', '[ABSENCE]');
           } else {
-            elem.setAttribute('comment', `${day}.${month}.${year} [${description[i]}]`);
+            elem.setAttribute('comment', `${day}.${month}.${year} [${type[i] || description[i]}]`);
           }
 
           elem.setAttribute('data-toggle', 'modal');

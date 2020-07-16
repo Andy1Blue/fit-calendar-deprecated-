@@ -1,4 +1,5 @@
 #red-toast {
+  text-align: center;
   background-color: #1b1927;
   z-index: 999;
   color: white;
@@ -6,6 +7,6 @@
   animation: show 0.5s;
   font-size: 22px;
   // border-radius: 10px;
-  box-shadow: 0 20px 30px -10px rgba(#000, 0.4);
+  // box-shadow: 0 20px 30px -10px rgba(#000, 0.4);
   padding: 5px;
 }

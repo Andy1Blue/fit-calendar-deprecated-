@@ -8,6 +8,7 @@ import Loader from '../Loader';
 import DayModal from '../DayModal';
 import AppHeader from '../AppHeader';
 import AppContext from '../../context';
+import BModal from 'react-bootstrap/Modal';
 
 const App = () => {
   const actualTCgId = localStorage.getItem('TCgId');
@@ -23,6 +24,11 @@ const App = () => {
   const [givenName, setGivenName] = useState(null);
   const [gId, setgId] = useState(null);
   const [gImg, setgImg] = useState(null);
+  const [show, setShow] = useState(showDay);
+
+  const handleClose = () => setShow(false);
+
+  const handleShow = () => setShow(true);
 
   const refreshNow = () => {
     setRefresh(true);
@@ -88,6 +94,7 @@ const App = () => {
   const showDayNow = e => {
     setShowDayLoader(true);
     setShowDay(true);
+    setShow(true);
 
     if (e.target.attributes.getNamedItem('id') !== null) {
       if (e.target.attributes.getNamedItem('trainingId')) {
@@ -147,6 +154,7 @@ const App = () => {
         .then(response => response.json())
         .then(() => {
           // this.setState({ showDay: false });
+          setShow(false);
           refreshNow();
           showAlert('Workout added!');
         });
@@ -182,12 +190,14 @@ const App = () => {
       }).then(() => {
         // this.setState({ showDay: false });
         refreshNow();
-        showAlert('Workout updated!');
+        // showAlert('Workout updated!');
+        setShow(false);
       });
     }
   };
 
   const deleteDay = () => {
+    setShow(false);
     // TODO: Add alert to confirm deleting...
     fetch(`${process.env.REACT_APP_DOMAIN}/trainings/user/${actualTCgId}/id/${targetDayTId}`, {
       method: 'DELETE',
@@ -223,6 +233,7 @@ const App = () => {
     saveDay,
     deleteDay,
     updateDay,
+    closeDay,
   };
 
   useEffect(() => {
@@ -276,16 +287,23 @@ const App = () => {
             </div>
 
             {dayObject !== null && (
-              <DayModal
-                showDay={showDayNow}
-                targetDay={targetDay}
-                dayObject={dayObject}
-                showDayLoader={showDayLoader}
-                targetDayTId={targetDayTId}
-                refresh={refresh}
-                showAlert={showAlert}
-                forceUpdate={refresh}
-              />
+              <BModal show={show} onHide={handleClose} centered>
+                <BModal.Header id="red-toast" closeButton>
+                  <BModal.Title></BModal.Title>
+                </BModal.Header>
+                <BModal.Body id="red-toast" className="padding10">
+                  <DayModal
+                    showDayLoader={showDayLoader}
+                    showDay={showDay}
+                    targetDay={targetDay}
+                    dayObject={dayObject}
+                    targetDayTId={targetDayTId}
+                    refresh={refresh}
+                    showAlert={showAlert}
+                    forceUpdate={refresh}
+                  />
+                </BModal.Body>
+              </BModal>
             )}
           </div>
         )}

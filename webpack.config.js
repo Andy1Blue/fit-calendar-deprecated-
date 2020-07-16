@@ -24,17 +24,20 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
-          presets: ['@babel/preset-env',
-            '@babel/react', { plugins: ['@babel/plugin-proposal-class-properties'] }],
+          presets: [
+            '@babel/preset-env',
+            '@babel/react',
+            { plugins: ['@babel/plugin-proposal-class-properties'] },
+          ],
         },
       },
       {
-        test: /\.s[ac]ss$/i,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
+      {
+        test: /\.scss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
@@ -48,7 +51,7 @@ module.exports = {
       template: join(__dirname, 'views', 'index.html'),
     }),
     new Dotenv({
-      path: envPath
-  })
+      path: envPath,
+    }),
   ],
 };

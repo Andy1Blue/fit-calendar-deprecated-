@@ -93,7 +93,9 @@ const ListOfMonths = () => {
         });
 
       const promiseSumValuesYear = fetch(
-        `${process.env.REACT_APP_DOMAIN}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${year}`,
+        `${
+          process.env.REACT_APP_DOMAIN
+        }/trainings/sum/user/${getLocalStorageGoogleId()}/year/${year}`,
         {
           method: 'GET',
           headers: {
@@ -164,7 +166,9 @@ const ListOfMonths = () => {
       const lastYear = year - 1;
 
       const promiseSumValuesLastYear = fetch(
-        `${process.env.REACT_APP_DOMAIN}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${lastYear}`,
+        `${
+          process.env.REACT_APP_DOMAIN
+        }/trainings/sum/user/${getLocalStorageGoogleId()}/year/${lastYear}`,
         {
           method: 'GET',
           headers: {
@@ -184,7 +188,9 @@ const ListOfMonths = () => {
         });
 
       const promiseTheLargestCalories = fetch(
-        `${process.env.REACT_APP_DOMAIN}/trainings/calories/user/${getLocalStorageGoogleId()}/year/${year}`,
+        `${
+          process.env.REACT_APP_DOMAIN
+        }/trainings/calories/user/${getLocalStorageGoogleId()}/year/${year}`,
         {
           method: 'GET',
           headers: {
@@ -204,7 +210,9 @@ const ListOfMonths = () => {
         });
 
       const promiseTheLargestTime = fetch(
-        `${process.env.REACT_APP_DOMAIN}/trainings/time/user/${getLocalStorageGoogleId()}/year/${year}`,
+        `${
+          process.env.REACT_APP_DOMAIN
+        }/trainings/time/user/${getLocalStorageGoogleId()}/year/${year}`,
         {
           method: 'GET',
           headers: {
@@ -224,7 +232,9 @@ const ListOfMonths = () => {
         });
 
       const promiseTheLargestDistance = fetch(
-        `${process.env.REACT_APP_DOMAIN}/trainings/distance/user/${getLocalStorageGoogleId()}/year/${year}`,
+        `${
+          process.env.REACT_APP_DOMAIN
+        }/trainings/distance/user/${getLocalStorageGoogleId()}/year/${year}`,
         {
           method: 'GET',
           headers: {
@@ -243,14 +253,17 @@ const ListOfMonths = () => {
           }
         });
 
-      const promiseWorkout = fetch(`${process.env.REACT_APP_DOMAIN}/trainings/user/${getLocalStorageGoogleId()}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          key: process.env.REACT_APP_SECRET_KEY,
-          userid: getLocalStorageGoogleId(),
+      const promiseWorkout = fetch(
+        `${process.env.REACT_APP_DOMAIN}/trainings/user/${getLocalStorageGoogleId()}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            key: process.env.REACT_APP_SECRET_KEY,
+            userid: getLocalStorageGoogleId(),
+          },
         },
-      })
+      )
         .then(response => response.json())
         .then(response => {
           const isWorkoutDateArray = [];
