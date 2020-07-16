@@ -1,5 +1,3 @@
-import config from './components/Config';
-
 export const addLog = (googleId, log, category) => {
   const data = {
     userId: googleId,
@@ -7,11 +5,11 @@ export const addLog = (googleId, log, category) => {
     category,
   };
 
-  fetch(`${config.domain}/logs`, {
+  fetch(`${process.env.REACT_APP_DOMAIN}/logs`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      key: config.secretKey,
+      key: process.env.REACT_APP_SECRET_KEY,
       userid: googleId,
     },
     body: JSON.stringify(data),

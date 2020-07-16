@@ -25,8 +25,6 @@ $ npm install
 
 Create `.env` file.
 
-Create `/views/components/Config/index.js` file.
-
 ## Running the app
 
 ```bash

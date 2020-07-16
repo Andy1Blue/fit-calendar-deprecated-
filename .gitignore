@@ -37,5 +37,4 @@ lerna-debug.log*
 
 # other
 .env
-/views/components/Config/index.js
 /.history

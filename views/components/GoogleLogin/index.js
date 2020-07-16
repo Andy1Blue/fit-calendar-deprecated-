@@ -4,7 +4,6 @@ import './style.scss';
 import GoogleAuth from 'react-google-login';
 import PropTypes from 'prop-types';
 import {addLog} from '../../helpers';
-import config from '../Config';
 import Alert from '../Alert';
 
 const GoogleLogin = ({ google }) => {
@@ -16,11 +15,11 @@ const GoogleLogin = ({ google }) => {
 
   const getWhitelistedById = googleId => {
     return new Promise((res, rej) => {
-      fetch(`${config.domain}/whitelists/user/${googleId}`, {
+      fetch(`${process.env.REACT_APP_DOMAIN}/whitelists/user/${googleId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          key: config.secretKey,
+          key: process.env.REACT_APP_SECRET_KEY,
           userid: googleId,
         },
       })
@@ -75,7 +74,7 @@ const GoogleLogin = ({ google }) => {
     <div>
       <GoogleAuth
         className="google-login-button"
-        clientId={config.google}
+        clientId={process.env.REACT_APP_GOOGLE_ID}
         buttonText="Sign in with Google"
         onSuccess={responseGoogle}
         onFailure={responseGoogle}

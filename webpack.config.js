@@ -1,6 +1,8 @@
 const { resolve, join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
+const envPath = '.env';
 
 module.exports = {
   entry: join(__dirname, './views', 'main.js'),
@@ -45,5 +47,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: join(__dirname, 'views', 'index.html'),
     }),
+    new Dotenv({
+      path: envPath
+  })
   ],
 };

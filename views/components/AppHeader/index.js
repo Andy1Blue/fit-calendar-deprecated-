@@ -7,7 +7,6 @@ import {
   removeLocalStorageGoogleName,
   removeLocalStorageGoogleAvatar,
 } from '../../helpers';
-import config from '../Config';
 import logo from '../../assets/logo-calendar.png';
 
 const AppHeader = ({ name, id, img }) => {
@@ -20,7 +19,7 @@ const AppHeader = ({ name, id, img }) => {
     }
 
     // Redirecting, TODO: change it to a different way
-    window.location.href = config.url;
+    window.location.href = process.env.REACT_APP_URL;
   };
 
   return (

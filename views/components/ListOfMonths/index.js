@@ -6,7 +6,6 @@ import Loader from '../Loader';
 import StatisticCard from '../StatisticCard';
 import TodayCard from '../TodayCard';
 import Calendar from '../Calendar';
-import config from '../Config';
 
 const ListOfMonths = () => {
   const [today, setToday] = useState(null);
@@ -57,14 +56,14 @@ const ListOfMonths = () => {
 
       // test fetch comparision
       fetch(
-        `${config.domain}/trainings/compare/user/${getLocalStorageGoogleId()}/to/${
-          config.compareToUserId
+        `${process.env.REACT_APP_DOMAIN}/trainings/compare/user/${getLocalStorageGoogleId()}/to/${
+          process.env.REACT_APP_COMPARE_TO_USER_ID
         }/year/${year}`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            key: config.secretKey,
+            key: process.env.REACT_APP_SECRET_KEY,
             userid: getLocalStorageGoogleId(),
           },
         },
@@ -75,14 +74,14 @@ const ListOfMonths = () => {
           console.log(response);
         });
       fetch(
-        `${config.domain}/trainings/compare/user/${getLocalStorageGoogleId()}/to/${
-          config.compareToUserId
+        `${process.env.REACT_APP_DOMAIN}/trainings/compare/user/${getLocalStorageGoogleId()}/to/${
+          process.env.REACT_APP_COMPARE_TO_USER_ID
         }/year/${year}/month/${month}`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            key: config.secretKey,
+            key: process.env.REACT_APP_SECRET_KEY,
             userid: getLocalStorageGoogleId(),
           },
         },
@@ -94,12 +93,12 @@ const ListOfMonths = () => {
         });
 
       const promiseSumValuesYear = fetch(
-        `${config.domain}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${year}`,
+        `${process.env.REACT_APP_DOMAIN}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${year}`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            key: config.secretKey,
+            key: process.env.REACT_APP_SECRET_KEY,
             userid: getLocalStorageGoogleId(),
           },
         },
@@ -115,13 +114,13 @@ const ListOfMonths = () => {
 
       const promiseSumValuesMonth = fetch(
         `${
-          config.domain
+          process.env.REACT_APP_DOMAIN
         }/trainings/sum/user/${getLocalStorageGoogleId()}/year/${year}/month/${month}`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            key: config.secretKey,
+            key: process.env.REACT_APP_SECRET_KEY,
             userid: getLocalStorageGoogleId(),
           },
         },
@@ -142,13 +141,13 @@ const ListOfMonths = () => {
 
       const promiseSumValuesLastMonth = fetch(
         `${
-          config.domain
+          process.env.REACT_APP_DOMAIN
         }/trainings/sum/user/${getLocalStorageGoogleId()}/year/${lastYearByMonth}/month/${lastMonth}`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            key: config.secretKey,
+            key: process.env.REACT_APP_SECRET_KEY,
             userid: getLocalStorageGoogleId(),
           },
         },
@@ -165,12 +164,12 @@ const ListOfMonths = () => {
       const lastYear = year - 1;
 
       const promiseSumValuesLastYear = fetch(
-        `${config.domain}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${lastYear}`,
+        `${process.env.REACT_APP_DOMAIN}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${lastYear}`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            key: config.secretKey,
+            key: process.env.REACT_APP_SECRET_KEY,
             userid: getLocalStorageGoogleId(),
           },
         },
@@ -185,12 +184,12 @@ const ListOfMonths = () => {
         });
 
       const promiseTheLargestCalories = fetch(
-        `${config.domain}/trainings/calories/user/${getLocalStorageGoogleId()}/year/${year}`,
+        `${process.env.REACT_APP_DOMAIN}/trainings/calories/user/${getLocalStorageGoogleId()}/year/${year}`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            key: config.secretKey,
+            key: process.env.REACT_APP_SECRET_KEY,
             userid: getLocalStorageGoogleId(),
           },
         },
@@ -205,12 +204,12 @@ const ListOfMonths = () => {
         });
 
       const promiseTheLargestTime = fetch(
-        `${config.domain}/trainings/time/user/${getLocalStorageGoogleId()}/year/${year}`,
+        `${process.env.REACT_APP_DOMAIN}/trainings/time/user/${getLocalStorageGoogleId()}/year/${year}`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            key: config.secretKey,
+            key: process.env.REACT_APP_SECRET_KEY,
             userid: getLocalStorageGoogleId(),
           },
         },
@@ -225,12 +224,12 @@ const ListOfMonths = () => {
         });
 
       const promiseTheLargestDistance = fetch(
-        `${config.domain}/trainings/distance/user/${getLocalStorageGoogleId()}/year/${year}`,
+        `${process.env.REACT_APP_DOMAIN}/trainings/distance/user/${getLocalStorageGoogleId()}/year/${year}`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            key: config.secretKey,
+            key: process.env.REACT_APP_SECRET_KEY,
             userid: getLocalStorageGoogleId(),
           },
         },
@@ -244,11 +243,11 @@ const ListOfMonths = () => {
           }
         });
 
-      const promiseWorkout = fetch(`${config.domain}/trainings/user/${getLocalStorageGoogleId()}`, {
+      const promiseWorkout = fetch(`${process.env.REACT_APP_DOMAIN}/trainings/user/${getLocalStorageGoogleId()}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          key: config.secretKey,
+          key: process.env.REACT_APP_SECRET_KEY,
           userid: getLocalStorageGoogleId(),
         },
       })

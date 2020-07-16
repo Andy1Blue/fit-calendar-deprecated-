@@ -5,7 +5,6 @@ import GoogleLogin from '../GoogleLogin';
 // import Alert from '../Alert';
 import logo from '../../assets/logo-calendar.png';
 import Loader from '../Loader';
-import config from '../Config';
 import DayModal from '../DayModal';
 import AppHeader from '../AppHeader';
 import AppContext from '../../context';
@@ -43,11 +42,11 @@ const App = () => {
     if (actualTCgId !== null) {
       // const targetDateChanged = day.replace(/\./g, '');
 
-      fetch(`${config.domain}/trainings/user/${TCgId}/id/${trainingId}`, {
+      fetch(`${process.env.REACT_APP_DOMAIN}/trainings/user/${TCgId}/id/${trainingId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          key: config.secretKey,
+          key: process.env.REACT_APP_SECRET_KEY,
           userid: TCgId,
         },
       })
@@ -136,11 +135,11 @@ const App = () => {
         type: typeValue === '-' ? null : typeValue,
       };
 
-      fetch(`${config.domain}/trainings`, {
+      fetch(`${process.env.REACT_APP_DOMAIN}/trainings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          key: config.secretKey,
+          key: process.env.REACT_APP_SECRET_KEY,
           userid: TCgId,
         },
         body: JSON.stringify(data),
@@ -172,11 +171,11 @@ const App = () => {
         type: typeValue === '-' ? null : typeValue,
       };
 
-      fetch(`${config.domain}/trainings/user/${TCgId}/id/${targetDayTId}`, {
+      fetch(`${process.env.REACT_APP_DOMAIN}/trainings/user/${TCgId}/id/${targetDayTId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          key: config.secretKey,
+          key: process.env.REACT_APP_SECRET_KEY,
           userid: TCgId,
         },
         body: JSON.stringify(data),
@@ -190,11 +189,11 @@ const App = () => {
 
   const deleteDay = () => {
     // TODO: Add alert to confirm deleting...
-    fetch(`${config.domain}/trainings/user/${actualTCgId}/id/${targetDayTId}`, {
+    fetch(`${process.env.REACT_APP_DOMAIN}/trainings/user/${actualTCgId}/id/${targetDayTId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        key: config.secretKey,
+        key: process.env.REACT_APP_SECRET_KEY,
         userid: actualTCgId,
       },
     }).then(() => {
