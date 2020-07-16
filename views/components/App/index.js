@@ -276,16 +276,18 @@ const App = () => {
               {!refresh && <ListOfMonths TCgId={TCgId} />}
             </div>
 
-            {/* <DayModal
-              showDay={showDay}
-              targetDay={targetDay}
-              dayObject={dayObject}
-              showDayLoader={showDayLoader}
-              targetDayTId={targetDayTId}
-              refresh={refresh}
-              showAlert={showAlert}
-              forceUpdate={refresh}
-            /> */}
+            {dayObject !== null && (
+              <DayModal
+                showDay={showDayNow}
+                targetDay={targetDay}
+                dayObject={dayObject}
+                showDayLoader={showDayLoader}
+                targetDayTId={targetDayTId}
+                refresh={refresh}
+                showAlert={showAlert}
+                forceUpdate={refresh}
+              />
+            )}
           </div>
         )}
       </AppContext.Provider>

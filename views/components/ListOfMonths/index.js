@@ -5,6 +5,7 @@ import { getLocalStorageGoogleId } from '../../helpers';
 import Loader from '../Loader';
 import StatisticCard from '../StatisticCard';
 import TodayCard from '../TodayCard';
+import Calendar from '../Calendar';
 import config from '../Config';
 
 const ListOfMonths = () => {
@@ -31,10 +32,6 @@ const ListOfMonths = () => {
   const [theLargestCalories, setTheLargestCalories] = useState(null);
   const [theLargestTime, setTheLargestTime] = useState(null);
 
-  const refreshNow = () => {
-    setIsFetching(true);
-  };
-
   const getActualYear = () => new Date().getFullYear();
 
   const getActualMonth = () => {
@@ -52,123 +49,6 @@ const ListOfMonths = () => {
     return todayDate.length === 2 ? todayDate : `0${todayDate}`;
   };
 
-  const daysInMonth = (month, year) => new Date(year, month, 0).getDate();
-
-  const addRect = (selector, day, month, year) => {
-    if (isWorkoutDate) {
-      const elem = document.createElement('rect');
-
-      const workoutDateLength = isWorkoutDate.length > 0 ? isWorkoutDate.length : 10;
-      for (let i = 0; i < workoutDateLength; i++) {
-        if (`${day}${month}${year}` === isWorkoutDate[i]) {
-          elem.className = 'rect-workout standardColor';
-          elem.innerHTML = day;
-
-          if (type[i] === 'ABSENCE') {
-            elem.className = 'react-absence';
-          }
-
-          if (colorTags[i] === 'default') {
-            elem.className = 'rect-workout defaultColor';
-          }
-
-          if (colorTags[i] === 'orange') {
-            elem.className = 'rect-workout orangeColor';
-          }
-
-          if (colorTags[i] === 'blue') {
-            elem.className = 'rect-workout blueColor';
-          }
-
-          elem.setAttribute('id', `${day}.${month}.${year}`);
-          if (`${day}${month}${year}` === today) {
-            elem.className = 'rect-standard rect-today defaultColor';
-
-            if (type[i] === 'ABSENCE') {
-              elem.className = 'react-absence';
-            }
-
-            if (colorTags[i] === 'default') {
-              elem.className = 'rect-standard rect-today defaultColor';
-            }
-
-            if (colorTags[i] === 'orange') {
-              elem.className = 'rect-standard rect-today orangeColor';
-            }
-
-            if (colorTags[i] === 'blue') {
-              elem.className = 'rect-standard rect-today blueColor';
-            }
-          } else {
-            elem.className = 'rect-workout defaultColor';
-
-            if (type[i] === 'ABSENCE') {
-              elem.className = 'react-absence';
-            }
-
-            if (colorTags[i] === 'default') {
-              elem.className = 'rect-workout defaultColor';
-            }
-
-            if (colorTags[i] === 'orange') {
-              elem.className = 'rect-workout orangeColor';
-            }
-
-            if (colorTags[i] === 'blue') {
-              elem.className = 'rect-workout blueColor';
-            }
-          }
-          elem.setAttribute('trainingId', idList[i]);
-
-          if (type[i] === 'ABSENCE') {
-            elem.setAttribute('comment', '[ABSENCE]');
-          } else {
-            elem.setAttribute('comment', `${day}.${month}.${year} [${description[i]}]`);
-          }
-
-          elem.setAttribute('data-toggle', 'modal');
-          elem.setAttribute('data-target', '#workoutDay');
-          break;
-        } else {
-          elem.className = 'rect-standard standardColor';
-          elem.innerHTML = day;
-
-          elem.setAttribute('id', `${day}.${month}.${year}`);
-          elem.setAttribute('comment', `${day}.${month}.${year} [No training!]`);
-          elem.setAttribute('data-toggle', 'modal');
-          elem.setAttribute('data-target', '#workoutDay');
-
-          if (`${day}${month}${year}` === today) {
-            elem.className = 'rect-standard rect-today standardColor';
-          }
-        }
-      }
-
-      const m = document
-        .getElementById('root')
-        .querySelector(`.App .App-matches .container .${selector}`);
-      m.appendChild(elem);
-    }
-  };
-
-  const generateReacts = () => {
-    if (isWorkoutDate) {
-      // for (let i = 1; i <= 31; i++) {
-      //     this.addTitle(i);
-      // }
-
-      for (let i = 1; i <= 12; i++) {
-        let y = `0${i}`;
-        if (y.length > 2) {
-          y = `${i}`;
-        }
-        for (let j = 1; j <= daysInMonth(i, actualYear); j++) {
-          addRect(`m${i}`, String(`00${j}`).slice(-2), y, actualYear);
-        }
-      }
-    }
-  };
-
   const fetchData = () => {
     setIsFetching(true);
     if (getLocalStorageGoogleId() !== null) {
@@ -177,7 +57,9 @@ const ListOfMonths = () => {
 
       // test fetch comparision
       fetch(
-        `${config.domain}/trainings/compare/user/${getLocalStorageGoogleId()}/to/${config.compareToUserId}/year/${year}`,
+        `${config.domain}/trainings/compare/user/${getLocalStorageGoogleId()}/to/${
+          config.compareToUserId
+        }/year/${year}`,
         {
           method: 'GET',
           headers: {
@@ -193,7 +75,9 @@ const ListOfMonths = () => {
           console.log(response);
         });
       fetch(
-        `${config.domain}/trainings/compare/user/${getLocalStorageGoogleId()}/to/${config.compareToUserId}/year/${year}/month/${month}`,
+        `${config.domain}/trainings/compare/user/${getLocalStorageGoogleId()}/to/${
+          config.compareToUserId
+        }/year/${year}/month/${month}`,
         {
           method: 'GET',
           headers: {
@@ -230,7 +114,9 @@ const ListOfMonths = () => {
         });
 
       const promiseSumValuesMonth = fetch(
-        `${config.domain}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${year}/month/${month}`,
+        `${
+          config.domain
+        }/trainings/sum/user/${getLocalStorageGoogleId()}/year/${year}/month/${month}`,
         {
           method: 'GET',
           headers: {
@@ -255,7 +141,9 @@ const ListOfMonths = () => {
       const lastYearByMonth = month === '01' ? year - 1 : year;
 
       const promiseSumValuesLastMonth = fetch(
-        `${config.domain}/trainings/sum/user/${getLocalStorageGoogleId()}/year/${lastYearByMonth}/month/${lastMonth}`,
+        `${
+          config.domain
+        }/trainings/sum/user/${getLocalStorageGoogleId()}/year/${lastYearByMonth}/month/${lastMonth}`,
         {
           method: 'GET',
           headers: {
@@ -404,7 +292,6 @@ const ListOfMonths = () => {
 
       Promise.allSettled(promises).then(() => {
         setIsFetching(false);
-        generateReacts();
       });
     } else {
       setIsWorkoutDate([]);
@@ -454,7 +341,6 @@ const ListOfMonths = () => {
 
   useEffect(() => {
     setActualYear(getActualYear());
-    setToday();
     setToday(`${getActualDay()}${getActualMonth()}${getActualYear()}`);
 
     if (getLocalStorageGoogleId() !== null) {
@@ -462,7 +348,7 @@ const ListOfMonths = () => {
     } else {
       GoogleLogin.logout();
     }
-  });
+  }, []);
 
   return (
     <div className="App-matches">
@@ -595,37 +481,18 @@ const ListOfMonths = () => {
             )}
           </div>
 
-          <div className="right">
-            <div className="container" id="calendar">
-              <div className="calendar-year">
-                <button type="submit" onClick={subtractYear}>
-                  &#10148;
-                </button>{' '}
-                <h2>{actualYear}</h2>{' '}
-                <button type="submit" onClick={addYear}>
-                  &#10148;
-                </button>
-              </div>
-              <div className="row">
-                <div className="traning-table-content">
-                  <div className="col">
-                    <div className="m1" />
-                    <div className="m2" />
-                    <div className="m3" />
-                    <div className="m4" />
-                    <div className="m5" />
-                    <div className="m6" />
-                    <div className="m7" />
-                    <div className="m8" />
-                    <div className="m9" />
-                    <div className="m10" />
-                    <div className="m11" />
-                    <div className="m12" />
-                  </div>
-                </div>
-              </div>
+          {!isFetching && isWorkoutDate && isWorkoutDate !== null && (
+            <div className="right">
+              <Calendar
+                actualYear={actualYear}
+                isWorkoutDate={isWorkoutDate}
+                colorTags={colorTags}
+                type={type}
+                idList={idList}
+                description={description}
+              />
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>

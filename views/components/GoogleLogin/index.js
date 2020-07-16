@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './style.scss';
 import GoogleAuth from 'react-google-login';
 import PropTypes from 'prop-types';
-import helpers from '../../helpers';
+import {addLog} from '../../helpers';
 import config from '../Config';
 import Alert from '../Alert';
 
@@ -51,7 +51,7 @@ const GoogleLogin = ({ google }) => {
       // name, Google ID and avatar (in local sotrage and in state)
       if (isWhitelisted && response !== null) {
         if (TCgId !== null) {
-          helpers.addLog(TCgId, 'User has log in', 'Login');
+          addLog(TCgId, 'User has log in', 'Login');
         }
 
         localStorage.setItem('TCgivenName', response.profileObj.givenName);

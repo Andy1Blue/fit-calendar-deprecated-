@@ -5,7 +5,7 @@ import './style.scss';
 import Loader from '../Loader';
 import AppProvider from '../../context';
 
-const DayModal = ({showDay, targetDay, dayObject, showDayLoader, isDescriptionInactive}) => {
+const DayModal = ({ showDay, targetDay, dayObject, showDayLoader, isDescriptionInactive }) => {
   const [targetColorTag, setTargetColorTag] = useState(null);
   const [dayObjectState, setDayObject] = useState(dayObject);
   const [isDescriptionInactiveState, setIsDescriptionInactive] = useState(isDescriptionInactive);
