@@ -276,15 +276,7 @@ const App = () => {
           <div>
             <div>{!refresh && <AppHeader name={givenName} id={gId} img={gImg} />}</div>
 
-            <div
-              role="button"
-              styling="link"
-              tabIndex={0}
-              onClick={showDayNow}
-              onKeyDown={showDayNow}
-            >
-              {!refresh && <ListOfMonths TCgId={TCgId} />}
-            </div>
+            {!refresh && <ListOfMonths TCgId={TCgId} showDayNow={showDayNow} />}
 
             {dayObject !== null && (
               <BModal show={show} onHide={handleClose} centered>

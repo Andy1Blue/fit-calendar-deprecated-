@@ -1,7 +1,18 @@
 import React, { useEffect } from 'react';
 import './style.scss';
 
-const Calendar = ({ actualYear, isWorkoutDate, colorTags, type, idList, description }) => {
+const Calendar = ({
+  today,
+  actualYear,
+  isWorkoutDate,
+  colorTags,
+  type,
+  idList,
+  description,
+  subtractYear,
+  addYear,
+  showDayNow,
+}) => {
   const getActualYear = () => new Date().getFullYear();
   const daysInMonth = (month, year) => new Date(year, month, 0).getDate();
 
@@ -89,8 +100,14 @@ const Calendar = ({ actualYear, isWorkoutDate, colorTags, type, idList, descript
           elem.setAttribute('data-toggle', 'modal');
           elem.setAttribute('data-target', '#workoutDay');
 
+          elem.onclick = showDayNow;
+          elem.onkeydown = showDayNow;
+
           if (`${day}${month}${year}` === today) {
             elem.className = 'rect-standard rect-today standardColor';
+
+            elem.onclick = showDayNow;
+            elem.onkeydown = showDayNow;
           }
         }
       }
@@ -129,12 +146,13 @@ const Calendar = ({ actualYear, isWorkoutDate, colorTags, type, idList, descript
   return (
     <div className="container" id="calendar">
       <div className="calendar-year">
-        {/* <button type="submit" onClick={subtractYear}> */}
-        {/* &#10148; */}
-        {/* </button>{' '} */}
-        <h2>{actualYear}</h2> {/* <button type="submit" onClick={addYear}> */}
-        {/* &#10148; */}
-        {/* </button> */}
+        <button type="submit" onClick={subtractYear}>
+          &#10148;
+        </button>{' '}
+        <h2>{actualYear}</h2>{' '}
+        <button type="submit" onClick={addYear}>
+          &#10148;
+        </button>
       </div>
       <div className="row">
         <div className="traning-table-content">

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './style.scss';
 import {
   getLocalStorageGoogleId,
+  getLocalStorageGoogleName,
+  getLocalStorageGoogleAvatar,
   removeLocalStorageGoogleId,
   removeLocalStorageGoogleName,
   removeLocalStorageGoogleAvatar,
@@ -10,6 +12,16 @@ import {
 import logo from '../../assets/logo-calendar.png';
 
 const AppHeader = ({ name, id, img }) => {
+  const [userName, setUserName] = useState(name);
+  const [userAvatar, setUserAvatar] = useState(img);
+
+  useEffect(() => {
+    if (getLocalStorageGoogleId() !== null) {
+      setUserName(getLocalStorageGoogleName());
+      setUserAvatar(getLocalStorageGoogleAvatar());
+    }
+  }, []);
+
   const logout = () => {
     // If local storage with Google ID does not exist, remove local storage and state
     if (getLocalStorageGoogleId() !== null) {
@@ -42,7 +54,8 @@ const AppHeader = ({ name, id, img }) => {
         <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item active">
-              Hello {name}! <img src={img} alt="Google Avatar" id={id} width="30px" hight="30px" />
+              Hello {userName}!{' '}
+              <img src={userAvatar} alt="Google Avatar" id={id} width="30px" hight="30px" />
             </li>
             <li className="nav-item">
               <a className="nav-link" href="#calendar">

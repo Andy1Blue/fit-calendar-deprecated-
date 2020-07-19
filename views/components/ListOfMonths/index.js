@@ -7,7 +7,7 @@ import StatisticCard from '../StatisticCard';
 import TodayCard from '../TodayCard';
 import Calendar from '../Calendar';
 
-const ListOfMonths = () => {
+const ListOfMonths = ({ showDayNow }) => {
   const [today, setToday] = useState(null);
   const [todayWorkout, setTodayWorkout] = useState(null);
   const [refresh, setRefresh] = useState(false);
@@ -271,6 +271,7 @@ const ListOfMonths = () => {
           const colorTagsArray = [];
           const idListArray = [];
           const typeArray = [];
+
           for (let i = 0; i < response.length; i++) {
             isWorkoutDateArray.push(response[i].trainingDate);
             descriptionArray.push(response[i].description);
@@ -331,13 +332,18 @@ const ListOfMonths = () => {
     }, 500);
   };
 
-  const subtractYear = () => {
-    const prevSubtractYearRef = useRef();
+  function usePrevious(value) {
+    const ref = useRef();
     useEffect(() => {
-      prevSubtractYearRef.current = actualYear;
+      ref.current = value;
     });
-    const prevSubtractYear = prevSubtractYearRef.current;
-    setActualYear(prevSubtractYear.actualYear - 1);
+    return ref.current;
+  }
+
+  const subtractYear = () => {
+    const prevYear = usePrevious(actualYear);
+    console.log(prevYear);
+    setActualYear(prevYear - 1);
     setIsFetching(true);
 
     for (let i = 1; i <= 12; i++) {
@@ -360,7 +366,7 @@ const ListOfMonths = () => {
     } else {
       GoogleLogin.logout();
     }
-  }, []);
+  }, [actualYear]);
 
   return (
     <div className="App-matches">
@@ -496,12 +502,16 @@ const ListOfMonths = () => {
           {!isFetching && isWorkoutDate && isWorkoutDate !== null && (
             <div className="right">
               <Calendar
+                today={today}
                 actualYear={actualYear}
                 isWorkoutDate={isWorkoutDate}
                 colorTags={colorTags}
                 type={type}
                 idList={idList}
                 description={description}
+                subtractYear={subtractYear}
+                addYear={addYear}
+                showDayNow={showDayNow}
               />
             </div>
           )}
