@@ -13,21 +13,22 @@ const GoogleLogin = ({ google }) => {
   const [processing, setProcessing] = useState(false);
   const [authorization, setAuthorization] = useState(false);
 
-  const getWhitelistedById = googleId => {
+  const verifyToken = (token, userId) => {
     return new Promise((res, rej) => {
-      fetch(`${process.env.REACT_APP_DOMAIN}/whitelists/user/${googleId}`, {
-        method: 'GET',
+      fetch(`${process.env.REACT_APP_DOMAIN}/auth/token`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          key: process.env.REACT_APP_SECRET_KEY,
-          userid: googleId,
         },
+        body: JSON.stringify({
+          "userId": userId,
+          "token": token
+        })
       })
         .then(response => response.json())
         .then(response => {
-          if (response) {
+          if (response.isVerified) {
             console.log(response);
-            // TODO: save it in store in redux
             setAuthorization(true);
             setProcessing(true);
             res(true);
@@ -44,18 +45,21 @@ const GoogleLogin = ({ google }) => {
   };
 
   const responseGoogle = response => {
-    const TCgId = localStorage.getItem('TCgId');
-    getWhitelistedById(response.profileObj.googleId).then(isWhitelisted => {
+    const TCgId = localStorage.getItem('TCgId') || response.profileObj.googleId;
+    const TCtoken = localStorage.getItem('TCtoken') || response.tokenId;
+
+    verifyToken(TCtoken, TCgId).then(isWhitelisted => {
       // If response from Google API is not null, create local storage with
       // name, Google ID and avatar (in local sotrage and in state)
       if (isWhitelisted && response !== null) {
         if (TCgId !== null) {
           addLog(TCgId, 'User has log in', 'Login');
         }
-
+console.log(response.tokenId);
         localStorage.setItem('TCgivenName', response.profileObj.givenName);
         localStorage.setItem('TCgId', response.profileObj.googleId);
         localStorage.setItem('TCgImg', response.profileObj.imageUrl);
+        localStorage.setItem('TCtoken', response.tokenId);
 
         setGivenName(response.profileObj.givenName);
         setgId(response.profileObj.googleId);

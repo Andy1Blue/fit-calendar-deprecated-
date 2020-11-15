@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TrainingsModule } from './trainings/trainings.module';
 import { LogsModule } from './userLogs/logs.module';
 import { WhitelistsModule } from './whitelists/whitelists.module';
+import { AuthModule } from './auth/auth.module';
 
 const dbData =
   process.env.MONGOOSE_USER === null || process.env.MONGOOSE_USER === ''
@@ -20,6 +21,7 @@ const dbData =
     TrainingsModule,
     LogsModule,
     WhitelistsModule,
+    AuthModule,
     MongooseModule.forRoot(dbData, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

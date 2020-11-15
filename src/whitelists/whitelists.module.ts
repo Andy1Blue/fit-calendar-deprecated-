@@ -10,5 +10,6 @@ import { WhitelistSchema } from './schemas/whitelist.schema';
   ],
   controllers: [WhitelistsController],
   providers: [WhitelistsService],
+  exports: [WhitelistsService],
 })
 export class WhitelistsModule {}

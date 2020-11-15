@@ -12,8 +12,12 @@ import BModal from 'react-bootstrap/Modal';
 
 const App = () => {
   const actualTCgId = localStorage.getItem('TCgId');
+  const token = localStorage.getItem('TCtoken');
+  const actualTCgImg = localStorage.getItem('TCgImg');
+  const actualTCgivenName = localStorage.getItem('TCgivenName');
   const [isFetching, setIsFetching] = useState(false);
   const [isLogin, setIsLogin] = useState(false); // Local Sotorage TCgId exist
+  const [isVerified, setIsVerified] = useState(false);
   const [TCgId, setTCgId] = useState(actualTCgId);
   const [showDay, setShowDay] = useState(false);
   const [targetDay, setTargetDay] = useState(null);
@@ -21,14 +25,43 @@ const App = () => {
   const [targetDayTId, setTargetDayTId] = useState(null);
   const [showDayLoader, setShowDayLoader] = useState(false);
   const [dayObject, setDayObject] = useState(null);
-  const [givenName, setGivenName] = useState(null);
+  const [givenName, setGivenName] = useState(actualTCgivenName);
   const [gId, setgId] = useState(null);
-  const [gImg, setgImg] = useState(null);
+  const [gImg, setgImg] = useState(actualTCgImg);
   const [show, setShow] = useState(showDay);
 
   const handleClose = () => setShow(false);
 
   const handleShow = () => setShow(true);
+
+  const verifyToken = (tokenn, userId) => {
+    return new Promise((res, rej) => {
+      fetch(`${process.env.REACT_APP_DOMAIN}/auth/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "userId": userId,
+          "token": tokenn
+        })
+      })
+        .then(response => response.json())
+        .then(response => {
+          if (response.isVerified) {
+            setGivenName(response.payload.given_name);
+            setgId(response.payload.sub);
+            setgImg(response.payload.picture);
+            res(true);
+          } else {
+            res(false);
+          }
+        })
+        .catch(error => {
+          rej(error);
+        });
+    });
+  };
 
   const refreshNow = () => {
     setRefresh(true);
@@ -237,15 +270,19 @@ const App = () => {
   };
 
   useEffect(() => {
-    // if (userContext.givenName !== null) {
-    //   google(userContext);
-    // }
-    // console.log(userContext);
     if (actualTCgId !== null) {
-      setTCgId(actualTCgId);
-      setIsLogin(true);
-      setIsFetching(false);
+    verifyToken(token, actualTCgId).then((isVerifiedToken) => {
+      setIsVerified(isVerifiedToken);
+
+      if (isVerified) {
+        setTCgId(actualTCgId);
+        setIsLogin(true);
+        setIsFetching(false);
+      }
+    })
     } else {
+      setIsVerified(false);
+      setIsLogin(false);
       setIsFetching(false);
     }
   });
@@ -259,7 +296,7 @@ const App = () => {
           </div>
         )}
 
-        {TCgId === null && !isFetching && (
+        {!isVerified && !isFetching && (
           <header className="App-header">
             <div className="welcome-container">
               <img className="logo-welcome-page" src={logo} alt="logo" />
@@ -272,7 +309,7 @@ const App = () => {
           </header>
         )}
 
-        {TCgId !== null && !isFetching && (
+        {TCgId !== null && !isFetching && isVerified && (
           <div>
             <div>{!refresh && <AppHeader name={givenName} id={gId} img={gImg} />}</div>
 
