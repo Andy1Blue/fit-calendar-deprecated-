@@ -9,6 +9,7 @@ import DayModal from '../DayModal';
 import AppHeader from '../AppHeader';
 import AppContext from '../../context';
 import BModal from 'react-bootstrap/Modal';
+import _fetch from '../../api/fetch';
 
 const App = () => {
   const actualTCgId = localStorage.getItem('TCgId');
@@ -36,17 +37,14 @@ const App = () => {
 
   const verifyToken = (tokenn, userId) => {
     return new Promise((res, rej) => {
-      fetch(`${process.env.REACT_APP_DOMAIN}/auth/token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "userId": userId,
-          "token": tokenn
-        })
-      })
-        .then(response => response.json())
+      _fetch(
+        `/auth/token`,
+        'POST',
+        JSON.stringify({
+          userId,
+          token: tokenn,
+        }),
+      )
         .then(response => {
           if (response.isVerified) {
             setGivenName(response.payload.given_name);
@@ -175,22 +173,12 @@ const App = () => {
         type: typeValue === '-' ? null : typeValue,
       };
 
-      fetch(`${process.env.REACT_APP_DOMAIN}/trainings`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          key: process.env.REACT_APP_SECRET_KEY,
-          userid: TCgId,
-        },
-        body: JSON.stringify(data),
-      })
-        .then(response => response.json())
-        .then(() => {
-          // this.setState({ showDay: false });
-          setShow(false);
-          refreshNow();
-          showAlert('Workout added!');
-        });
+      _fetch(`/trainings`, 'POST', JSON.stringify(data)).then(() => {
+        // this.setState({ showDay: false });
+        setShow(false);
+        refreshNow();
+        showAlert('Workout added!');
+      });
     }
   };
 
@@ -271,15 +259,15 @@ const App = () => {
 
   useEffect(() => {
     if (actualTCgId !== null) {
-    verifyToken(token, actualTCgId).then((isVerifiedToken) => {
-      setIsVerified(isVerifiedToken);
+      verifyToken(token, actualTCgId).then(isVerifiedToken => {
+        setIsVerified(isVerifiedToken);
 
-      if (isVerified) {
-        setTCgId(actualTCgId);
-        setIsLogin(true);
-        setIsFetching(false);
-      }
-    })
+        if (isVerified) {
+          setTCgId(actualTCgId);
+          setIsLogin(true);
+          setIsFetching(false);
+        }
+      });
     } else {
       setIsVerified(false);
       setIsLogin(false);

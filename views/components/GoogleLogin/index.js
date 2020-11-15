@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import './style.scss';
 import GoogleAuth from 'react-google-login';
 import PropTypes from 'prop-types';
-import {addLog} from '../../helpers';
+import { addLog } from '../../helpers';
 import Alert from '../Alert';
+import _fetch from '../../api/fetch';
 
 const GoogleLogin = ({ google }) => {
   const [givenName, setGivenName] = useState(null);
@@ -15,20 +16,16 @@ const GoogleLogin = ({ google }) => {
 
   const verifyToken = (token, userId) => {
     return new Promise((res, rej) => {
-      fetch(`${process.env.REACT_APP_DOMAIN}/auth/token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "userId": userId,
-          "token": token
-        })
-      })
-        .then(response => response.json())
+      _fetch(
+        '/auth/token',
+        'POST',
+        JSON.stringify({
+          userId,
+          token,
+        }),
+      )
         .then(response => {
           if (response.isVerified) {
-            console.log(response);
             setAuthorization(true);
             setProcessing(true);
             res(true);
@@ -55,7 +52,7 @@ const GoogleLogin = ({ google }) => {
         if (TCgId !== null) {
           addLog(TCgId, 'User has log in', 'Login');
         }
-console.log(response.tokenId);
+
         localStorage.setItem('TCgivenName', response.profileObj.givenName);
         localStorage.setItem('TCgId', response.profileObj.googleId);
         localStorage.setItem('TCgImg', response.profileObj.imageUrl);

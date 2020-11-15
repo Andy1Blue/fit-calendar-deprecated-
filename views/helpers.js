@@ -5,6 +5,8 @@ export const addLog = (googleId, log, category) => {
     category,
   };
 
+
+
   fetch(`${process.env.REACT_APP_DOMAIN}/logs`, {
     method: 'POST',
     headers: {

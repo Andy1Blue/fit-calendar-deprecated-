@@ -16,19 +16,14 @@ export class AuthController {
   async verifyToken(@Body('token') token: string, @Body('userId') userId: string) {
     const currentDate = Date.now() * 1000;
     const payload = await this.authService.verifyToken(token, userId);
+    const isWhitelisted = await this.whitelistsService.isWhitelisted(userId);
 
-    if (!payload) {
+    if (!payload || !isWhitelisted) {
       throw new BadRequestException('No authorisation');
     }
 
     if (currentDate < payload?.payload?.exp) {
-      throw new BadRequestException('Token exp');
-    }
-
-    const isWhitelisted = await this.whitelistsService.isWhitelisted(userId);
-
-    if (!isWhitelisted) {
-      throw new BadRequestException('No authorisation');
+      throw new BadRequestException('Access token expired');
     }
 
     return payload;
